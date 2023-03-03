@@ -1,20 +1,46 @@
 <script>
-import { mapStores } from 'pinia'
+import { mapStores, mapState } from 'pinia'
 import { useWaveSelStore } from '@/stores/wavesel'
+import { useSrtStore } from '@/stores/srt'
 
 import WaveSurfer from 'wavesurfer.js';
 import RegionsPlugin from 'wavesurfer.js/dist/plugin/wavesurfer.regions.min.js';
-import { createDOMCompilerError } from '@vue/compiler-dom';
-
 
 export default {
     computed: {
-        // WaveSel
-        ...mapStores(useWaveSelStore)
+        ...mapState(useWaveSelStore, ['pos']),
+        ...mapState(useSrtStore,['activeLine']),
+        ...mapStores(useWaveSelStore, useSrtStore)
+    },
+    watch: {
+        pos(newPos, oldPos){
+            if(!this.playing){
+                console.log('pos changed',oldPos, newPos)
+                this.updateActiveLine()
+            }
+        },
+        activeLine(newAl, oldAl){
+            if(this.region){
+                this.region.remove()
+                this.region = false
+            }
+            if(newAl>=0){
+                const line = this.srtStore.lines[newAl]
+                this.region = this.waveform.addRegion({
+                    id: 'activeLine',
+                    start: line.from, 
+                    end: line.to,
+                    loop: false,
+                    drag: false,
+                    resize: false
+                })
+            }
+        }
     },
     data (){
         return {
-            playing: false
+            playing: false,
+            region: false
         }
     },
     mounted() {
@@ -30,6 +56,9 @@ export default {
 
         // Load audio file
         this.waveform.load('/audio.mp3');
+        this.waveform.on('ready', ()=>{
+            this.waveSelStore.duration = this.waveform.getDuration()
+        })
         this.waveform.on('seek', this.updatePos)
         this.waveform.on('audioprocess', this.updatePos)
         this.waveform.on('play', ()=>{
@@ -38,21 +67,39 @@ export default {
         this.waveform.on('finish', ()=>{
             this.playing = false
         })
-
-        this.waveform.on('region-created', (evt) => {
-            console.log('Region created:', evt)
-            // Do something with the region, such as store it in a data structure for later use
-        });
+        this.waveform.on('region-play', ()=>{
+            this.playing = true
+        })
+        this.waveform.on('pause', ()=>{
+            this.playing = false
+        })
     },
     methods:{
         updatePos(){
             this.waveSelStore.setPos(this.waveform.getCurrentTime())
         },
+        updateActiveLine(){
+            const lines = this.srtStore.lines
+            const pos = this.waveSelStore.pos
+            var al = -1
+            for(var i in lines){
+                const line = lines[i]
+                if(pos>=line.from&&pos<line.to){
+                    al = i
+                    break
+                }
+            }
+            this.srtStore.activeLine = al
+        },
         togglePlay(){
-            if(this.waveform.isPlaying()){
-                this.waveform.stop()
+            if(this.playing){
+                this.waveform.pause()
             }else{
-                this.waveform.play()
+                if(this.region){
+                    this.region.play()
+                }else{
+                    this.waveform.play()
+                }
             }
         }
     }

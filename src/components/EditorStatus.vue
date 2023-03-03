@@ -12,7 +12,8 @@ export default {
 
 <template>
     <div>
-        <p>{{ waveSelStore.pos }}</p>
-        <p>{{ srtStore.lines.length }}</p>
+        <p>{{ waveSelStore.pos.toFixed(2) }}/{{ waveSelStore.duration.toFixed(2) }}</p>
+        <p v-if="srtStore.activeLine>=0">{{ srtStore.activeLine }}/{{ srtStore.lines.length }}</p>
+        <p v-else>{{  srtStore.lines.length }}</p>
     </div>
 </template>

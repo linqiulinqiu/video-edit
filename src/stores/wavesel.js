@@ -3,7 +3,8 @@ import { defineStore } from 'pinia'
 export const useWaveSelStore = defineStore('waveSel', {
     state: ()=>({
         pos: 0,
-        sels: [0,0]
+        sels: [0,0],
+        duration: 0
     }),
     actions: {
         setPos(pos){
