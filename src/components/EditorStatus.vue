@@ -1,10 +1,11 @@
 <script>
 import { mapStores } from 'pinia'
 import { useWaveSelStore } from '@/stores/wavesel'
+import { useSrtStore } from '@/stores/srt'
 
 export default {
     computed: {
-        ...mapStores(useWaveSelStore)
+        ...mapStores(useWaveSelStore,useSrtStore)
     }
 }
 </script>
@@ -12,5 +13,6 @@ export default {
 <template>
     <div>
         <p>{{ waveSelStore.pos }}</p>
+        <p>{{ srtStore.lines.length }}</p>
     </div>
 </template>
