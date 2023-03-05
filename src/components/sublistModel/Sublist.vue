@@ -45,7 +45,7 @@ export default {
             <el-input-number
               v-model="line.from"
               :precision="3"
-              step="0.01"
+              step=0.01
               :placeholder="line.from"
               :controls="isControl"
               @blur="this.isControl = true"
@@ -57,7 +57,7 @@ export default {
             <el-input-number
               v-model="line.to"
               :precision="3"
-              step="0.01"
+              step=0.01
               :placeholder="2"
               size="small"
             ></el-input-number>

@@ -15,7 +15,7 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
       </el-row>
       <el-col>
         <EditorStatus />
-        <WaveMap />
+        <WaveMap audio-at="/data/audio.mp3" srt-at="/data/subtitle.srt" />
       </el-col>
     </el-main>
   </el-container>

@@ -3,44 +3,50 @@ import { mapStores, mapState } from "pinia";
 import { useWaveSelStore } from "@/stores/wavesel";
 import { useSrtStore } from "@/stores/srt";
 
+import * as srtparsejs from "srtparsejs";
 import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.min.js";
 
 export default {
+  props: {
+    audioAt: String,
+    srtAt: String
+  },
   computed: {
     ...mapState(useWaveSelStore, ["pos"]),
-    ...mapState(useSrtStore, ["activeLine"]),
+    ...mapState(useSrtStore, ["activeLine", "lines"]),
     ...mapStores(useWaveSelStore, useSrtStore),
   },
   watch: {
     pos(newPos, oldPos) {
       if (!this.playing) {
-        console.log("pos changed", oldPos, newPos);
         this.updateActiveLine();
       }
     },
+    lines(newLines, oldLines) {
+      this.updateRegions()
+    },
     activeLine(newAl, oldAl) {
-      if (this.region) {
-        this.region.remove();
-        this.region = false;
-      }
-      if (newAl >= 0) {
-        const line = this.srtStore.lines[newAl];
-        this.region = this.waveform.addRegion({
-          id: "activeLine",
-          start: line.from,
-          end: line.to,
-          loop: false,
+      if (oldAl >= 0 && oldAl < this.regions.length) {
+        this.regions[oldAl].update({
           drag: false,
           resize: false,
-        });
+          color: "rgba(0,0,0,0.1)"
+        })
+      }
+      if (newAl >= 0 && newAl < this.regions.length) {
+        this.regions[newAl].update({
+          drag: true,
+          resize: true,
+          color: "rgba(0,0,0,0.3)"
+        })
       }
     },
   },
   data() {
     return {
       playing: false,
-      region: false,
+      regions: [],
     };
   },
   mounted() {
@@ -51,28 +57,66 @@ export default {
       progressColor: "#a75",
       plugins: [RegionsPlugin.create({})],
     });
-
-    // Load audio file
-    this.waveform.load("/audio.mp3");
-    this.waveform.on("ready", () => {
-      this.waveSelStore.duration = this.waveform.getDuration();
-    });
-    this.waveform.on("seek", this.updatePos);
-    this.waveform.on("audioprocess", this.updatePos);
-    this.waveform.on("play", () => {
-      this.playing = true;
-    });
-    this.waveform.on("finish", () => {
-      this.playing = false;
-    });
-    this.waveform.on("region-play", () => {
-      this.playing = true;
-    });
-    this.waveform.on("pause", () => {
-      this.playing = false;
-    });
+    this.loadWaveform()
   },
   methods: {
+    async loadWaveform() {
+      // Load audio file
+      this.waveform.load(this.audioAt)
+      this.waveform.on("ready", () => {
+        this.waveSelStore.duration = this.waveform.getDuration();
+      });
+      this.waveform.on("seek", this.updatePos);
+      this.waveform.on("audioprocess", this.updatePos);
+      this.waveform.on("play", () => {
+        this.playing = true;
+      });
+      this.waveform.on("finish", () => {
+        this.playing = false;
+      });
+      this.waveform.on("region-play", () => {
+        this.playing = true;
+      });
+      this.waveform.on("pause", () => {
+        this.playing = false;
+      });
+      if(this.srtAt){
+        const resp = await fetch(this.srtAt)
+        const body = await resp.text()
+        console.log('srtbody', body)
+        const srt = srtparsejs.parse(body)
+        const lines = []
+        for(var i in srt){
+          const line = srt[i]
+          lines.push({
+            'speaker': 1,
+            'from': srtparsejs.toMS(line.startTime)/1000,
+            'to':srtparsejs.toMS(line.endTime)/1000,
+            'textZh': line.text,
+            'textEn': line.text
+          })
+          this.srtStore.lines = lines
+        }
+      }
+      this.updateRegions()
+    },
+    updateRegions() {
+      while (this.regions.length > 0) {
+        const region = this.regions.pop()
+        region.remove()
+      }
+      for (var i in this.lines) {
+        const line = this.lines[i]
+        this.regions.push(this.waveform.addRegion({
+          id: `line-${i}`,
+          start: line.from,
+          end: line.to,
+          loop: false,
+          drag: false,
+          resize: false,
+        }))
+      }
+    },
     updatePos() {
       this.waveSelStore.setPos(this.waveform.getCurrentTime());
     },
@@ -94,8 +138,8 @@ export default {
       if (this.playing) {
         this.waveform.pause();
       } else {
-        if (this.region) {
-          this.region.play();
+        if (this.activeLine>=0 && this.activeLine<this.regions.length) {
+          this.regions[this.activeLine].play();
         } else {
           this.waveform.play();
         }
