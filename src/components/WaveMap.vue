@@ -19,9 +19,12 @@ export default {
   },
   watch: {
     pos(newPos, oldPos) {
-      if (!this.playing) {
-        this.updateActiveLine();
+      if(this.waveform){
+        if(Math.abs(this.waveform.getCurrentTime()-newPos)>0.1){
+          this.waveform.setCurrentTime(newPos)
+        }
       }
+      this.updateActiveLine();
     },
     lines(newLines, oldLines) {
       this.updateRegions()
@@ -45,7 +48,6 @@ export default {
   },
   data() {
     return {
-      playing: false,
       regions: [],
     };
   },
@@ -66,24 +68,9 @@ export default {
       this.waveform.on("ready", () => {
         this.waveSelStore.duration = this.waveform.getDuration();
       });
-      this.waveform.on("seek", this.updatePos);
-      this.waveform.on("audioprocess", this.updatePos);
-      this.waveform.on("play", () => {
-        this.playing = true;
-      });
-      this.waveform.on("finish", () => {
-        this.playing = false;
-      });
-      this.waveform.on("region-play", () => {
-        this.playing = true;
-      });
-      this.waveform.on("pause", () => {
-        this.playing = false;
-      });
       if(this.srtAt){
         const resp = await fetch(this.srtAt)
         const body = await resp.text()
-        console.log('srtbody', body)
         const srt = srtparsejs.parse(body)
         const lines = []
         for(var i in srt){
@@ -134,17 +121,6 @@ export default {
       this.srtStore.activeLine = al;
       console.log("activeLine in update:", this.srtStore.activeLine);
     },
-    togglePlay() {
-      if (this.playing) {
-        this.waveform.pause();
-      } else {
-        if (this.activeLine>=0 && this.activeLine<this.regions.length) {
-          this.regions[this.activeLine].play();
-        } else {
-          this.waveform.play();
-        }
-      }
-    },
   },
 };
 </script>
@@ -152,10 +128,5 @@ export default {
 <template>
   <div>
     <div ref="waveform"></div>
-    <div>
-      <button v-on:click="togglePlay">
-        <span v-if="playing">Stop</span><span v-else>Play</span>
-      </button>
-    </div>
   </div>
 </template>

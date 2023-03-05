@@ -12,6 +12,7 @@
     "element-plus": "^2.2.32",
     "pinia": "^2.0.32",
     "srtparsejs": "^1.0.8",
+    "video.js": "^8.0.4",
     "vue": "^3.2.47",
     "wavesurfer.js": "^6.4.0"
   },

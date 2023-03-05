@@ -1,5 +1,6 @@
 <script setup>
 import WaveMap from "./components/WaveMap.vue";
+import VideoPlayer from './components/VideoPlayer.vue';
 import EditorStatus from "./components/EditorStatus.vue";
 import SublistVue from "./components/sublistModel/Sublist.vue";
 </script>
@@ -8,9 +9,9 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
   <el-container id="container" style="width: 100%">
     <el-main>
       <el-row justify="space-around">
-        <el-col :span="18"><SublistVue /></el-col>
-        <el-col class="border" :span="6">
-          <h2>video</h2>
+        <el-col :span="15"><SublistVue /></el-col>
+        <el-col class="border" :span="8">
+          <VideoPlayer video-at="data/video.mp4" />
         </el-col>
       </el-row>
       <el-col>
