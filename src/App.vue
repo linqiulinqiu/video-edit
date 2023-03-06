@@ -9,7 +9,7 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
   <el-container id="container" style="width: 100%">
     <el-main>
       <el-row>
-        <el-col :span="16">
+        <el-col :span="16" class="sublist">
           <SublistVue />
         </el-col>
         <el-col :span="8">
@@ -18,8 +18,8 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
       </el-row>
       <el-row>
         <el-col>
-        <EditorStatus />
-        <WaveMap audio-at="/data/audio.mp3" srt-at="/data/subtitle.srt" />
+          <EditorStatus />
+          <WaveMap audio-at="/data/audio.mp3" srt-at="/data/subtitle.srt" />
         </el-col>
       </el-row>
     </el-main>
@@ -29,7 +29,7 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
 <style scoped>
 .sublist {
   overflow-y: auto;
-  height: 600px;
+  height: 400px;
   /* height: calc(100vh - 200px); */
 }
 .sublist::-webkit-scrollbar {
@@ -49,6 +49,7 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
 
 #container {
   background-color: rgb(184, 214, 205);
+  text-align: center;
 }
 .bgcolor {
   background-color: rgb(215, 243, 245);
