@@ -10,7 +10,7 @@ import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.min.js";
 export default {
   props: {
     audioAt: String,
-    srtAt: String
+    srtAt: String,
   },
   computed: {
     ...mapState(useWaveSelStore, ["pos"]),
@@ -19,36 +19,43 @@ export default {
   },
   watch: {
     pos(newPos, oldPos) {
-      if(this.waveform){
-        if(Math.abs(this.waveform.getCurrentTime()-newPos)>0.1){
-          this.waveform.setCurrentTime(newPos)
+      if (this.waveform) {
+        // console.log("pos changed:", this.posDirty);
+        if (this.posDirty) {
+          this.posDirty = false;
+        } else {
+          if (Math.abs(this.waveform.getCurrentTime() - newPos) > 0.02) {
+            // console.log("set new pos", newPos);
+            this.waveform.setCurrentTime(newPos);
+          }
         }
+        this.updateActiveLine();
       }
-      this.updateActiveLine();
     },
     lines(newLines, oldLines) {
-      this.updateRegions()
+      this.updateRegions();
     },
     activeLine(newAl, oldAl) {
       if (oldAl >= 0 && oldAl < this.regions.length) {
         this.regions[oldAl].update({
           drag: false,
           resize: false,
-          color: "rgba(0,0,0,0.1)"
-        })
+          color: "rgba(0,0,0,0.1)",
+        });
       }
       if (newAl >= 0 && newAl < this.regions.length) {
         this.regions[newAl].update({
           drag: true,
           resize: true,
-          color: "rgba(0,0,0,0.3)"
-        })
+          color: "rgba(0,0,0,0.3)",
+        });
       }
     },
   },
   data() {
     return {
       regions: [],
+      posDirty: false,
     };
   },
   mounted() {
@@ -59,49 +66,65 @@ export default {
       progressColor: "#a75",
       plugins: [RegionsPlugin.create({})],
     });
-    this.loadWaveform()
+    this.loadWaveform();
   },
   methods: {
     async loadWaveform() {
       // Load audio file
-      this.waveform.load(this.audioAt)
+      this.waveform.load(this.audioAt);
       this.waveform.on("ready", () => {
         this.waveSelStore.duration = this.waveform.getDuration();
       });
-      if(this.srtAt){
-        const resp = await fetch(this.srtAt)
-        const body = await resp.text()
-        const srt = srtparsejs.parse(body)
-        const lines = []
-        for(var i in srt){
-          const line = srt[i]
+      if (this.srtAt) {
+        const resp = await fetch(this.srtAt);
+        const body = await resp.text();
+        const srt = srtparsejs.parse(body);
+        const lines = [];
+        for (var i in srt) {
+          const line = srt[i];
           lines.push({
-            'speaker': 1,
-            'from': srtparsejs.toMS(line.startTime)/1000,
-            'to':srtparsejs.toMS(line.endTime)/1000,
-            'textZh': line.text,
-            'textEn': line.text
-          })
-          this.srtStore.lines = lines
+            speaker: 1,
+            from: srtparsejs.toMS(line.startTime) / 1000,
+            to: srtparsejs.toMS(line.endTime) / 1000,
+            textZh: line.text,
+            textEn: line.text,
+          });
+          this.srtStore.lines = lines;
         }
       }
-      this.updateRegions()
+      this.updateRegions();
+      const widget = this;
+      this.waveform.on("region-click", () => {
+        if (widget.waveform.getCurrentTime() != widget.pos) {
+          console.log(
+            "pos changed by usr",
+            widget.waveform.getCurrentTime(),
+            widget.pos
+          );
+
+          widget.posDirty = true;
+          widget.updatePos();
+          // console.log("pos=", widget.pos);
+        }
+      });
     },
     updateRegions() {
       while (this.regions.length > 0) {
-        const region = this.regions.pop()
-        region.remove()
+        const region = this.regions.pop();
+        region.remove();
       }
       for (var i in this.lines) {
-        const line = this.lines[i]
-        this.regions.push(this.waveform.addRegion({
-          id: `line-${i}`,
-          start: line.from,
-          end: line.to,
-          loop: false,
-          drag: false,
-          resize: false,
-        }))
+        const line = this.lines[i];
+        this.regions.push(
+          this.waveform.addRegion({
+            id: `line-${i}`,
+            start: line.from,
+            end: line.to,
+            loop: false,
+            drag: false,
+            resize: false,
+          })
+        );
       }
     },
     updatePos() {
@@ -110,9 +133,12 @@ export default {
     updateActiveLine() {
       const lines = this.srtStore.lines;
       const pos = this.waveSelStore.pos;
-      if(this.activeLine>=0 && this.activeLine<lines.length){
-        if(lines[this.activeLine].from<=pos && lines[this.activeLine].to>pos){
-          return
+      if (this.activeLine >= 0 && this.activeLine < lines.length) {
+        if (
+          lines[this.activeLine].from <= pos &&
+          lines[this.activeLine].to > pos
+        ) {
+          return;
         }
       }
       var al = -1;

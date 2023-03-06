@@ -11,7 +11,10 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
       <el-row :gutter="30">
         <el-col class="sublist" :span="17"><SublistVue /></el-col>
         <el-col class="border" :span="6">
-          <VideoPlayer video-at="data/video.mp4" />
+          <VideoPlayer video-at="/data/video.mp4" />
+          <!-- <video width="380" height="250" controls> -->
+          <!-- <source src="../public/data/video.mp4" type="" /> -->
+          <!-- </video>region-click -->
         </el-col>
       </el-row>
       <el-col>
