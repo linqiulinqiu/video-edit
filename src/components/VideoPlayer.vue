@@ -25,7 +25,6 @@ export default {
         activeLine(newAl,oldAl){
             if(this.player){
                 if(this.playing){
-                    console.log('this-player', this.player)
                     this.player.pause()
                     this.playing = false
                 }
@@ -50,17 +49,16 @@ export default {
                     }
                 ]
             }
-            this.player = videojs(this.$refs.videoPlayer, options, () => { 
-                if(!this.posChecker){
-                    const widget = this
-                    this.posChecker = setInterval(()=>{
-                        if(widget.playing&&widget.player){
-                            const ctime = widget.player.currentTime()
-                            widget.waveSelStore.pos = ctime
-                        }
-                    },50)
-                }
-            })
+            this.player = videojs(this.$refs.videoPlayer, options, () => {})
+            if(!this.posChecker){
+                const widget = this
+                this.posChecker = setInterval(()=>{
+                    if(widget.playing&&widget.player){
+                        const ctime = widget.player.currentTime()
+                        widget.waveSelStore.pos = ctime
+                    }
+                },50)
+            }
         }
     },
     beforeUnmount() {

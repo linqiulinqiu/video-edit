@@ -110,6 +110,11 @@ export default {
     updateActiveLine() {
       const lines = this.srtStore.lines;
       const pos = this.waveSelStore.pos;
+      if(this.activeLine>=0 && this.activeLine<lines.length){
+        if(lines[this.activeLine].from<=pos && lines[this.activeLine].to>pos){
+          return
+        }
+      }
       var al = -1;
       for (var i in lines) {
         const line = lines[i];
