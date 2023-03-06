@@ -8,19 +8,20 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
 <template>
   <el-container id="container" style="width: 100%">
     <el-main>
-      <el-row :gutter="30">
-        <el-col class="sublist" :span="17"><SublistVue /></el-col>
-        <el-col class="border" :span="6">
+      <el-row>
+        <el-col :span="16">
+          <SublistVue />
+        </el-col>
+        <el-col :span="8">
           <VideoPlayer video-at="/data/video.mp4" />
-          <!-- <video width="380" height="250" controls> -->
-          <!-- <source src="../public/data/video.mp4" type="" /> -->
-          <!-- </video>region-click -->
         </el-col>
       </el-row>
-      <el-col>
+      <el-row>
+        <el-col>
         <EditorStatus />
         <WaveMap audio-at="/data/audio.mp3" srt-at="/data/subtitle.srt" />
-      </el-col>
+        </el-col>
+      </el-row>
     </el-main>
   </el-container>
 </template>

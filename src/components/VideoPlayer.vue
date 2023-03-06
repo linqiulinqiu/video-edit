@@ -39,15 +39,13 @@ export default {
     mounted() {
         if (this.videoAt) {
             const options = {
-                controls: false,
+                controls: true,
                 fill: true,
                 autoplay: true,
-                sources: [
-                    {
-                        src: this.videoAt,
-                        type: 'video/mp4'
-                    }
-                ]
+                sources: [{
+                    src: this.videoAt,
+                    type: 'video/mp4'
+                }]
             }
             this.player = videojs(this.$refs.videoPlayer, options, () => {})
             if(!this.posChecker){
@@ -75,7 +73,6 @@ export default {
 </script>
 
 <template>
-    <div>
-        <video ref="videoPlayer" class="video-js" width="300px"></video>
-    </div>
+    <video ref="videoPlayer" class="video-js" width="400" height="300" data-setup="{}">
+    </video>
 </template>
