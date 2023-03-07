@@ -21,11 +21,10 @@ export default {
     },
     textFocus() {
       this.showGroup = true;
-      console.log("show group :", this.showGroup);
     },
-    textBlur() {
-      this.showGroup = false;
-      console.log("show group :", this.showGroup);
+    textSelect(event) {
+      const objArea = event.target;
+      this.cursorPos = objArea.selectionStart;
     },
   },
   data() {
@@ -33,6 +32,7 @@ export default {
       currentIndex: this.activeLine,
       isControl: false,
       showGroup: false,
+      cursorPos: 0,
     };
   },
 };
@@ -57,8 +57,6 @@ export default {
               :precision="2"
               :step="0.01"
               :placeholder="line.from.toString()"
-              :controls="isControl"
-              @blur="this.isControl = true"
               size="small"
             ></el-input-number>
           </el-col>
@@ -77,19 +75,19 @@ export default {
               <el-icon size="20"><VideoPlay /></el-icon>
             </el-button>
           </el-col>
-          <el-col :span="9">
+          <el-col :span="14">
             <el-input
               type="textarea"
-              name=""
               @focus="textFocus()"
-              @blur="textBlur()"
               v-model="line.textZh"
+              @click="textSelect($event)"
             />
           </el-col>
-          <el-col :span="5">
+          <el-col class="btn-group" v-if="index == activeLine">
             <EditBtnGroupVue
-              class="btn-group"
-              :line="line"
+              :curIndex="index"
+              :cursorPos="cursorPos"
+              :lines="srtStore.lines"
               :showGroup="showGroup"
             />
           </el-col>
