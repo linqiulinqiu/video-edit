@@ -3,13 +3,14 @@ import videojs from "video.js";
 import "video.js/dist/video-js.css";
 import { mapStores, mapState } from "pinia";
 import { useWaveSelStore } from "@/stores/wavesel";
+import { usePlayerStore } from "@/stores/player";
 import { useSrtStore } from "@/stores/srt";
 import { iteratee } from "lodash";
 
 export default {
   computed: {
     ...mapState(useSrtStore, ["activeLine", "lines"]),
-    ...mapStores(useWaveSelStore, useSrtStore),
+    ...mapStores(useWaveSelStore, useSrtStore, usePlayerStore),
   },
   props: {
     videoAt: String,
@@ -27,9 +28,13 @@ export default {
         if (this.playing) {
           this.player.pause();
           this.playing = false;
+          this.playerStore.pos = null;
         }
         if (newAl < this.lines.length && newAl >= 0) {
-          this.player.currentTime(this.lines[newAl].from);
+          const start = this.lines[newAl].from
+          this.player.currentTime(start);
+          this.playerStore.pos = start;
+          this.waveSelStore.pos = null;
           this.player.play();
           this.playing = true;
         }
@@ -55,7 +60,7 @@ export default {
         this.posChecker = setInterval(() => {
           if (widget.playing && widget.player) {
             const ctime = widget.player.currentTime();
-            widget.waveSelStore.pos = ctime;
+            widget.playerStore.pos = ctime;
           }
         }, 50);
       }

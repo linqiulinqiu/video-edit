@@ -2,6 +2,7 @@
 import { mapStores, mapState } from "pinia";
 import { useWaveSelStore } from "@/stores/wavesel";
 import { useSrtStore } from "@/stores/srt";
+import { usePlayerStore } from "@/stores/player";
 
 import * as srtparsejs from "srtparsejs";
 import WaveSurfer from "wavesurfer.js";
@@ -13,22 +14,14 @@ export default {
     srtAt: String,
   },
   computed: {
-    ...mapState(useWaveSelStore, ["pos"]),
+    ...mapState(usePlayerStore, ["pos"]),
     ...mapState(useSrtStore, ["activeLine", "lines"]),
-    ...mapStores(useWaveSelStore, useSrtStore),
+    ...mapStores(useWaveSelStore, useSrtStore, usePlayerStore),
   },
   watch: {
     pos(newPos, oldPos) {
-      if (this.waveform) {
-        // console.log("pos changed:", this.posDirty);
-        if (this.posDirty) {
-          this.posDirty = false;
-        } else {
-          if (Math.abs(this.waveform.getCurrentTime() - newPos) > 0.02) {
-            // console.log("set new pos", newPos);
-            this.waveform.setCurrentTime(newPos);
-          }
-        }
+      if (newPos!=null && this.waveform && this.waveSelStore.pos==null) {
+        this.waveform.setCurrentTime(newPos);
         this.updateActiveLine();
       }
     },
@@ -54,8 +47,7 @@ export default {
   },
   data() {
     return {
-      regions: [],
-      posDirty: false,
+      regions: []
     };
   },
   mounted() {
@@ -94,18 +86,9 @@ export default {
       }
       this.updateRegions();
       const widget = this;
-      this.waveform.on("region-click", () => {
-        if (widget.waveform.getCurrentTime() != widget.pos) {
-          console.log(
-            "pos changed by usr",
-            widget.waveform.getCurrentTime(),
-            widget.pos
-          );
-
-          widget.posDirty = true;
-          widget.updatePos();
-          // console.log("pos=", widget.pos);
-        }
+      this.waveform.on("region-click", (e) => {
+          widget.waveSelStore.pos = e.start 
+          widget.updateActiveLine();
       });
     },
     updateRegions() {
@@ -127,12 +110,10 @@ export default {
         );
       }
     },
-    updatePos() {
-      this.waveSelStore.setPos(this.waveform.getCurrentTime());
-    },
     updateActiveLine() {
       const lines = this.srtStore.lines;
-      const pos = this.waveSelStore.pos;
+      let pos = this.waveSelStore.pos;
+      if(!pos) pos = this.pos;
       if (this.activeLine >= 0 && this.activeLine < lines.length) {
         if (
           lines[this.activeLine].from <= pos &&
@@ -150,7 +131,6 @@ export default {
         }
       }
       this.srtStore.activeLine = al;
-      console.log("activeLine in update:", this.srtStore.activeLine);
     },
   },
 };
