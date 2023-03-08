@@ -98,15 +98,19 @@ export default {
       }
       for (var i in this.lines) {
         const line = this.lines[i];
-        this.regions.push(
-          this.waveform.addRegion({
+        const prop = {
             id: `line-${i}`,
             start: line.from,
             end: line.to,
             loop: false,
             drag: false,
             resize: false,
-          })
+        }
+        if(i == this.activeLine){
+          prop.color= "rgba(0,0,0,0.3)"
+        }
+        this.regions.push(
+          this.waveform.addRegion(prop)
         );
       }
     },
