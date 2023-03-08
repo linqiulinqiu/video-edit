@@ -90,6 +90,20 @@ export default {
           widget.waveSelStore.pos = e.start 
           widget.updateActiveLine();
       });
+      // TODO: check overlap: cancel update when overlap
+      this.waveform.on('region-update-end', (e)=>{
+        if(Object.keys(this.waveform.regions.list).length==this.srtStore.lines.length){
+          let i = 0
+          const lines = this.srtStore.lines
+          for(let idx in this.waveform.regions.list){
+            const region = this.waveform.regions.list[idx]
+            lines[i].from = region.start
+            lines[i].to = region.end
+            i++
+          }
+          this.srtStore.lines = [...lines]
+        }
+      })
     },
     updateRegions() {
       while (this.regions.length > 0) {
@@ -103,8 +117,8 @@ export default {
             start: line.from,
             end: line.to,
             loop: false,
-            drag: false,
-            resize: false,
+            drag: true,
+            resize: true,
         }
         if(i == this.activeLine){
           prop.color= "rgba(0,0,0,0.3)"
