@@ -2,6 +2,7 @@
 import { mapStores, mapState } from "pinia";
 import { useSrtStore } from "@/stores/srt";
 import EditBtnGroupVue from "./EditBtnGroup.vue";
+import { VideoPlay, VideoPause } from "@element-plus/icons-vue";
 
 export default {
   computed: {
@@ -12,8 +13,9 @@ export default {
     EditBtnGroupVue,
   },
   methods: {
-    setActiveLine(idx) {
+    playVideo(idx) {
       this.srtStore.activeLine = idx;
+      this.isPlay != this.isPlay;
     },
     liClick(index) {
       this.currentIndex = index;
@@ -26,6 +28,19 @@ export default {
       const objArea = event.target;
       this.cursorPos = objArea.selectionStart;
     },
+    changeFrom(from, index) {
+      console.log("from", from, this.srtStore.lines);
+      const lines = this.srtStore.lines;
+      lines[index].from = from;
+      this.srtStore.lines = [...lines];
+      // this.srtStore.lines[index].from = from;
+    },
+    changeTo(to, index) {
+      const lines = this.srtStore.lines;
+      lines[index].to = to;
+      this.srtStore.lines = [...lines];
+      //Object.assign({}, lines);
+    }
   },
   data() {
     return {
@@ -33,7 +48,13 @@ export default {
       isControl: false,
       showGroup: false,
       cursorPos: 0,
+      isPlay: false,
     };
+  },
+  watch: {
+    activeLine: function (newL, oldL) {
+      this.currentIndex = newL;
+    },
   },
 };
 </script>
@@ -48,14 +69,15 @@ export default {
       >
         <el-row>
           <el-col :span="1">
+            <el-icon v-if="index == currentIndex"><Right /></el-icon>
             <span>{{ index + 1 }}</span>
-            <el-icon v-if="index == activeLine"><Right /></el-icon>
           </el-col>
           <el-col :span="3">
             <el-input-number
               v-model="line.from"
               :precision="2"
               :step="0.01"
+              @change="changeFrom(line.from, index)"
               :placeholder="line.from.toString()"
               size="small"
             ></el-input-number>
@@ -65,13 +87,14 @@ export default {
             <el-input-number
               v-model="line.to"
               :precision="2"
+              @change="changeTo(line.to, index)"
               :step="0.01"
               :placeholder="line.to.toString()"
               size="small"
             ></el-input-number>
           </el-col>
           <el-col :span="2">
-            <el-button plain size="default" @click="setActiveLine(index)">
+            <el-button plain size="default" @click="playVideo(index)">
               <el-icon size="20"><VideoPlay /></el-icon>
             </el-button>
           </el-col>
@@ -83,7 +106,7 @@ export default {
               @click="textSelect($event)"
             />
           </el-col>
-          <el-col class="btn-group" v-if="index == activeLine">
+          <el-col class="btn-group" v-if="index == currentIndex">
             <EditBtnGroupVue
               :curIndex="index"
               :cursorPos="cursorPos"
@@ -94,13 +117,14 @@ export default {
         </el-row>
       </li>
     </ul>
+    <el-button @click="tuneTest">Tune</el-button>
   </el-col>
 </template>
 <style scoped>
 .active {
   border: 1px solid rgb(54, 92, 85);
   border-radius: 10px;
-  background-color: rgb(154, 199, 201);
+  background-color: #235862ab;
 }
 ul {
   padding-inline-start: 0px !important;

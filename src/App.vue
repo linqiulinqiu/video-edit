@@ -48,7 +48,6 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
 }
 
 #container {
-  background-color: rgb(184, 214, 205);
   text-align: center;
 }
 .bgcolor {
