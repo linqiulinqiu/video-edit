@@ -20,7 +20,7 @@ export default {
   },
   watch: {
     pos(newPos, oldPos) {
-      if (newPos!=null && this.waveform && this.waveSelStore.pos==null) {
+      if (newPos != null && this.waveform && this.waveSelStore.pos == null) {
         this.waveform.setCurrentTime(newPos);
         this.updateActiveLine();
       }
@@ -47,7 +47,7 @@ export default {
   },
   data() {
     return {
-      regions: []
+      regions: [],
     };
   },
   mounted() {
@@ -67,6 +67,7 @@ export default {
       this.waveform.on("ready", () => {
         this.waveSelStore.duration = this.waveform.getDuration();
       });
+      console.log(this.srtAt);
       if (this.srtAt) {
         const resp = await fetch(this.srtAt);
         const body = await resp.text();
@@ -81,29 +82,36 @@ export default {
             textZh: line.text,
             textEn: line.text,
           });
-          this.srtStore.lines = lines;
         }
+        this.srtStore.lines = lines;
+        this.srtStore.setLines([...lines], this.waveSelStore.duration);
       }
       this.updateRegions();
       const widget = this;
       this.waveform.on("region-click", (e) => {
-          widget.waveSelStore.pos = e.start 
-          widget.updateActiveLine();
+        widget.waveSelStore.pos = e.start;
+        widget.updateActiveLine();
       });
       // TODO: check overlap: cancel update when overlap
-      this.waveform.on('region-update-end', (e)=>{
-        if(Object.keys(this.waveform.regions.list).length==this.srtStore.lines.length){
-          let i = 0
-          const lines = this.srtStore.lines
-          for(let idx in this.waveform.regions.list){
-            const region = this.waveform.regions.list[idx]
-            lines[i].from = region.start
-            lines[i].to = region.end
-            i++
+      this.waveform.on("region-update-end", (e) => {
+        if (
+          Object.keys(this.waveform.regions.list).length ==
+          this.srtStore.lines.length
+        ) {
+          let i = 0;
+          const lines = [];
+          for (let idx in this.waveform.regions.list) {
+            const region = this.waveform.regions.list[idx];
+            const line = Object.assign({}, this.srtStore.lines[i]);
+            line.from = region.start;
+            line.to = region.end;
+            lines.push(line);
+            i++;
           }
-          this.srtStore.lines = [...lines]
+          this.srtStore.setLines(lines, this.waveSelStore.duration);
+          this.updateRegions();
         }
-      })
+      });
     },
     updateRegions() {
       while (this.regions.length > 0) {
@@ -113,25 +121,23 @@ export default {
       for (var i in this.lines) {
         const line = this.lines[i];
         const prop = {
-            id: `line-${i}`,
-            start: line.from,
-            end: line.to,
-            loop: false,
-            drag: true,
-            resize: true,
+          id: `line-${i}`,
+          start: line.from,
+          end: line.to,
+          loop: false,
+          drag: true,
+          resize: true,
+        };
+        if (i == this.activeLine) {
+          prop.color = "rgba(0,0,0,0.3)";
         }
-        if(i == this.activeLine){
-          prop.color= "rgba(0,0,0,0.3)"
-        }
-        this.regions.push(
-          this.waveform.addRegion(prop)
-        );
+        this.regions.push(this.waveform.addRegion(prop));
       }
     },
     updateActiveLine() {
       const lines = this.srtStore.lines;
       let pos = this.waveSelStore.pos;
-      if(!pos) pos = this.pos;
+      if (!pos) pos = this.pos;
       if (this.activeLine >= 0 && this.activeLine < lines.length) {
         if (
           lines[this.activeLine].from <= pos &&

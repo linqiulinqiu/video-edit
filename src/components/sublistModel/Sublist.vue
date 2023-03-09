@@ -1,12 +1,14 @@
 <script>
 import { mapStores, mapState } from "pinia";
 import { useSrtStore } from "@/stores/srt";
+import { useWaveSelStore } from "@/stores/wavesel";
 import EditBtnGroupVue from "./EditBtnGroup.vue";
 import { VideoPlay, VideoPause } from "@element-plus/icons-vue";
 
 export default {
   computed: {
-    ...mapState(useSrtStore, ["activeLine","lines"]),
+    ...mapState(useSrtStore, ["activeLine", "lines"]),
+    ...mapState(useWaveSelStore, ["duration"]),
     ...mapStores(useSrtStore),
   },
   components: {
@@ -28,34 +30,37 @@ export default {
       const objArea = event.target;
       this.cursorPos = objArea.selectionStart;
     },
-    edgeUpdate(index){
-      const lines = this.srtStore.lines
-      console.log('update lines', index, lines)
-      const line = lines[index]
-      let fixed = false
-      if(index<=0){
-        if(line.from<0){
-          line.from = 0
-          fixed = true
+    edgeUpdate(index) {
+      const lines = this.srtStore.lines;
+      const line = lines[index];
+      let fixed = false;
+      if (index <= 0) {
+        if (line.from < 0) {
+          line.from = 0;
+          fixed = true;
         }
-      }else if(line.from<lines[index-1].to){
-        line.from = lines[index-1].to
-        fixed = true
+      } else if (line.from < lines[index - 1].to) {
+        line.from = lines[index - 1].to;
+        fixed = true;
       }
-      if(index>=lines.length){
-        const duration = this.waveSelStore.duration
-        if(line.to>=duration){
-          line.to = duration
-          fixed = true
+      const duration = this.duration;
+      if (index >= lines.length) {
+        console.log("enter");
+
+        if (line.to >= duration) {
+          line.to = duration;
+          fixed = true;
         }
-      }else if(line.to>lines[index+1].from){
-        line.to = lines[index+1].from
-        fixed = true
+      } else if (line.to > lines[index + 1].from) {
+        line.to = lines[index + 1].from;
+        fixed = true;
+      } else {
+        console.log("line.to = ", line.to, lines[index + 1].from);
       }
-      this.srtStore.lines = [...lines]
-      if(fixed){
-        console.log('fixed line', index, this.lines)
-        this.$forceUpdate()
+      this.srtStore.setLines(lines, duration);
+      if (fixed) {
+        console.log("fixed line", index, this.lines);
+        this.$forceUpdate();
       }
     },
   },
@@ -94,6 +99,8 @@ export default {
               v-model="line.from"
               :precision="2"
               :step="0.01"
+              :min="line.min"
+              :max="line.to"
               @input="edgeUpdate(index)"
               :placeholder="line.from.toString()"
               size="small"
@@ -104,6 +111,8 @@ export default {
             <el-input-number
               v-model="line.to"
               :precision="2"
+              :min="line.from"
+              :max="line.max"
               @input="edgeUpdate(index)"
               :step="0.01"
               :placeholder="line.to.toString()"
