@@ -67,7 +67,6 @@ export default {
       this.waveform.on("ready", () => {
         this.waveSelStore.duration = this.waveform.getDuration();
       });
-      console.log(this.srtAt);
       if (this.srtAt) {
         const resp = await fetch(this.srtAt);
         const body = await resp.text();
