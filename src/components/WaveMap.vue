@@ -4,14 +4,12 @@ import { useWaveSelStore } from "@/stores/wavesel";
 import { useSrtStore } from "@/stores/srt";
 import { usePlayerStore } from "@/stores/player";
 
-import * as srtparsejs from "srtparsejs";
 import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.min.js";
 
 export default {
   props: {
     audioAt: String,
-    srtAt: String,
   },
   computed: {
     ...mapState(usePlayerStore, ["pos"]),
@@ -26,6 +24,7 @@ export default {
       }
     },
     lines(newLines, oldLines) {
+      console.log('lines', newLines)
       this.updateRegions();
     },
     activeLine(newAl, oldAl) {
@@ -67,24 +66,6 @@ export default {
       this.waveform.on("ready", () => {
         this.waveSelStore.duration = this.waveform.getDuration();
       });
-      if (this.srtAt) {
-        const resp = await fetch(this.srtAt);
-        const body = await resp.text();
-        const srt = srtparsejs.parse(body);
-        const lines = [];
-        for (var i in srt) {
-          const line = srt[i];
-          lines.push({
-            speaker: 1,
-            from: srtparsejs.toMS(line.startTime) / 1000,
-            to: srtparsejs.toMS(line.endTime) / 1000,
-            textZh: line.text,
-            textEn: line.text,
-          });
-        }
-        this.srtStore.lines = lines;
-        this.srtStore.setLines([...lines], this.waveSelStore.duration);
-      }
       this.updateRegions();
       const widget = this;
       this.waveform.on("region-click", (e) => {

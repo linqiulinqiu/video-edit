@@ -2,7 +2,7 @@
 import WaveMap from "./components/WaveMap.vue";
 import VideoPlayer from "./components/VideoPlayer.vue";
 import EditorStatus from "./components/EditorStatus.vue";
-import SublistVue from "./components/sublistModel/Sublist.vue";
+import SublistPanel from "./components/sublistModel/SublistPanel.vue";
 </script>
 
 <template>
@@ -10,7 +10,7 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
     <el-main>
       <el-row>
         <el-col :span="16" class="sublist">
-          <SublistVue />
+          <SublistPanel />
         </el-col>
         <el-col :span="8">
           <VideoPlayer video-at="/data/video.mp4" />
@@ -19,7 +19,7 @@ import SublistVue from "./components/sublistModel/Sublist.vue";
       <el-row>
         <el-col>
           <EditorStatus />
-          <WaveMap audio-at="/data/audio.mp3" srt-at="/data/subtitle.srt" />
+          <WaveMap audio-at="/data/audio.mp3" />
         </el-col>
       </el-row>
     </el-main>
