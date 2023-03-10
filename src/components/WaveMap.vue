@@ -107,7 +107,9 @@ export default {
             lines.push(line);
             i++;
           }
+          this.srtStore.lines = lines;
           this.srtStore.setLines(lines, this.waveSelStore.duration);
+          console.log("lines = ", this.srtStore.lines);
           this.updateRegions();
         }
       });
