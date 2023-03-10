@@ -82,6 +82,11 @@ export default {
 </script>
 <template>
   <el-col :span="24" :offset="0">
+    <el-col>
+      <el-button>英文显示</el-button>
+      <el-button>中文显示</el-button>
+      <el-button>双语显示</el-button>
+    </el-col>
     <ul :spna="24">
       <li
         @click="liClick(index)"
