@@ -31,12 +31,22 @@ export default {
           this.playerStore.pos = null;
         }
         if (newAl < this.lines.length && newAl >= 0) {
-          const start = this.lines[newAl].from
+          const start = this.lines[newAl].from;
           this.player.currentTime(start);
           this.playerStore.pos = start;
           this.waveSelStore.pos = null;
-          this.player.play();
-          this.playing = true;
+          const playPromise = this.player.play();
+          if (playPromise != undefined) {
+            playPromise
+              .then((_) => {
+                this.playing = true;
+              })
+              .catch((error) => {
+                console.log("play error", error);
+              });
+          }
+          // this.player.play();
+          // this.playing = true;
         }
       }
     },

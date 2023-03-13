@@ -24,7 +24,7 @@ export default {
       }
     },
     lines(newLines, oldLines) {
-      console.log('lines', newLines)
+      // console.log('lines', newLines)
       this.updateRegions();
     },
     activeLine(newAl, oldAl) {
