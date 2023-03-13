@@ -1,11 +1,14 @@
 <script>
+import { mapState } from "pinia";
 import Tooltip from "../lib/Tooltip.vue";
 import { useSrtStore } from "@/stores/srt";
+import { useWaveSelStore } from "@/stores/wavesel";
 import { mapStores } from "pinia";
 
 export default {
   computed: {
     ...mapStores(useSrtStore),
+    ...mapState(useWaveSelStore, ["duration"]),
   },
   components: {
     Tooltip,
@@ -31,13 +34,22 @@ export default {
     editLines(direction) {
       const index = this.curIndex;
       const lines = this.lines;
-      const cutTxt = this.cutString(this.cursorPos, this.lines[index].textZh);
+      const cutTxt = this.cutString(this.cursorPos, lines[index].textZh);
+      const duration = lines[index].to - lines[index].from;
+      const scale = this.cursorPos / lines[index].textZh.length;
+      // console.log("scale = ", cutTime);
       if (direction == "last") {
+        const cutTime = scale * duration;
         lines[index - 1].textZh = lines[index - 1].textZh + cutTxt[0];
         lines[index].textZh = cutTxt[1];
+        lines[index - 1].to = lines[index - 1].to + cutTime;
+        lines[index].from = lines[index].from - cutTime;
       } else if (direction == "next") {
+        const cutTime = (1 - scale) * duration;
         lines[index].textZh = cutTxt[0];
         lines[index + 1].textZh = cutTxt[1] + lines[index + 1].textZh;
+        lines[index].to = lines[index].to - cutTime;
+        lines[index + 1].from = lines[index + 1].from + cutTime;
       }
       return lines;
     },
@@ -89,11 +101,13 @@ export default {
     },
     cutToLast() {
       const cutLines = this.editLines("last");
-      this.srtStore.lines = cutLines;
+      // this.srtStore.lines = cutLines;
+      this.srtStore.setLines(cutLines, this.duration);
       console.log(this.lines);
     },
     cutToNext() {
-      this.srtStore.lines = this.editLines("next");
+      const cutLines = this.editLines("next");
+      this.srtStore.setLines(cutLines, this.duration);
     },
   },
 };

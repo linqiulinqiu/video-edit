@@ -39,6 +39,9 @@ export const useSrtStore = defineStore('srt', {
                 }
                 lastTo = line.to
             }
+            console.log("lines", lines)
+            console.log("lines",lines,lines.length)
+
             for (let i = 0; i < lines.length; i++) {
                 let min = ''
                 let max = ''
