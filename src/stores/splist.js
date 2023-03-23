@@ -9,6 +9,7 @@ export const useSpStore = defineStore('spList', {
             { id: 3, name: '03-Daniel', gender: "女", demo: "dd" },
             { id: 4, name: '04-Emma', gender: "男", demo: "ee" },
             { id: 5, name: '05-Francisco', gender: "女", demo: "ff" }
-        ]
+        ],
+        speakerList: [3, 5, 2],
     })
 })

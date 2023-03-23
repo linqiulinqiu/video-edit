@@ -13,6 +13,12 @@ export default defineConfig({
   },
   server: {
     open: true,
-    port:8080, 
+    port: 8080, 
+    proxy: {
+      '/api': {
+        // target: 'https://gwl.brimod.com/',
+        changeOrigin:true,
+      }
+    }
   }
 })

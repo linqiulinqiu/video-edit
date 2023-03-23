@@ -1,9 +1,34 @@
-<script setup>
+<script>
 import WaveMap from "./components/WaveMap.vue";
 import VideoPlayer from "./components/VideoPlayer.vue";
 import EditorStatus from "./components/EditorStatus.vue";
 import SublistPanel from "./components/sublistModel/SublistPanel.vue";
 import SpeakerList from "./components/SpeakerList.vue";
+import queryString from "query-string";
+
+export default {
+  components: {
+    SpeakerList,
+    SublistPanel,
+    EditorStatus,
+    VideoPlayer,
+    WaveMap,
+  },
+  async mounted() {
+    const query = queryString.parse(location.search);
+    if('sid' in query){
+    console.log("sid=", query.sid);
+    const url = `/subedit/subtitle-info/${query.sid}`;
+    const subres = await this.axios({
+      method: "get",
+      url: url,
+    })
+    console.log('subinfo', subres.code, subres.data)
+    const spkres = await this.axios({method:'get', url: '/subedit/all-speakers'})
+    console.log('spks', spkres.code, spkres.data)
+    }
+  },
+};
 </script>
 
 <template>

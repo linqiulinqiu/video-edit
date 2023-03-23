@@ -9,6 +9,7 @@ export const useSrtStore = defineStore('srt', {
     actions: {
         async loadSrt(url,duration, lang) {
             const resp = await fetch(url);
+            console.log('resp = ',resp)
             const body = await resp.text();
             const srt = srtparsejs.parse(body);
             const lines = [];
