@@ -2,12 +2,14 @@
 import { mapStores, mapState } from "pinia";
 import { useSrtStore } from "@/stores/srt";
 import { useWaveSelStore } from "@/stores/wavesel";
+import { useSpStore } from "@/stores/splist";
 import EditBtnGroupVue from "./EditBtnGroup.vue";
 import { VideoPlay } from "@element-plus/icons-vue";
 
 export default {
   computed: {
     ...mapState(useSrtStore, ["activeLine", "lines"]),
+    ...mapState(useSpStore, ["speakers"]),
     ...mapState(useWaveSelStore, ["duration"]),
     ...mapStores(useSrtStore),
   },
@@ -65,6 +67,7 @@ export default {
     },
   },
   data() {
+    console.log("lines", this.lines);
     return {
       currentIndex: this.activeLine,
       isControl: false,
@@ -81,67 +84,76 @@ export default {
 };
 </script>
 <template>
-    <ul :spna="24">
-      <li
-        @click="liClick(index)"
-        :class="{ active: currentIndex == index }"
-        v-for="(line, index) in lines"
-        :key="index"
-      >
-        <el-row>
-          <el-col :span="1">
-            <el-icon v-if="index == currentIndex"><Right /></el-icon>
-            <span>{{ index + 1 }}</span>
-          </el-col>
-          <el-col :span="3">
-            <el-input-number
-              v-model="line.from"
-              :precision="2"
-              :step="0.01"
-              :min="line.min"
-              :max="line.to"
-              @input="edgeUpdate(index)"
-              :placeholder="line.from.toString()"
-              size="small"
-            ></el-input-number>
-          </el-col>
-          <el-col :span="1">----</el-col>
-          <el-col :span="3">
-            <el-input-number
-              v-model="line.to"
-              :precision="2"
-              :min="line.from"
-              :max="line.max"
-              @input="edgeUpdate(index)"
-              :step="0.01"
-              :placeholder="line.to.toString()"
-              size="small"
-            ></el-input-number>
-          </el-col>
-          <el-col :span="2">
-            <el-button plain size="default" @click="playVideo(index)">
-              <el-icon size="20"><VideoPlay /></el-icon>
-            </el-button>
-          </el-col>
-          <el-col :span="14">
-            <el-input
-              type="textarea"
-              @focus="textFocus()"
-              v-model="line.textZh"
-              @click="textSelect($event)"
-            />
-          </el-col>
-          <el-col class="btn-group" v-if="index == currentIndex">
-            <EditBtnGroupVue
-              :curIndex="index"
-              :cursorPos="cursorPos"
-              :lines="srtStore.lines"
-              :showGroup="showGroup"
-            />
-          </el-col>
-        </el-row>
-      </li>
-    </ul>
+  <ul :spna="24">
+    <li
+      @click="liClick(index)"
+      :class="{ active: currentIndex == index }"
+      v-for="(line, index) in lines"
+      :key="index"
+    >
+      <el-row>
+        <el-col :span="1">
+          <el-icon v-if="index == currentIndex"><Right /></el-icon>
+          <span>{{ index + 1 }}</span>
+        </el-col>
+        <el-col :span="2">
+          <el-select size="small" v-model="line.speaker">
+            <el-option
+              v-for="item in speakers"
+              :key="item.id"
+              :value="item.name"
+            ></el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="3">
+          <el-input-number
+            v-model="line.from"
+            :precision="2"
+            :step="0.01"
+            :min="line.min"
+            :max="line.to"
+            @input="edgeUpdate(index)"
+            :placeholder="line.from.toString()"
+            size="small"
+          ></el-input-number>
+        </el-col>
+        <el-col :span="1">-----</el-col>
+        <el-col :span="3">
+          <el-input-number
+            v-model="line.to"
+            :precision="2"
+            :min="line.from"
+            :max="line.max"
+            @input="edgeUpdate(index)"
+            :step="0.01"
+            :placeholder="line.to.toString()"
+            size="small"
+          ></el-input-number>
+        </el-col>
+        <el-col :span="2">
+          <el-button plain size="default" @click="playVideo(index)">
+            <el-icon size="20"><VideoPlay /></el-icon>
+          </el-button>
+        </el-col>
+        <el-col :span="12">
+          <el-input
+            type="textarea"
+            @focus="textFocus()"
+            v-model="line.textZh"
+            @click="textSelect($event)"
+          />
+        </el-col>
+        <el-col class="btn-group" v-if="index == currentIndex">
+          <EditBtnGroupVue
+            :curIndex="index"
+            :cursorPos="cursorPos"
+            :lines="srtStore.lines"
+            :showGroup="showGroup"
+          />
+        </el-col>
+      </el-row>
+    </li>
+  </ul>
 </template>
 <style scoped>
 .active {

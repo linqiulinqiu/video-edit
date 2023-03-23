@@ -93,8 +93,8 @@ export default {
   <video
     ref="videoPlayer"
     class="video-js"
-    width="500"
     height="350"
+    width="500"
     data-setup="{}"
   ></video>
 </template>

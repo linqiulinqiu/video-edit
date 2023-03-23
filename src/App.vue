@@ -3,25 +3,29 @@ import WaveMap from "./components/WaveMap.vue";
 import VideoPlayer from "./components/VideoPlayer.vue";
 import EditorStatus from "./components/EditorStatus.vue";
 import SublistPanel from "./components/sublistModel/SublistPanel.vue";
+import SpeakerList from "./components/SpeakerList.vue";
 </script>
 
 <template>
   <el-container id="container" style="width: 100%">
     <el-main>
-      <el-row>
-        <el-col :span="16" class="sublist">
-          <SublistPanel />
-        </el-col>
-        <el-col :span="8">
-          <VideoPlayer video-at="/data/video.mp4" />
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col>
+      <el-tabs>
+        <el-tab-pane label="编辑内容">
+          <el-row>
+            <el-col :span="16" class="sublist">
+              <SublistPanel />
+            </el-col>
+            <el-col :span="8">
+              <VideoPlayer video-at="/data/video.mp4" />
+            </el-col>
+          </el-row>
           <EditorStatus />
           <WaveMap audio-at="/data/audio.mp3" />
-        </el-col>
-      </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="语音设置">
+          <SpeakerList />
+        </el-tab-pane>
+      </el-tabs>
     </el-main>
   </el-container>
 </template>
@@ -29,7 +33,7 @@ import SublistPanel from "./components/sublistModel/SublistPanel.vue";
 <style scoped>
 .sublist {
   overflow-y: auto;
-  height: 400px;
+  height: 500px;
   /* height: calc(100vh - 200px); */
 }
 .sublist::-webkit-scrollbar {
@@ -46,7 +50,13 @@ import SublistPanel from "./components/sublistModel/SublistPanel.vue";
   background-color: rgb(124, 179, 160);
   border-radius: 5px;
 }
-
+.el-tabs {
+  height: 800px;
+  background-color: #9dbfc1;
+}
+.el-tabs__header {
+  background-color: #9dbfc1;
+}
 #container {
   text-align: center;
 }
