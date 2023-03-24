@@ -11,6 +11,7 @@ export default {
     ...mapState(useSpStore, ["speakers", "speakerList"]),
     ...mapStores(useSpStore),
   },
+
   data() {
     return {};
   },
@@ -18,6 +19,9 @@ export default {
     speakerList: function (newl) {
       console.log("new list", newl);
     },
+  },
+  mounted() {
+    this.spStore.loadSpeakers("/subedit/all-speakers/");
   },
   methods: {
     delSpeaker(val, idx) {
@@ -40,7 +44,6 @@ export default {
             <el-col :span="3">性别</el-col>
             <el-col :span="5">示例</el-col>
             <el-col :span="5">删除</el-col>
-            <el-col :span="5">设置</el-col>
           </el-row>
         </h2>
       </li>
@@ -60,7 +63,6 @@ export default {
               >Delete (delete this, and move all rest up)</el-button
             ></el-col
           >
-          <el-col :span="5"></el-col>
         </el-row>
       </li>
     </ul>

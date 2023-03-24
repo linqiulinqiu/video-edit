@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import loadInfo from '../loadInfo'
 
 export const useSpStore = defineStore('spList', {
     state: () => ({
@@ -10,6 +11,14 @@ export const useSpStore = defineStore('spList', {
             { id: 4, name: '04-Emma', gender: "男", demo: "ee" },
             { id: 5, name: '05-Francisco', gender: "女", demo: "ff" }
         ],
-        speakerList: [3, 5, 2],
-    })
+        speakerList: [],
+    }),
+    actions: {
+        async loadSpeakers(url) {
+            const resp = await loadInfo.getInfo(url)
+            this.speakers = resp.data
+
+        }
+    }
+    
 })

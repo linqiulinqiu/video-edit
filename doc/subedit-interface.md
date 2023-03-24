@@ -23,7 +23,7 @@ Vue 应用运行在 Web Server /subedit/dist 目录下，后端接口URL位于 W
     - id: SUBTITLE_ID
     - video_id: 对应的视频ID
     - lang.name: 对应的语言名称
-    - revision: 最新版本
+    - subsnap.revision: 最新版本
     - subsnap.spks: 最新版本的说话人对应表
     - subsnap.chunks: 最新版本的句子/段落列表
 

@@ -6,26 +6,26 @@ import Sublist from "@/components/sublistModel/Sublist.vue";
 
 export default {
   computed: {
-    ...mapState(useWaveSelStore,["duration"]),
-    ...mapStores(useSrtStore)
+    ...mapState(useWaveSelStore, ["duration"]),
+    ...mapStores(useSrtStore),
   },
-  components:{
-    Sublist
+  components: {
+    Sublist,
   },
   methods: {
-    loadSrt(name){
-        this.srtStore.loadSrt('/data/'+name+'.srt', this.duration, 'zh')
-    }
-  }
-}
+    loadSrt(name) {
+      this.srtStore.loadSrt('/subedit/subtitle-info/', this.duration);
+    },
+  },
+};
 </script>
 <template>
   <el-col :span="24" :offset="0">
     <el-col>
       <el-button @click="loadSrt('subtitle')">MS中文</el-button>
-      <el-button @click="loadSrt('subtitle-en')">GPT英文</el-button>
-      <el-button @click="loadSrt('subtitle-zh')">GPT中文</el-button>
+      <!-- <el-button @click="loadSrt('subtitle-en')">GPT英文</el-button> -->
+      <!-- <el-button @click="loadSrt('subtitle-zh')">GPT中文</el-button> -->
     </el-col>
     <Sublist />
-</el-col>
+  </el-col>
 </template>
