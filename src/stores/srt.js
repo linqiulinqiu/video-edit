@@ -14,7 +14,7 @@ export const useSrtStore = defineStore('srt', {
             if (sid) {
                 url = url + sid
                 const resp =await loadInfo.getInfo(url);
-                console.log('resp = ',resp.data)
+                console.log('in loadSrt,resp = ',resp.data)
                 // const lang = {
                 //     name: resp.lang.name,
                 //     lcname:resp.lang.lcname

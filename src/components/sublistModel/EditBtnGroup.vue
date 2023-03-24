@@ -71,8 +71,7 @@ export default {
         const line = {
           from: 0.0,
           to: 0.3,
-          textZh: "",
-          textEn: "",
+          text: "",
           speaker: "",
         };
         this.lines.splice(index + 1, 0, line);
@@ -89,8 +88,7 @@ export default {
         const line = {
           from: 0.0,
           to: 0.3,
-          textZh: "",
-          textEn: "",
+          text: "",
           speaker: "",
         };
         this.lines.unshift(line);

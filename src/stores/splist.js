@@ -17,7 +17,6 @@ export const useSpStore = defineStore('spList', {
         async loadSpeakers(url) {
             const resp = await loadInfo.getInfo(url)
             this.speakers = resp.data
-
         }
     }
     

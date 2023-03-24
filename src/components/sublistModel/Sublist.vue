@@ -67,7 +67,7 @@ export default {
     },
   },
   data() {
-    console.log("lines", this.lines);
+    console.log("lines in sublist", this.lines);
     return {
       currentIndex: this.activeLine,
       isControl: false,
@@ -139,7 +139,7 @@ export default {
           <el-input
             type="textarea"
             @focus="textFocus()"
-            v-model="line.textZh"
+            v-model="line.text"
             @click="textSelect($event)"
           />
         </el-col>
