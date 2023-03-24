@@ -1,6 +1,6 @@
 
 <script>
-import { mapState, mapStores } from "pinia";
+import { mapState, mapStores, mapActions } from "pinia";
 import { useSpStore } from "@/stores/splist";
 import SpeakerSetVue from "./speakerModel/speakerSet.vue";
 export default {
@@ -9,6 +9,7 @@ export default {
   },
   computed: {
     ...mapState(useSpStore, ["speakers", "speakerList"]),
+    ...mapActions(useSpStore, ["loadlist"]),
     ...mapStores(useSpStore),
   },
 
@@ -21,7 +22,8 @@ export default {
     },
   },
   async mounted() {
-    await useSpStore.loadSpeakers("/subedit/all-speakers/");
+    // console.log("store:", useSpStore.loadlist());
+    await this.loadlist("subedit/all-speakers/");
     // await this.spStore.loadSpeakers("/subedit/all-speakers/");
   },
   methods: {
