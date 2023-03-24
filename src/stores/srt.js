@@ -23,6 +23,7 @@ export const useSrtStore = defineStore('srt', {
                 const video_id = resp.data.video_id
                 const revision = resp.data.subsnap.revision
                 const spks = resp.data.subsnap.spks
+                const audio_lens = resp.data.subsnap.audio_lens
                 useSpStore.speakerList = spks
                 const subtitle_id = resp.data.subsnap.subtitle_id
 
@@ -39,25 +40,6 @@ export const useSrtStore = defineStore('srt', {
                 }
                 this.setLines(lines,duration)
             }
-
-            // const body = await resp.text();
-            // const srt = srtparsejs.parse(body);
-            // const lines = [];
-            // for (var i in srt) {
-            //     const line = srt[i];
-            //     const item = {
-            //         speaker: 1,
-            //         from: srtparsejs.toMS(line.startTime) / 1000,
-            //         to: srtparsejs.toMS(line.endTime) / 1000,
-            //     };
-            //     if(lang=='en'){
-            //         item.textEn = line.text
-            //     }else if(lang =='zh'){
-            //         item.textZh = line.text
-            //     }
-            //     lines.push(item)
-            // }
-            // this.setLines(lines, duration);
         },
         setLines(lines, duration) {
             let overlap = false

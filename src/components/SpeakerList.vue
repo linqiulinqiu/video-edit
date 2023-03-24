@@ -20,8 +20,9 @@ export default {
       console.log("new list", newl);
     },
   },
-  mounted() {
-    this.spStore.loadSpeakers("/subedit/all-speakers/");
+  async mounted() {
+    await useSpStore.loadSpeakers("/subedit/all-speakers/");
+    // await this.spStore.loadSpeakers("/subedit/all-speakers/");
   },
   methods: {
     delSpeaker(val, idx) {
