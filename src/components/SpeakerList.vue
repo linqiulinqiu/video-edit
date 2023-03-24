@@ -3,6 +3,8 @@
 import { mapState, mapStores, mapActions } from "pinia";
 import { useSpStore } from "@/stores/splist";
 import SpeakerSetVue from "./speakerModel/speakerSet.vue";
+import loadInfo from "../loadInfo";
+
 export default {
   components: {
     SpeakerSetVue,
@@ -21,12 +23,16 @@ export default {
       console.log("new list", newl);
     },
   },
+
   async mounted() {
-    // console.log("store:", useSpStore.loadlist());
     await this.loadlist("subedit/all-speakers/");
     // await this.spStore.loadSpeakers("/subedit/all-speakers/");
   },
   methods: {
+    async loadlist(url) {
+      const resp = await loadInfo.getInfo(url);
+      this.speakers = [...resp.data];
+    },
     delSpeaker(val, idx) {
       this.speakerList.splice(idx, 1);
       console.log("befoe delete :", this.speakerList);
