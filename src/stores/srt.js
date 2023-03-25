@@ -3,29 +3,29 @@ import * as srtparsejs from "srtparsejs";
 
 export const useSrtStore = defineStore('srt', {
     state: () => ({
+        spks: [],
         lines: [],
+        videoId: 0,
         activeLine: -1
     }),
     actions: {
-        async loadSrt(url,duration, lang) {
-            const resp = await fetch(url);
-            const body = await resp.text();
-            const srt = srtparsejs.parse(body);
+        async loadSrt(duration) {
+            const id = 2
+            const resp = await fetch(`/subedit/subtitle-info/${id}`);
+            const body = await resp.json();
+            const chunks = body.subsnap.chunks
             const lines = [];
-            for (var i in srt) {
-                const line = srt[i];
+            for (var i in chunks) {
+                const line = chunks[i];
                 const item = {
-                    speaker: 1,
-                    from: srtparsejs.toMS(line.startTime) / 1000,
-                    to: srtparsejs.toMS(line.endTime) / 1000,
+                    speaker: line.spk,
+                    from: line.start_ms / 1000,
+                    to: (line.start_ms + line.duration_ms)/1000,
                 };
-                if(lang=='en'){
-                    item.textEn = line.text
-                }else if(lang =='zh'){
-                    item.textZh = line.text
-                }
+                item.text = line.body
                 lines.push(item)
             }
+            this.videoId = body.video_id
             this.setLines(lines, duration);
         },
         setLines(lines, duration) {

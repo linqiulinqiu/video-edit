@@ -16,7 +16,7 @@ import SpeakerList from "./components/SpeakerList.vue";
               <SublistPanel />
             </el-col>
             <el-col :span="8">
-              <VideoPlayer video-at="/data/video.mp4" />
+              <VideoPlayer></VideoPlayer>
             </el-col>
           </el-row>
           <EditorStatus />

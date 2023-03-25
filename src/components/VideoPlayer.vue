@@ -9,11 +9,8 @@ import { iteratee } from "lodash";
 
 export default {
   computed: {
-    ...mapState(useSrtStore, ["activeLine", "lines"]),
+    ...mapState(useSrtStore, ["activeLine", "lines", "videoId"]),
     ...mapStores(useWaveSelStore, useSrtStore, usePlayerStore),
-  },
-  props: {
-    videoAt: String,
   },
   data() {
     return {
@@ -23,6 +20,36 @@ export default {
     };
   },
   watch: {
+    videoId(newId, oldId) {
+      if(oldId>0){
+        this.clearVideo()
+      }
+      if (newId > 0) {
+        const videoAt = `/video-store/video-stream/${newId}`
+        const options = {
+          controls: true,
+          // fill: true,
+          autoplay: true,
+          sources: [
+            {
+              src: videoAt,
+              type: "video/mp4",
+            },
+          ],
+        };
+        this.player = videojs(this.$refs.videoPlayer, options, () => { });
+        if (!this.posChecker) {
+          const widget = this;
+          this.posChecker = setInterval(() => {
+            if (widget.playing && widget.player) {
+              const ctime = widget.player.currentTime();
+              widget.playerStore.pos = ctime;
+            }
+          }, 50);
+        }
+
+      }
+    },
     activeLine(newAl, oldAl) {
       if (this.player) {
         if (this.playing) {
@@ -51,50 +78,22 @@ export default {
       }
     },
   },
-  mounted() {
-    if (this.videoAt) {
-      const options = {
-        controls: true,
-        // fill: true,
-        autoplay: true,
-        sources: [
-          {
-            src: this.videoAt,
-            type: "video/mp4",
-          },
-        ],
-      };
-      this.player = videojs(this.$refs.videoPlayer, options, () => {});
-      if (!this.posChecker) {
-        const widget = this;
-        this.posChecker = setInterval(() => {
-          if (widget.playing && widget.player) {
-            const ctime = widget.player.currentTime();
-            widget.playerStore.pos = ctime;
-          }
-        }, 50);
+  methods: {
+    clearVideo() {
+      if (this.player) {
+        if (this.posChecker) {
+          clearInterval(this.posChecker);
+          this.posChecker = null;
+        }
+        this.player.dispose();
+        this.player = null;
       }
-    }
+    },
   },
-  beforeUnmount() {
-    if (this.player) {
-      if (this.posChecker) {
-        clearInterval(this.posChecker);
-        this.posChecker = null;
-      }
-      this.player.dispose();
-      this.player = null;
-    }
-  },
+
 };
 </script>
 
 <template>
-  <video
-    ref="videoPlayer"
-    class="video-js"
-    height="350"
-    width="500"
-    data-setup="{}"
-  ></video>
+  <video ref="videoPlayer" class="video-js" height="350" width="500" data-setup="{}"></video>
 </template>
