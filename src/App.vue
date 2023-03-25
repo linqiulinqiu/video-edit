@@ -4,7 +4,6 @@ import VideoPlayer from "./components/VideoPlayer.vue";
 import EditorStatus from "./components/EditorStatus.vue";
 import SublistPanel from "./components/sublistModel/SublistPanel.vue";
 import SpeakerList from "./components/SpeakerList.vue";
-// import load from "./axios";
 export default {
   components: {
     SpeakerList,
@@ -13,25 +12,6 @@ export default {
     VideoPlayer,
     WaveMap,
   },
-  // async mounted() {
-  //   const sid = load.getSid();
-  //   if (sid) {
-  //     console.log("sid=", sid);
-  //     // const url = `/subedit/subtitle-info/${sid}`;
-  //     const url = "/subedit/subtitle-info/";
-  //     const subres = await load.loadInfo(url, sid);
-  //     // const subres = await this.axios({
-  //     //   method: "get",
-  //     //   url: url,
-  //     // });
-  //     console.log("subinfo", subres.code, subres.data);
-  //     const spkres = await this.axios({
-  //       method: "get",
-  //       url: "/subedit/all-speakers",
-  //     });
-  //     console.log("spks", spkres.code, spkres.data);
-  //   }
-  // },
 };
 </script>
 

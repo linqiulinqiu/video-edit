@@ -8,8 +8,7 @@ import { VideoPlay } from "@element-plus/icons-vue";
 
 export default {
   computed: {
-    ...mapState(useSrtStore, ["activeLine", "lines"]),
-    ...mapState(useSpStore, ["speakers"]),
+    ...mapState(useSrtStore, ["activeLine", "lines", "spks"]),
     ...mapState(useWaveSelStore, ["duration"]),
     ...mapStores(useSrtStore),
   },
@@ -99,7 +98,7 @@ export default {
         <el-col :span="2">
           <el-select size="small" v-model="line.speaker">
             <el-option
-              v-for="item in speakers"
+              v-for="item in spks"
               :key="item.id"
               :value="item.name"
             ></el-option>

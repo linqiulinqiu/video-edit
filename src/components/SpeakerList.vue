@@ -1,44 +1,23 @@
 
 <script>
 import { mapState, mapStores, mapActions } from "pinia";
+import { useSrtStore } from "@/stores/srt";
 import { useSpStore } from "@/stores/splist";
 import SpeakerSetVue from "./speakerModel/speakerSet.vue";
-import loadInfo from "../loadInfo";
 
 export default {
   components: {
     SpeakerSetVue,
   },
   computed: {
-    ...mapState(useSpStore, ["speakers", "speakerList"]),
-    ...mapActions(useSpStore, ["loadlist"]),
-    ...mapStores(useSpStore),
+    ...mapState(useSpStore, ["speakerList"]),
+    ...mapState(useSrtStore, ["spks"]),
   },
 
-  data() {
-    return {};
-  },
-  watch: {
-    speakerList: function (newl) {
-      console.log("new list", newl);
-    },
-  },
-
-  async mounted() {
-    await this.loadlist("subedit/all-speakers/");
-    // await this.spStore.loadSpeakers("/subedit/all-speakers/");
-  },
   methods: {
-    async loadlist(url) {
-      const resp = await loadInfo.getInfo(url);
-      this.speakers = [...resp.data];
-    },
     delSpeaker(val, idx) {
-      this.speakerList.splice(idx, 1);
-      console.log("befoe delete :", this.speakerList);
     },
     addSpeaker() {
-      this.speakerList.push("4");
     },
   },
 };
@@ -56,14 +35,14 @@ export default {
           </el-row>
         </h2>
       </li>
-      <li v-for="(val, idx) in speakerList" :key="idx">
+      <li v-for="(spk, idx) in spks" :key="idx">
         <el-row>
           <el-col :span="3">
-            {{ speakers[val].name }}
-            <SpeakerSetVue :val="val" :idx="idx" />
+            {{ spk.name }}
+            <SpeakerSetVue :val="spk" :idx="idx" />
           </el-col>
 
-          <el-col :span="3">{{ speakers[val].gender }} </el-col>
+          <el-col :span="3">{{ spk.gender }} </el-col>
           <el-col :span="5"
             ><a href="">idx : {{ idx }} </a></el-col
           >

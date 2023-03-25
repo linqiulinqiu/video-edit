@@ -13,8 +13,8 @@ export default {
     Sublist,
   },
   methods: {
-    loadSrt(name) {
-      this.srtStore.loadSrt(name, this.duration);
+    loadSrt() {
+      this.srtStore.load();
     },
   },
 };
@@ -22,7 +22,7 @@ export default {
 <template>
   <el-col :span="24" :offset="0">
     <el-col>
-      <el-button @click="loadSrt('/subedit/subtitle-info/')">MS中文</el-button>
+      <el-button @click="loadSrt()">MS中文</el-button>
       <!-- <el-button @click="loadSrt('subtitle-en')">GPT英文</el-button> -->
       <!-- <el-button @click="loadSrt('subtitle-zh')">GPT中文</el-button> -->
     </el-col>
