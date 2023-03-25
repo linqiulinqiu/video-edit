@@ -8,15 +8,15 @@ import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.min.js";
 
 export default {
-  props: {
-    audioAt: String,
-  },
   computed: {
     ...mapState(usePlayerStore, ["pos"]),
-    ...mapState(useSrtStore, ["activeLine", "lines"]),
+    ...mapState(useSrtStore, ["activeLine", "lines", "videoId"]),
     ...mapStores(useWaveSelStore, useSrtStore, usePlayerStore),
   },
   watch: {
+    videoId(newSid, oldSid) {
+      this.loadWaveform()
+    },
     pos(newPos, oldPos) {
       if (newPos != null && this.waveform && this.waveSelStore.pos == null) {
         this.waveform.setCurrentTime(newPos);
@@ -57,44 +57,42 @@ export default {
       progressColor: "#a75",
       plugins: [RegionsPlugin.create({})],
     });
-    this.loadWaveform();
-    // console.log("waveform mounted", this.lines);
+    const widget = this;
+    this.waveform.on("ready", () => {
+      this.waveSelStore.duration = this.waveform.getDuration();
+    });
+    this.waveform.on("region-click", (e) => {
+      widget.waveSelStore.pos = e.start;
+      widget.updateActiveLine();
+    });
+    // TODO: check overlap: cancel update when overlap
+    this.waveform.on("region-update-end", (e) => {
+      if (
+        Object.keys(this.waveform.regions.list).length ==
+        this.srtStore.lines.length
+      ) {
+        let i = 0;
+        const lines = [];
+        for (let idx in this.waveform.regions.list) {
+          const region = this.waveform.regions.list[idx];
+          const line = Object.assign({}, this.srtStore.lines[i]);
+          line.from = region.start;
+          line.to = region.end;
+          lines.push(line);
+          i++;
+        }
+        // this.srtStore.lines = lines;
+        this.srtStore.setLines(lines, this.waveSelStore.duration);
+        // console.log("lines = ", this.srtStore.lines);
+        this.updateRegions();
+      }
+    });
   },
   methods: {
     async loadWaveform() {
-      // Load audio file
-      this.waveform.load(this.audioAt);
-      this.waveform.on("ready", () => {
-        this.waveSelStore.duration = this.waveform.getDuration();
-      });
+      this.waveform.load(`/video-store/audio-stream/${this.videoId}`);
       this.updateRegions();
-      const widget = this;
-      this.waveform.on("region-click", (e) => {
-        widget.waveSelStore.pos = e.start;
-        widget.updateActiveLine();
-      });
-      // TODO: check overlap: cancel update when overlap
-      this.waveform.on("region-update-end", (e) => {
-        if (
-          Object.keys(this.waveform.regions.list).length ==
-          this.srtStore.lines.length
-        ) {
-          let i = 0;
-          const lines = [];
-          for (let idx in this.waveform.regions.list) {
-            const region = this.waveform.regions.list[idx];
-            const line = Object.assign({}, this.srtStore.lines[i]);
-            line.from = region.start;
-            line.to = region.end;
-            lines.push(line);
-            i++;
-          }
-          // this.srtStore.lines = lines;
-          this.srtStore.setLines(lines, this.waveSelStore.duration);
-          // console.log("lines = ", this.srtStore.lines);
-          this.updateRegions();
-        }
-      });
+
     },
     updateRegions() {
       while (this.regions.length > 0) {
@@ -148,5 +146,4 @@ export default {
     <div ref="waveform"></div>
   </div>
 </template>
-<style>
-</style>
+<style></style>

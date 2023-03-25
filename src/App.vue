@@ -41,11 +41,11 @@ export default {
               <SublistPanel />
             </el-col>
             <el-col :span="8">
-              <VideoPlayer></VideoPlayer>
+              <VideoPlayer />
             </el-col>
           </el-row>
           <EditorStatus />
-          <WaveMap audio-at="/data/audio.mp3" />
+          <WaveMap />
         </el-tab-pane>
         <el-tab-pane label="语音设置">
           <SpeakerList />
