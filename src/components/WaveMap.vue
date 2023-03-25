@@ -60,6 +60,7 @@ export default {
     const widget = this;
     this.waveform.on("ready", () => {
       this.waveSelStore.duration = this.waveform.getDuration();
+      console.log('waveform ready', this.waveSelStore.duration)
     });
     this.waveform.on("region-click", (e) => {
       widget.waveSelStore.pos = e.start;
