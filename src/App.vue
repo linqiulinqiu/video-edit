@@ -5,6 +5,7 @@ import EditorStatus from "./components/EditorStatus.vue";
 import SublistPanel from "./components/sublistModel/SublistPanel.vue";
 import SpeakerList from "./components/SpeakerList.vue";
 import { mapStores } from "pinia";
+import { useSpStore } from "@/stores/splist";
 import { useSrtStore } from "@/stores/srt";
 import queryString from 'query-string';
 
@@ -17,14 +18,14 @@ export default {
     WaveMap,
   },
   computed: {
-    ...mapStores(useSrtStore)
+    ...mapStores(useSrtStore, useSpStore)
   },
   mounted(){
     const qs = queryString.parse(location.search)
-    console.log('qs=',qs)
     if('sid' in qs){
       this.srtStore.setSid(parseInt(qs.sid))
     }
+    this.spListStore.load()
   }
 };
 </script>

@@ -1,8 +1,8 @@
 <script>
 import { mapStores, mapState } from "pinia";
 import { useSrtStore } from "@/stores/srt";
-import { useWaveSelStore } from "@/stores/wavesel";
 import { useSpStore } from "@/stores/splist";
+import { useWaveSelStore } from "@/stores/wavesel";
 import EditBtnGroupVue from "./EditBtnGroup.vue";
 import { VideoPlay } from "@element-plus/icons-vue";
 
@@ -10,6 +10,7 @@ export default {
   computed: {
     ...mapState(useSrtStore, ["activeLine", "lines", "spks"]),
     ...mapState(useWaveSelStore, ["duration"]),
+    ...mapState(useSpStore, ["speakerList"]),
     ...mapStores(useSrtStore),
   },
   components: {
@@ -98,7 +99,7 @@ export default {
         <el-col :span="2">
           <el-select size="small" v-model="line.speaker">
             <el-option
-              v-for="item in spks"
+              v-for="item in speakerList"
               :key="item.id"
               :value="item.name"
             ></el-option>

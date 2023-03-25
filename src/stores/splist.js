@@ -8,8 +8,8 @@ export const useSpStore = defineStore('spList', {
     }),
     actions: {
         async load() {
-            const resp = await fetch(`/subedit/subtitle-info/${sid}`);
-            const data = resp.data
+            const resp = await fetch('/subedit/all-speakers');
+            const data = await resp.json()
             const speakers = []
             for (let i = 0; i < data.length; i++) {
                 const current = data[i]

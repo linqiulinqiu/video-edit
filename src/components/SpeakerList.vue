@@ -10,14 +10,20 @@ export default {
     SpeakerSetVue,
   },
   computed: {
-    ...mapState(useSpStore, ["speakerList"]),
+    ...mapState(useSpStore, ["speakerList"]), // 以此确保本Component不会改动spList.speakerList(仅能读入，不可修改)
     ...mapState(useSrtStore, ["spks"]),
   },
-
+  watch:{
+    spks(){
+      console.log('spks changed', this.spks.length)
+    }
+  },
   methods: {
     delSpeaker(val, idx) {
+      //
     },
     addSpeaker() {
+      //TODO: add item to srtStore.spks
     },
   },
 };
@@ -39,7 +45,6 @@ export default {
         <el-row>
           <el-col :span="3">
             {{ spk.name }}
-            <SpeakerSetVue :val="spk" :idx="idx" />
           </el-col>
 
           <el-col :span="3">{{ spk.gender }} </el-col>

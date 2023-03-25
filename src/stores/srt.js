@@ -28,6 +28,7 @@ export const useSrtStore = defineStore('srt', {
                 lines.push(item)
             }
             this.videoId = body.video_id
+            this.spks = body.subsnap.spks
             this.setLines(lines, duration);
         },
         setLines(lines, duration) {
