@@ -21,33 +21,16 @@ export default {
   },
   watch: {
     videoId(newId, oldId) {
-      if(oldId>0){
-        this.clearVideo()
-      }
+      console.log('watch videoId: ', newId, oldId)
       if (newId > 0) {
         const videoAt = `/video-store/video-stream/${newId}`
-        const options = {
-          controls: true,
-          // fill: true,
-          autoplay: true,
-          sources: [
-            {
-              src: videoAt,
-              type: "video/mp4",
-            },
-          ],
-        };
-        this.player = videojs(this.$refs.videoPlayer, options, () => { });
-        if (!this.posChecker) {
-          const widget = this;
-          this.posChecker = setInterval(() => {
-            if (widget.playing && widget.player) {
-              const ctime = widget.player.currentTime();
-              widget.playerStore.pos = ctime;
-            }
-          }, 50);
-        }
-
+        const sources = [
+          {
+            src: videoAt,
+            type: "video/mp4",
+          },
+        ]
+        this.player.src(sources)
       }
     },
     activeLine(newAl, oldAl) {
@@ -78,17 +61,32 @@ export default {
       }
     },
   },
-  methods: {
-    clearVideo() {
-      if (this.player) {
-        if (this.posChecker) {
-          clearInterval(this.posChecker);
-          this.posChecker = null;
+  mounted() {
+    const options = {
+      controls: true,
+      // fill: true,
+      autoplay: true,
+    };
+    this.player = videojs(this.$refs.videoPlayer, options, () => { });
+    if (!this.posChecker) {
+      const widget = this;
+      this.posChecker = setInterval(() => {
+        if (widget.playing && widget.player) {
+          const ctime = widget.player.currentTime();
+          widget.playerStore.pos = ctime;
         }
-        this.player.dispose();
-        this.player = null;
+      }, 50);
+    }
+  },
+  beforeUnmount() {
+    if (this.player) {
+      if (this.posChecker) {
+        clearInterval(this.posChecker);
+        this.posChecker = null;
       }
-    },
+      this.player.dispose();
+      this.player = null;
+    }
   },
 
 };

@@ -1,23 +1,23 @@
 
 <script>
-import { mapState, mapStores } from "pinia";
+import { mapState, mapStores, mapActions } from "pinia";
+import { useSrtStore } from "@/stores/srt";
 import { useSpStore } from "@/stores/splist";
+import SpeakerSetVue from "./speakerModel/speakerSet.vue";
+
 export default {
+  components: {
+    SpeakerSetVue,
+  },
   computed: {
-    ...mapState(useSpStore, ["speakers"]),
-    ...mapStores(useSpStore),
+    ...mapState(useSpStore, ["speakerList"]),
+    ...mapState(useSrtStore, ["spks"]),
   },
-  data() {
-    return {
-      speakerList: [3, 5, 2], // id for speakers[id]
-    };
-  },
+
   methods: {
-    setSpeaker(id, idx) {
-      console.log("value = ", id, idx);
-      // this.speakerList[idx] = v;
-      // console.log("speaker", this.speakerList, "value --idx :", v, idx);
-      // this.speakerList = [...this.speakerList];
+    delSpeaker(val, idx) {
+    },
+    addSpeaker() {
     },
   },
 };
@@ -32,40 +32,29 @@ export default {
             <el-col :span="3">性别</el-col>
             <el-col :span="5">示例</el-col>
             <el-col :span="5">删除</el-col>
-            <el-col :span="5">设置</el-col>
           </el-row>
         </h2>
       </li>
-      <li v-for="(v, k, idx) in speakerList" :key="idx">
+      <li v-for="(spk, idx) in spks" :key="idx">
         <el-row>
-          <el-col :span="3">Name={{ speakers[v].name }} </el-col>
-          <el-col :span="3">Gender={{ speakers[v].gender }} </el-col>
+          <el-col :span="3">
+            {{ spk.name }}
+            <SpeakerSetVue :val="spk" :idx="idx" />
+          </el-col>
+
+          <el-col :span="3">{{ spk.gender }} </el-col>
           <el-col :span="5"
-            ><a href="">Sample{{ idx }} </a></el-col
+            ><a href="">idx : {{ idx }} </a></el-col
           >
           <el-col :span="5"
-            ><button>Delete (delete this, and move all rest up)</button></el-col
+            ><el-button @click="delSpeaker(val, idx)"
+              >Delete (delete this, and move all rest up)</el-button
+            ></el-col
           >
-          <el-col :span="5"
-            ><el-select
-              :value="v"
-              @change="
-                (v) => {
-                  setSpeaker(v, idx);
-                }
-              "
-            >
-              <el-option
-                v-for="item in speakers"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-              ></el-option> </el-select
-          ></el-col>
         </el-row>
       </li>
     </ul>
-    <el-button>Add New Speaker</el-button>
+    <el-button @click="addSpeaker()">Add New Speaker</el-button>
     <el-button class="save-btn">保存</el-button>
   </el-col>
 </template>

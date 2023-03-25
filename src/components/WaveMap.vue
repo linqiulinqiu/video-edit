@@ -58,7 +58,7 @@ export default {
       plugins: [RegionsPlugin.create({})],
     });
     this.loadWaveform();
-    console.log("waveform mounted", this.lines);
+    // console.log("waveform mounted", this.lines);
   },
   methods: {
     async loadWaveform() {
@@ -91,7 +91,7 @@ export default {
           }
           // this.srtStore.lines = lines;
           this.srtStore.setLines(lines, this.waveSelStore.duration);
-          console.log("lines = ", this.srtStore.lines);
+          // console.log("lines = ", this.srtStore.lines);
           this.updateRegions();
         }
       });

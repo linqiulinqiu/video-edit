@@ -6,11 +6,11 @@ import Sublist from "@/components/sublistModel/Sublist.vue";
 
 export default {
   computed: {
-    ...mapState(useWaveSelStore,["duration"]),
-    ...mapStores(useSrtStore)
+    ...mapState(useWaveSelStore, ["duration"]),
+    ...mapStores(useSrtStore),
   },
-  components:{
-    Sublist
+  components: {
+    Sublist,
   },
   methods: {
     loadSrt(name){
@@ -25,5 +25,5 @@ export default {
       <el-button @click="loadSrt()">Load</el-button>
     </el-col>
     <Sublist />
-</el-col>
+  </el-col>
 </template>

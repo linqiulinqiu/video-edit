@@ -1,17 +1,19 @@
 import { defineStore } from 'pinia'
-import * as srtparsejs from "srtparsejs";
 
 export const useSrtStore = defineStore('srt', {
     state: () => ({
         spks: [],
         lines: [],
         videoId: 0,
+        sid: 0,
         activeLine: -1
     }),
     actions: {
+        setSid(sid){
+            this.sid = sid
+        },
         async loadSrt(duration) {
-            const id = 2
-            const resp = await fetch(`/subedit/subtitle-info/${id}`);
+            const resp = await fetch(`/subedit/subtitle-info/${this.sid}`);
             const body = await resp.json();
             const chunks = body.subsnap.chunks
             const lines = [];
@@ -39,8 +41,7 @@ export const useSrtStore = defineStore('srt', {
                 }
                 lastTo = line.to
             }
-            console.log("lines", lines)
-            console.log("lines",lines,lines.length)
+            console.log("set lines", lines)
 
             for (let i = 0; i < lines.length; i++) {
                 let min = ''
@@ -59,7 +60,7 @@ export const useSrtStore = defineStore('srt', {
                 lines[i].max = max
             }
             if (lastTo >= duration) {
-                lines[lines.length-1].to = duration
+                lines[lines.length - 1].to = duration
                 console.log('Overlap! Seems OpenAI generate srt longer than audio itself, need handle& fix')
                 //overlap = true
             }
