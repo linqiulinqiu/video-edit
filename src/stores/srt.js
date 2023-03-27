@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useSpStore } from './splist';
 
 export const useSrtStore = defineStore('srt', {
     state: () => ({
@@ -29,6 +30,8 @@ export const useSrtStore = defineStore('srt', {
             }
             this.videoId = body.video_id
             this.spks = body.subsnap.spks
+
+            this.setSpks(this.spks)
             this.setLines(lines, duration);
         },
         setLines(lines, duration) {
@@ -69,6 +72,20 @@ export const useSrtStore = defineStore('srt', {
                 this.lines = [...lines]
             }
             return overlap
+        },
+        setSpks(spks) {
+            const sysList = useSpStore().speakerList
+            for (var i in spks) {
+                for (var j in sysList) {
+                    if (spks[i].speaker_id == sysList[j].id) {
+                        spks[i]['name'] = sysList[j].name
+                        spks[i].gender= sysList[j].gender
+                    }
+                }
+            }
+            this.spks = spks
+            console.log("this.spks in setSpks:",this.spks)
         }
+
     }
 })

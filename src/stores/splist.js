@@ -27,6 +27,10 @@ export const useSpStore = defineStore('spList', {
                 speakers.push(item)
             }
             this.speakerList = speakers
+            console.log("speakerList in load",speakers)
+        },
+        setSpeakerList(list) {
+            this.speakerList =list
         }
     }
 })

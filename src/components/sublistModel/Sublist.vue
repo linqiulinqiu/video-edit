@@ -1,16 +1,13 @@
 <script>
 import { mapStores, mapState } from "pinia";
 import { useSrtStore } from "@/stores/srt";
-import { useSpStore } from "@/stores/splist";
 import { useWaveSelStore } from "@/stores/wavesel";
 import EditBtnGroupVue from "./EditBtnGroup.vue";
-import { VideoPlay } from "@element-plus/icons-vue";
 
 export default {
   computed: {
     ...mapState(useSrtStore, ["activeLine", "lines", "spks"]),
     ...mapState(useWaveSelStore, ["duration"]),
-    ...mapState(useSpStore, ["speakerList"]),
     ...mapStores(useSrtStore),
   },
   components: {
@@ -24,6 +21,10 @@ export default {
     liClick(index) {
       this.currentIndex = index;
       this.srtStore.activeLine = index;
+    },
+    setTalker(val, index) {
+      console.log("set Talker,", val, index);
+      this.lines[index].speaker = val;
     },
     textFocus() {
       this.showGroup = true;
@@ -67,7 +68,6 @@ export default {
     },
   },
   data() {
-    console.log("lines in sublist", this.lines);
     return {
       currentIndex: this.activeLine,
       isControl: false,
@@ -79,6 +79,7 @@ export default {
   watch: {
     activeLine: function (newL, oldL) {
       this.currentIndex = newL;
+      console.log("current Index = ", newL);
     },
   },
 };
@@ -97,11 +98,20 @@ export default {
           <span>{{ index + 1 }}</span>
         </el-col>
         <el-col :span="2">
-          <el-select size="small" v-model="line.speaker">
+          <el-select
+            size="small"
+            v-model="line.speaker"
+            @change="
+              (v) => {
+                setTalker(v, index);
+              }
+            "
+          >
             <el-option
-              v-for="item in speakerList"
-              :key="item.id"
-              :value="item.name"
+              v-for="item in spks"
+              :key="item.speaker_id"
+              :label="item.speaker_id"
+              :value="item.speaker_id"
             ></el-option>
           </el-select>
         </el-col>

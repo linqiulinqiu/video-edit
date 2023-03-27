@@ -34,20 +34,19 @@ export default {
     editLines(direction) {
       const index = this.curIndex;
       const lines = this.lines;
-      const cutTxt = this.cutString(this.cursorPos, lines[index].textZh);
+      const cutTxt = this.cutString(this.cursorPos, lines[index].text);
       const duration = lines[index].to - lines[index].from;
-      const scale = this.cursorPos / lines[index].textZh.length;
-      // console.log("scale = ", cutTime);
+      const scale = this.cursorPos / lines[index].text.length;
       if (direction == "last") {
         const cutTime = scale * duration;
-        lines[index - 1].textZh = lines[index - 1].textZh + cutTxt[0];
-        lines[index].textZh = cutTxt[1];
+        lines[index - 1].text = lines[index - 1].text + cutTxt[0];
+        lines[index].text = cutTxt[1];
         lines[index - 1].to = lines[index - 1].to + cutTime;
         lines[index].from = lines[index].from - cutTime;
       } else if (direction == "next") {
         const cutTime = (1 - scale) * duration;
-        lines[index].textZh = cutTxt[0];
-        lines[index + 1].textZh = cutTxt[1] + lines[index + 1].textZh;
+        lines[index].text = cutTxt[0];
+        lines[index + 1].text = cutTxt[1] + lines[index + 1].text;
         lines[index].to = lines[index].to - cutTime;
         lines[index + 1].from = lines[index + 1].from + cutTime;
       }
@@ -57,17 +56,26 @@ export default {
       this.lines.splice(this.curIndex, 1);
       this.srtStore.lines = this.lines;
     },
-    addLine() {
-      const index = this.curIndex;
-      if (
-        this.lines[index + 1].textEn == "" ||
-        this.lines[index + 1].textZh == ""
-      ) {
+    detectLines() {
+      let isBlank = false;
+      for (var i = 0; i < this.lines.length; i++) {
+        if (this.lines[i].text == "") {
+          isBlank = true;
+        }
+      }
+      if (isBlank) {
         this.$message({
-          message: "请完成当前项的编辑",
+          message: "请先完成空白项的编辑",
           type: "warning",
         });
-      } else {
+      }
+      console.log("isBlank :", isBlank);
+      return isBlank;
+    },
+    addLine() {
+      const index = this.curIndex;
+      const isOk = this.detectLines();
+      if (!isOk) {
         const line = {
           from: 0.0,
           to: 0.3,
@@ -79,12 +87,8 @@ export default {
       }
     },
     addLineFirst() {
-      if (this.lines[0].textEn == "" || this.lines.textZh == "") {
-        this.$message({
-          message: "请完成当前项的编辑",
-          type: "warning",
-        });
-      } else {
+      const isOk = this.detectLines();
+      if (!isOk) {
         const line = {
           from: 0.0,
           to: 0.3,
@@ -119,10 +123,14 @@ export default {
     <el-button v-if="curIndex == 0" plain size="small" @click="addLineFirst()">
       <el-icon><DocumentAdd /></el-icon>
     </el-button>
-    <el-button plain size="small" @click="cutToLast()"
+    <el-button v-if="curIndex != 0" plain size="small" @click="cutToLast()"
       ><el-icon><Top /></el-icon
     ></el-button>
-    <el-button plain size="small" @click="cutToNext()"
+    <el-button
+      v-if="curIndex != lines.length - 1"
+      plain
+      size="small"
+      @click="cutToNext()"
       ><el-icon><Bottom /></el-icon
     ></el-button>
     <el-button plain size="small" @click="addLine()"

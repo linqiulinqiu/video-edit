@@ -1,13 +1,18 @@
 <script>
-import { mapState } from "pinia";
+import { mapState, mapStores } from "pinia";
 import { useSpStore } from "@/stores/splist";
+import { useSrtStore } from "@/stores/srt";
 export default {
-  props: ["val", "idx"],
-  computed: { ...mapState(useSpStore, ["speakers", "speakerList"]) },
+  props: ["spks", "idx"],
+  computed: {
+    ...mapState(useSpStore, ["speakerList"]),
+    ...mapStores(useSrtStore),
+  },
+
   methods: {
     setSpeaker(value, idx) {
-      this.speakerList[idx] = value;
-      this.speakerList = [...this.speakerList];
+      this.spks[this.idx].speaker_id = value;
+      this.srtStore.setSpks(this.spks);
     },
   },
 };
@@ -22,8 +27,8 @@ export default {
     </template>
     <el-select
       size="small"
-      :placeholder="speakers[this.val].name"
-      :value="this.val"
+      :placeholder="spks[this.idx].name"
+      :value="spks[this.idx].speaker_id"
       @change="
         (v) => {
           setSpeaker(v, this.idx);
@@ -31,9 +36,9 @@ export default {
       "
     >
       <el-option
-        v-for="item in speakers"
+        v-for="item in speakerList"
         :key="item.id"
-        :label="item.name"
+        :label="item.name + '--' + item.gender"
         :value="item.id"
       ></el-option>
     </el-select>
