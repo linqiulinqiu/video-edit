@@ -7,7 +7,7 @@ import SpeakerList from "./components/SpeakerList.vue";
 import { mapStores } from "pinia";
 import { useSpStore } from "@/stores/splist";
 import { useSrtStore } from "@/stores/srt";
-import queryString from 'query-string';
+import queryString from "query-string";
 
 export default {
   components: {
@@ -18,22 +18,22 @@ export default {
     WaveMap,
   },
   computed: {
-    ...mapStores(useSrtStore, useSpStore)
+    ...mapStores(useSrtStore, useSpStore),
   },
-  mounted(){
-    const qs = queryString.parse(location.search)
-    if('sid' in qs){
-      this.srtStore.setSid(parseInt(qs.sid))
+  mounted() {
+    const qs = queryString.parse(location.search);
+    if ("sid" in qs) {
+      this.srtStore.setSid(parseInt(qs.sid));
     }
-    this.spListStore.load()
-  }
+    this.spListStore.load();
+  },
 };
 </script>
 
 <template>
   <el-container id="container" style="width: 100%">
     <el-main>
-      <p>version = <b>0.0.3</b></p>
+      <p>version = <b>0.0.4</b></p>
       <el-tabs>
         <el-tab-pane label="编辑内容">
           <el-row>
