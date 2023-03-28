@@ -14,11 +14,7 @@ export default {
     ...mapState(useSrtStore, ["spks"]),
     ...mapStores(useSrtStore),
   },
-  watch: {
-    spks(news) {
-      console.log("spks changed", news, this.spks.length);
-    },
-  },
+  watch: {},
   methods: {
     delSpeaker(val, idx) {
       this.spks.splice(idx, 1);
@@ -57,9 +53,11 @@ export default {
           </el-col>
           <el-col :span="3">{{ spk.name }}</el-col>
           <el-col :span="3">{{ spk.gender }} </el-col>
-          <el-col :span="5"
-            ><a href="">idx : {{ idx }} </a></el-col
-          >
+          <el-col :span="5">
+            <el-col :span="18">
+              <audio :src="spk.demo" type="audio/mp3"></audio>
+            </el-col>
+          </el-col>
           <el-col :span="5"
             ><el-button @click="delSpeaker(val, idx)"
               >Delete (delete this, and move all rest up)</el-button

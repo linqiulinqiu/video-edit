@@ -69,7 +69,6 @@ export default {
           type: "warning",
         });
       }
-      console.log("isBlank :", isBlank);
       return isBlank;
     },
     addLine() {
@@ -97,8 +96,6 @@ export default {
         };
         this.lines.unshift(line);
         this.srtStore.lines = this.lines;
-
-        console.log(this.lines);
       }
     },
     cutToLast() {

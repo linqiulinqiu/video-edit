@@ -15,7 +15,7 @@ export default {
   },
   watch: {
     videoId(newSid, oldSid) {
-      this.loadWaveform()
+      this.loadWaveform();
     },
     pos(newPos, oldPos) {
       if (newPos != null && this.waveform && this.waveSelStore.pos == null) {
@@ -24,7 +24,6 @@ export default {
       }
     },
     lines(newLines, oldLines) {
-      // console.log('lines', newLines)
       this.updateRegions();
     },
     activeLine(newAl, oldAl) {
@@ -60,7 +59,7 @@ export default {
     const widget = this;
     this.waveform.on("ready", () => {
       this.waveSelStore.duration = this.waveform.getDuration();
-      console.log('waveform ready', this.waveSelStore.duration)
+      console.log("waveform ready", this.waveSelStore.duration);
     });
     this.waveform.on("region-click", (e) => {
       widget.waveSelStore.pos = e.start;
@@ -82,9 +81,7 @@ export default {
           lines.push(line);
           i++;
         }
-        // this.srtStore.lines = lines;
         this.srtStore.setLines(lines, this.waveSelStore.duration);
-        // console.log("lines = ", this.srtStore.lines);
         this.updateRegions();
       }
     });
@@ -92,8 +89,9 @@ export default {
   methods: {
     async loadWaveform() {
       this.waveform.load(`/video-store/audio-stream/${this.videoId}`);
-      this.updateRegions();
+      // this.waveform.load(`/video-store/audio-stream/2`);
 
+      this.updateRegions();
     },
     updateRegions() {
       while (this.regions.length > 0) {

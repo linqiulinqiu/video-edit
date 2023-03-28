@@ -13,10 +13,13 @@ export const useSpStore = defineStore('spList', {
             const speakers = []
             for (let i = 0; i < data.length; i++) {
                 const current = data[i]
+                const src_demo = "/storage/samples/"+current.id+"-zh-CN"
+                const demoVoice = await fetch(src_demo)
                 const item = {
                     id: current.id,
                     name: current.name,
-                    gender: '-'
+                    gender: '-',
+                    demo:demoVoice.url+'.mp3'
                 }
                 if (current.gender == 'f') {
                     item.gender = '女'
@@ -27,7 +30,7 @@ export const useSpStore = defineStore('spList', {
                 speakers.push(item)
             }
             this.speakerList = speakers
-            console.log("speakerList in load",speakers)
+            console.log("speaker:",speakers)
         },
         setSpeakerList(list) {
             this.speakerList =list

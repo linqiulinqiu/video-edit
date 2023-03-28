@@ -23,7 +23,6 @@ export default {
       this.srtStore.activeLine = index;
     },
     setTalker(val, index) {
-      console.log("set Talker,", val, index);
       this.lines[index].speaker = val;
     },
     textFocus() {
@@ -110,7 +109,7 @@ export default {
             <el-option
               v-for="item in spks"
               :key="item.speaker_id"
-              :label="item.speaker_id"
+              :label="'speaker:' + item.speaker_id"
               :value="item.speaker_id"
             ></el-option>
           </el-select>

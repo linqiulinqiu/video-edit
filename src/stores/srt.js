@@ -16,6 +16,7 @@ export const useSrtStore = defineStore('srt', {
         async loadSrt(duration) {
             const resp = await fetch(`/subedit/subtitle-info/${this.sid}`);
             const body = await resp.json();
+            console.log("body:",body)
             const chunks = body.subsnap.chunks
             const lines = [];
             for (var i in chunks) {
@@ -45,7 +46,6 @@ export const useSrtStore = defineStore('srt', {
                 }
                 lastTo = line.to
             }
-            console.log("set lines", lines)
 
             for (let i = 0; i < lines.length; i++) {
                 let min = ''
@@ -84,7 +84,6 @@ export const useSrtStore = defineStore('srt', {
                 }
             }
             this.spks = spks
-            console.log("this.spks in setSpks:",this.spks)
         }
 
     }

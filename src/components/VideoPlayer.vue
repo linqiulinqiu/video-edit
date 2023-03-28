@@ -21,16 +21,16 @@ export default {
   },
   watch: {
     videoId(newId, oldId) {
-      console.log('watch videoId: ', newId, oldId)
+      console.log("watch videoId: ", newId, oldId);
       if (newId > 0) {
-        const videoAt = `/video-store/video-stream/${newId}`
+        const videoAt = `/video-store/video-stream/${newId}`;
         const sources = [
           {
             src: videoAt,
             type: "video/mp4",
           },
-        ]
-        this.player.src(sources)
+        ];
+        this.player.src(sources);
       }
     },
     activeLine(newAl, oldAl) {
@@ -67,7 +67,7 @@ export default {
       // fill: true,
       autoplay: true,
     };
-    this.player = videojs(this.$refs.videoPlayer, options, () => { });
+    this.player = videojs(this.$refs.videoPlayer, options, () => {});
     if (!this.posChecker) {
       const widget = this;
       this.posChecker = setInterval(() => {
@@ -88,10 +88,15 @@ export default {
       this.player = null;
     }
   },
-
 };
 </script>
 
 <template>
-  <video ref="videoPlayer" class="video-js" height="350" width="500" data-setup="{}"></video>
+  <video
+    ref="videoPlayer"
+    class="video-js"
+    height="350"
+    width="500"
+    data-setup="{}"
+  ></video>
 </template>
