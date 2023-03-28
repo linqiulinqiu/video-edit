@@ -14,12 +14,12 @@ export const useSpStore = defineStore('spList', {
             for (let i = 0; i < data.length; i++) {
                 const current = data[i]
                 const src_demo = "/storage/samples/"+current.id+"-zh-CN"
-                const demoVoice = await fetch(src_demo)
+                // const demoVoice = await fetch(src_demo)
                 const item = {
                     id: current.id,
                     name: current.name,
                     gender: '-',
-                    demo:demoVoice.url+'.mp3'
+                    demo:src_demo+'.mp3'
                 }
                 if (current.gender == 'f') {
                     item.gender = '女'

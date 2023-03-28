@@ -1,6 +1,6 @@
 
 <script>
-import { mapState, mapStores, mapActions } from "pinia";
+import { mapState, mapStores } from "pinia";
 import { useSrtStore } from "@/stores/srt";
 import { useSpStore } from "@/stores/splist";
 import SpeakerSetVue from "./speakerModel/speakerSet.vue";
@@ -45,7 +45,7 @@ export default {
           </el-row>
         </h2>
       </li>
-      <li v-for="(spk, idx) in spks" :key="idx">
+      <li v-for="(spk, idx) in spks" :key="spk.name">
         <el-row>
           <el-col :span="3">
             {{ spk.speaker_id }}
@@ -55,7 +55,7 @@ export default {
           <el-col :span="3">{{ spk.gender }} </el-col>
           <el-col :span="5">
             <el-col :span="18">
-              <audio :src="spk.demo" type="audio/mp3"></audio>
+              <el-icon size="20"><VideoPlay /></el-icon>
             </el-col>
           </el-col>
           <el-col :span="5"

@@ -33,7 +33,7 @@ export default {
 <template>
   <el-container id="container" style="width: 100%">
     <el-main>
-      <p>version = <b>0.0.4</b></p>
+      <p>version = <b>0.0.6</b></p>
       <el-tabs>
         <el-tab-pane label="编辑内容">
           <el-row>

@@ -8,6 +8,7 @@ import { mapStores } from "pinia";
 export default {
   computed: {
     ...mapStores(useSrtStore),
+    // ...mapState(useSrtStore, ["lines"]),
     ...mapState(useWaveSelStore, ["duration"]),
   },
   components: {
@@ -53,8 +54,10 @@ export default {
       return lines;
     },
     delLine() {
-      this.lines.splice(this.curIndex, 1);
-      this.srtStore.lines = this.lines;
+      const lines = this.lines;
+      lines.splice(this.curIndex, 1);
+      // this.srtStore.lines = this.lines;
+      this.srtStore.setLines(lines, this.duration);
     },
     detectLines() {
       let isBlank = false;
@@ -81,8 +84,10 @@ export default {
           text: "",
           speaker: "",
         };
-        this.lines.splice(index + 1, 0, line);
-        this.srtStore.lines = this.lines;
+        const lines = this.lines;
+        lines.splice(index + 1, 0, line);
+        // this.srtStore.lines = this.lines;
+        this.srtStore.setLines(lines, this.duration);
       }
     },
     addLineFirst() {
@@ -94,8 +99,10 @@ export default {
           text: "",
           speaker: "",
         };
-        this.lines.unshift(line);
-        this.srtStore.lines = this.lines;
+        const lines = this.lines;
+        lines.unshift(line);
+        // this.srtStore.lines = this.lines;
+        this.srtStore.setLines(lines, this.duration);
       }
     },
     cutToLast() {

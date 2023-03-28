@@ -13,17 +13,17 @@ export default {
     Sublist,
   },
   methods: {
-    loadSrt(name) {
-      this.srtStore.loadSrt(this.duration);
+    async loadSrt() {
+      await this.srtStore.loadSrt(this.duration);
     },
   },
 };
 </script>
 <template>
-  <el-col :span="24" :offset="0">
-    <el-col v-if="this.srtStore.lines.length == 0">
-      <el-button @click="loadSrt()">Load</el-button>
-    </el-col>
-    <Sublist v-else />
+  <el-col>
+    <!-- <el-col?> -->
+    <el-button @click="loadSrt()">Load</el-button>
+    <!-- </el-col?> -->
+    <Sublist />
   </el-col>
 </template>

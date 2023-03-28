@@ -30,12 +30,12 @@ export const useSrtStore = defineStore('srt', {
                 lines.push(item)
             }
             this.videoId = body.video_id
-            this.spks = body.subsnap.spks
+            this.setSpks(body.subsnap.spks)
 
-            this.setSpks(this.spks)
             this.setLines(lines, duration);
         },
         setLines(lines, duration) {
+            console.log('set-lines', lines, duration)
             let overlap = false
             let lastTo = 0
             for (let i = 0; i < lines.length; i++) {
@@ -66,11 +66,10 @@ export const useSrtStore = defineStore('srt', {
             if (lastTo >= duration) {
                 lines[lines.length - 1].to = duration
                 console.log('Overlap! Seems OpenAI generate srt longer than audio itself, need handle& fix')
-                //overlap = true
+                overlap = true
             }
-            if (overlap == false) {
-                this.lines = [...lines]
-            }
+            this.lines = [...lines]
+            console.log('set-lines done')
             return overlap
         },
         setSpks(spks) {

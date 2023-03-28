@@ -11,11 +11,11 @@ export default {
   computed: {
     ...mapState(usePlayerStore, ["pos"]),
     ...mapState(useSrtStore, ["activeLine", "lines", "videoId"]),
-    ...mapStores(useWaveSelStore, useSrtStore, usePlayerStore),
+    ...mapStores(useWaveSelStore, useSrtStore),
   },
   watch: {
-    videoId(newSid, oldSid) {
-      this.loadWaveform();
+    videoId(newVid, oldVid) {
+      this.loadWaveform(newVid);
     },
     pos(newPos, oldPos) {
       if (newPos != null && this.waveform && this.waveSelStore.pos == null) {
@@ -87,8 +87,8 @@ export default {
     });
   },
   methods: {
-    async loadWaveform() {
-      this.waveform.load(`/video-store/audio-stream/${this.videoId}`);
+    async loadWaveform(id) {
+      this.waveform.load(`/video-store/audio-stream/${id}`);
       // this.waveform.load(`/video-store/audio-stream/2`);
 
       this.updateRegions();
@@ -111,6 +111,7 @@ export default {
         if (i == this.activeLine) {
           prop.color = "rgba(0,0,0,0.3)";
         }
+        console.log("add-region prop", prop);
         this.regions.push(this.waveform.addRegion(prop));
       }
     },

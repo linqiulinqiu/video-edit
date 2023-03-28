@@ -19,28 +19,30 @@ export default {
 </script>
 
 <template>
-  <el-popover trigger="click" placement="right" :width="200">
-    <template #reference>
-      <el-button circle size="small">
-        <el-icon><Setting /></el-icon>
-      </el-button>
-    </template>
-    <el-select
-      size="small"
-      :placeholder="spks[this.idx].name"
-      :value="spks[this.idx].speaker_id"
-      @change="
-        (v) => {
-          setSpeaker(v, this.idx);
-        }
-      "
-    >
-      <el-option
-        v-for="item in speakerList"
-        :key="item.id"
-        :label="item.name + '--' + item.gender"
-        :value="item.id"
-      ></el-option>
-    </el-select>
-  </el-popover>
+  <el-col>
+    <el-popover trigger="click" placement="right" :width="200">
+      <template #reference>
+        <el-button circle size="small">
+          <el-icon><Setting /></el-icon>
+        </el-button>
+      </template>
+      <el-select
+        size="small"
+        :placeholder="spks[this.idx].name"
+        :value="spks[this.idx].speaker_id"
+        @change="
+          (v) => {
+            setSpeaker(v, this.idx);
+          }
+        "
+      >
+        <el-option
+          v-for="item in speakerList"
+          :key="item.id"
+          :label="item.name + '--' + item.gender"
+          :value="item.id"
+        ></el-option>
+      </el-select>
+    </el-popover>
+  </el-col>
 </template>

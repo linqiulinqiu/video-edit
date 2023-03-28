@@ -5,12 +5,11 @@ import { mapStores, mapState } from "pinia";
 import { useWaveSelStore } from "@/stores/wavesel";
 import { usePlayerStore } from "@/stores/player";
 import { useSrtStore } from "@/stores/srt";
-import { iteratee } from "lodash";
 
 export default {
   computed: {
     ...mapState(useSrtStore, ["activeLine", "lines", "videoId"]),
-    ...mapStores(useWaveSelStore, useSrtStore, usePlayerStore),
+    ...mapStores(useWaveSelStore, usePlayerStore),
   },
   data() {
     return {
