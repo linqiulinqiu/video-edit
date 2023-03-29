@@ -8,7 +8,7 @@ import { mapStores } from "pinia";
 export default {
   computed: {
     ...mapStores(useSrtStore),
-    // ...mapState(useSrtStore, ["lines"]),
+    ...mapState(useSrtStore, ["spks", "video"]),
     ...mapState(useWaveSelStore, ["duration"]),
   },
   components: {
@@ -24,6 +24,7 @@ export default {
     return {
       operation: this.showGroup,
       isClick: false,
+      lineList: this.lines.concat(),
     };
   },
   methods: {
@@ -34,7 +35,7 @@ export default {
     },
     editLines(direction) {
       const index = this.curIndex;
-      const lines = this.lines;
+      const lines = this.lineList;
       const cutTxt = this.cutString(this.cursorPos, lines[index].text);
       const duration = lines[index].to - lines[index].from;
       const scale = this.cursorPos / lines[index].text.length;
@@ -54,9 +55,8 @@ export default {
       return lines;
     },
     delLine() {
-      const lines = this.lines;
+      const lines = this.lineList;
       lines.splice(this.curIndex, 1);
-      // this.srtStore.lines = this.lines;
       this.srtStore.setLines(lines, this.duration);
     },
     detectLines() {
@@ -78,15 +78,21 @@ export default {
       const index = this.curIndex;
       const isOk = this.detectLines();
       if (!isOk) {
-        const line = {
-          from: 0.0,
-          to: 0.3,
+        console.log(this.lines[index]);
+        let line = {
+          from: this.lines[index].to + 0.01,
+          to: "",
           text: "",
-          speaker: "",
+          speaker: this.lines[index].speaker,
         };
-        const lines = this.lines;
+        if (index == this.lines.length - 1) {
+          line.to = this.video.time;
+        } else {
+          this.lines[index + 1].from - 0.01;
+        }
+        console.log(line);
+        const lines = this.lineList;
         lines.splice(index + 1, 0, line);
-        // this.srtStore.lines = this.lines;
         this.srtStore.setLines(lines, this.duration);
       }
     },
@@ -94,22 +100,19 @@ export default {
       const isOk = this.detectLines();
       if (!isOk) {
         const line = {
-          from: 0.0,
-          to: 0.3,
+          from: this.lines[0].from - 0.01,
+          to: this.lines[0].from + 0.1,
           text: "",
-          speaker: "",
+          speaker: this.lines[0].speaker,
         };
-        const lines = this.lines;
+        const lines = this.lineList;
         lines.unshift(line);
-        // this.srtStore.lines = this.lines;
         this.srtStore.setLines(lines, this.duration);
       }
     },
-    cutToLast() {
+    cutToPrev() {
       const cutLines = this.editLines("last");
-      // this.srtStore.lines = cutLines;
       this.srtStore.setLines(cutLines, this.duration);
-      console.log(this.lines);
     },
     cutToNext() {
       const cutLines = this.editLines("next");
@@ -127,7 +130,7 @@ export default {
     <el-button v-if="curIndex == 0" plain size="small" @click="addLineFirst()">
       <el-icon><DocumentAdd /></el-icon>
     </el-button>
-    <el-button v-if="curIndex != 0" plain size="small" @click="cutToLast()"
+    <el-button v-if="curIndex != 0" plain size="small" @click="cutToPrev()"
       ><el-icon><Top /></el-icon
     ></el-button>
     <el-button

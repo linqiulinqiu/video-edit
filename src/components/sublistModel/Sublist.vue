@@ -23,7 +23,11 @@ export default {
       this.srtStore.activeLine = index;
     },
     setTalker(val, index) {
-      this.lines[index].speaker = val;
+      // this.lines[index].speaker = val;
+      console.log(" set taller", val, index);
+      const lines = this.lines.concat();
+      lines[index].speaker = val;
+      this.srtStore.setLines(lines, this.duration);
     },
     textFocus() {
       this.showGroup = true;
@@ -99,7 +103,7 @@ export default {
           <el-col :span="2">
             <el-select
               size="small"
-              v-model="line.speaker"
+              :model-value="spks[line.speaker].name"
               @change="
                 (v) => {
                   setTalker(v, index);
@@ -109,8 +113,8 @@ export default {
               <el-option
                 v-for="(item, index) in spks"
                 :key="index"
-                :label="'speaker:' + item.speaker_id"
-                :value="item.speaker_id"
+                :label="item.name"
+                :value="index"
               ></el-option>
             </el-select>
           </el-col>

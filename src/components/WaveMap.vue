@@ -10,12 +10,12 @@ import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.min.js";
 export default {
   computed: {
     ...mapState(usePlayerStore, ["pos"]),
-    ...mapState(useSrtStore, ["activeLine", "lines", "videoId"]),
+    ...mapState(useSrtStore, ["activeLine", "lines", "video"]),
     ...mapStores(useWaveSelStore, useSrtStore),
   },
   watch: {
-    videoId(newVid, oldVid) {
-      this.loadWaveform(newVid);
+    video(newV) {
+      this.loadWaveform(newV.id);
     },
     pos(newPos, oldPos) {
       if (newPos != null && this.waveform && this.waveSelStore.pos == null) {
@@ -111,7 +111,7 @@ export default {
         if (i == this.activeLine) {
           prop.color = "rgba(0,0,0,0.3)";
         }
-        console.log("add-region prop", prop);
+        // console.log("add-region prop", prop);
         this.regions.push(this.waveform.addRegion(prop));
       }
     },

@@ -1,65 +1,75 @@
 {
+  "id": 2,
+  "lang_id": 2,
+  "video_id": 1,
+  "creator_id": 1,
+  "note": "",
+  "created_at": "2023-02-13T05:33:57.000000Z",
+  "updated_at": "2023-02-13T05:33:57.000000Z",
+  "subsnap": {
+    "id": 4,
+    "subtitle_id": 2,
+    "spks": [
+      {
+        "age": 18,
+        "gender": "f",
+        "speaker_id": 4
+      },
+      {
+        "age": 18,
+        "gender": "f",
+        "speaker_id": 5
+      },
+      {
+        "age": 18,
+        "gender": "f",
+        "speaker_id": 3
+      }
+    ],
+    "revision": 2,
+    "audio_lens": [
+      2160,
+      2268,
+      2448
+    ],
+    "chunks": [
+      {
+        "spk": 0,
+        "body": "让我们考虑一下。",
+        "start_ms": 450,
+        "duration_ms": 1740
+      },
+      {
+        "spk": 1,
+        "body": "已经在的病人。",
+        "start_ms": 2200,
+        "duration_ms": 1790
+      },
+      {
+        "spk": 2,
+        "body": "治疗2型糖尿病的药物。",
+        "start_ms": 4000,
+        "duration_ms": 2590
+      }
+    ],
+    "created_at": "2023-02-14T04:37:51.000000Z",
+    "updated_at": "2023-02-20T08:29:56.000000Z"
+  },
+  "lang": {
     "id": 2,
-    "lang_id": 2,
-    "video_id": 1,
+    "name": "zh-CN",
+    "lcname": "zh-CN",
+    "created_at": "2023-02-13T05:24:39.000000Z",
+    "updated_at": "2023-02-13T05:24:39.000000Z"
+  },
+  "video": {
+    "id": 1,
+    "pathname": "public/upload/video-store/1/2023-02-13/short-test.mp4",
+    "name": "short-test.mp4",
+    "duration_ms": 7019,
     "creator_id": 1,
-    "note": "",
-    "created_at": "2023-02-13T05:33:57.000000Z",
-    "updated_at": "2023-02-13T05:33:57.000000Z",
-    "subsnap": {
-        "id": 4,
-        "subtitle_id": 2,
-        "spks": [
-            {
-                "age": 18,
-                "gender": "f",
-                "speaker_id": 4
-            },
-            {
-                "age": 18,
-                "gender": "f",
-                "speaker_id": 5
-            },
-            {
-                "age": 18,
-                "gender": "f",
-                "speaker_id": 3
-            }
-        ],
-        "revision": 2,
-        "audio_lens": [
-            2160,
-            2268,
-            2448
-        ],
-        "chunks": [
-            {
-                "spk": 0,
-                "body": "\u8ba9\u6211\u4eec\u8003\u8651\u4e00\u4e0b\u3002",
-                "start_ms": 450,
-                "duration_ms": 1740
-            },
-            {
-                "spk": 1,
-                "body": "\u5df2\u7ecf\u5728\u7684\u75c5\u4eba\u3002",
-                "start_ms": 2200,
-                "duration_ms": 1790
-            },
-            {
-                "spk": 2,
-                "body": "\u6cbb\u75972\u578b\u7cd6\u5c3f\u75c5\u7684\u836f\u7269\u3002",
-                "start_ms": 4000,
-                "duration_ms": 2590
-            }
-        ],
-        "created_at": "2023-02-14T04:37:51.000000Z",
-        "updated_at": "2023-02-20T08:29:56.000000Z"
-    },
-    "lang": {
-        "id": 2,
-        "name": "zh-CN",
-        "lcname": "zh-CN",
-        "created_at": "2023-02-13T05:24:39.000000Z",
-        "updated_at": "2023-02-13T05:24:39.000000Z"
-    }
+    "audio_stat": "extracted",
+    "created_at": "2023-02-13T05:32:47.000000Z",
+    "updated_at": "2023-02-13T05:33:15.000000Z"
+  }
 }

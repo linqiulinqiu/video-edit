@@ -8,7 +8,7 @@ import { useSrtStore } from "@/stores/srt";
 
 export default {
   computed: {
-    ...mapState(useSrtStore, ["activeLine", "lines", "videoId"]),
+    ...mapState(useSrtStore, ["activeLine", "lines", "video"]),
     ...mapStores(useWaveSelStore, usePlayerStore),
   },
   data() {
@@ -19,8 +19,8 @@ export default {
     };
   },
   watch: {
-    videoId(newId, oldId) {
-      console.log("watch videoId: ", newId, oldId);
+    video(newV) {
+      const newId = newV.id;
       if (newId > 0) {
         const videoAt = `/video-store/video-stream/${newId}`;
         const sources = [

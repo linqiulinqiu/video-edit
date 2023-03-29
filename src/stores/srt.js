@@ -1,3 +1,4 @@
+
 import { defineStore } from 'pinia'
 import { useSpStore } from './splist';
 
@@ -5,7 +6,7 @@ export const useSrtStore = defineStore('srt', {
     state: () => ({
         spks: [],
         lines: [],
-        videoId: 0,
+        video:{},//video info
         sid: 0,
         activeLine: -1
     }),
@@ -24,18 +25,22 @@ export const useSrtStore = defineStore('srt', {
                 const item = {
                     speaker: line.spk,
                     from: line.start_ms / 1000,
-                    to: (line.start_ms + line.duration_ms)/1000,
+                    to: (line.start_ms + line.duration_ms) / 1000,
                 };
                 item.text = line.body
                 lines.push(item)
             }
-            this.videoId = body.video_id
+            this.video = {
+                time: body.video.duration_ms/1000,
+                id: body.video.id,
+                pathName: body.video.pathName
+            }
+
             this.setSpks(body.subsnap.spks)
 
             this.setLines(lines, duration);
         },
         setLines(lines, duration) {
-            console.log('set-lines', lines, duration)
             let overlap = false
             let lastTo = 0
             for (let i = 0; i < lines.length; i++) {
@@ -46,7 +51,6 @@ export const useSrtStore = defineStore('srt', {
                 }
                 lastTo = line.to
             }
-
             for (let i = 0; i < lines.length; i++) {
                 let min = ''
                 let max = ''
@@ -64,12 +68,11 @@ export const useSrtStore = defineStore('srt', {
                 lines[i].max = max
             }
             if (lastTo >= duration) {
-                lines[lines.length - 1].to = duration
+                // lines[lines.length - 1].to = duration
                 console.log('Overlap! Seems OpenAI generate srt longer than audio itself, need handle& fix')
                 overlap = true
             }
             this.lines = [...lines]
-            console.log('set-lines done')
             return overlap
         },
         setSpks(spks) {
