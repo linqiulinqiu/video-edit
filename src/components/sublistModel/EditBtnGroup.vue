@@ -2,14 +2,12 @@
 import { mapState } from "pinia";
 import Tooltip from "../lib/Tooltip.vue";
 import { useSrtStore } from "@/stores/srt";
-import { useWaveSelStore } from "@/stores/wavesel";
 import { mapStores } from "pinia";
 
 export default {
   computed: {
     ...mapStores(useSrtStore),
     ...mapState(useSrtStore, ["spks", "video"]),
-    ...mapState(useWaveSelStore, ["duration"]),
   },
   components: {
     Tooltip,
@@ -57,7 +55,7 @@ export default {
     delLine() {
       const lines = this.lineList;
       lines.splice(this.curIndex, 1);
-      this.srtStore.setLines(lines, this.duration);
+      this.srtStore.setLines(lines);
     },
     detectLines() {
       let isBlank = false;
@@ -93,30 +91,30 @@ export default {
         console.log(line);
         const lines = this.lineList;
         lines.splice(index + 1, 0, line);
-        this.srtStore.setLines(lines, this.duration);
+        this.srtStore.setLines(lines);
       }
     },
     addLineFirst() {
       const isOk = this.detectLines();
       if (!isOk) {
         const line = {
-          from: this.lines[0].from - 0.01,
-          to: this.lines[0].from + 0.1,
+          from: 0.01,
+          to: this.lines[0].from,
           text: "",
           speaker: this.lines[0].speaker,
         };
         const lines = this.lineList;
         lines.unshift(line);
-        this.srtStore.setLines(lines, this.duration);
+        this.srtStore.setLines(lines);
       }
     },
     cutToPrev() {
       const cutLines = this.editLines("last");
-      this.srtStore.setLines(cutLines, this.duration);
+      this.srtStore.setLines(cutLines);
     },
     cutToNext() {
       const cutLines = this.editLines("next");
-      this.srtStore.setLines(cutLines, this.duration);
+      this.srtStore.setLines(cutLines);
     },
   },
 };

@@ -81,7 +81,7 @@ export default {
           lines.push(line);
           i++;
         }
-        this.srtStore.setLines(lines, this.waveSelStore.duration);
+        this.srtStore.setLines(lines);
         this.updateRegions();
       }
     });

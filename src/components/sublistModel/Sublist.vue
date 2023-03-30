@@ -3,6 +3,7 @@ import { mapStores, mapState } from "pinia";
 import { useSrtStore } from "@/stores/srt";
 import { useWaveSelStore } from "@/stores/wavesel";
 import EditBtnGroupVue from "./EditBtnGroup.vue";
+import TimePickerVue from "./TimePicker.vue";
 
 export default {
   computed: {
@@ -12,8 +13,23 @@ export default {
   },
   components: {
     EditBtnGroupVue,
+    TimePickerVue,
   },
   methods: {
+    format(seconds) {
+      let hour =
+        Math.floor(seconds / 3600) >= 10
+          ? Math.floor(seconds / 3600)
+          : "0" + Math.floor(seconds / 3600);
+      seconds -= 3600 * hour;
+      let min =
+        Math.floor(seconds / 60) >= 10
+          ? Math.floor(seconds / 60)
+          : "0" + Math.floor(seconds / 60);
+      seconds -= 60 * min;
+      let sec = seconds >= 10 ? seconds : "0" + seconds;
+      return hour + ":" + min + ":" + sec;
+    },
     playVideo(idx) {
       this.srtStore.activeLine = idx;
       this.isPlay != this.isPlay;
@@ -27,7 +43,7 @@ export default {
       console.log(" set taller", val, index);
       const lines = this.lines.concat();
       lines[index].speaker = val;
-      this.srtStore.setLines(lines, this.duration);
+      this.srtStore.setLines(lines);
     },
     textFocus() {
       this.showGroup = true;
@@ -62,7 +78,7 @@ export default {
       } else {
         console.log("line.to = ", line.to, this.lines[index + 1].from);
       }
-      this.srtStore.setLines(this.lines, duration);
+      this.srtStore.setLines(this.lines);
       if (fixed) {
         console.log("fixed line", index, this.lines);
         this.$forceUpdate();
@@ -81,7 +97,6 @@ export default {
   watch: {
     activeLine: function (newL, oldL) {
       this.currentIndex = newL;
-      console.log("current Index = ", newL);
     },
   },
 };
@@ -129,6 +144,7 @@ export default {
               :placeholder="line.from.toString()"
               size="small"
             ></el-input-number>
+            <!-- <span>start:{{ format(line.from) }}</span> -->
           </el-col>
           <el-col :span="1">-----</el-col>
           <el-col :span="3">
@@ -142,6 +158,7 @@ export default {
               :placeholder="line.to.toString()"
               size="small"
             ></el-input-number>
+            <!-- <span>end:{{ format(line.to) }}</span> -->
           </el-col>
           <el-col :span="2">
             <el-button plain size="default" @click="playVideo(index)">

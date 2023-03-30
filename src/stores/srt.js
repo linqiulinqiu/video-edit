@@ -14,7 +14,7 @@ export const useSrtStore = defineStore('srt', {
         setSid(sid){
             this.sid = sid
         },
-        async loadSrt(duration) {
+        async loadSrt() {
             const resp = await fetch(`/subedit/subtitle-info/${this.sid}`);
             const body = await resp.json();
             console.log("body:",body)
@@ -38,9 +38,9 @@ export const useSrtStore = defineStore('srt', {
 
             this.setSpks(body.subsnap.spks)
 
-            this.setLines(lines, duration);
+            this.setLines(lines);
         },
-        setLines(lines, duration) {
+        setLines(lines) {
             let overlap = false
             let lastTo = 0
             for (let i = 0; i < lines.length; i++) {
@@ -67,8 +67,8 @@ export const useSrtStore = defineStore('srt', {
                 lines[i].min = min
                 lines[i].max = max
             }
-            if (lastTo >= duration) {
-                // lines[lines.length - 1].to = duration
+            if (lastTo >= this.video.time) {
+                lines[lines.length - 1].to = this.video.time
                 console.log('Overlap! Seems OpenAI generate srt longer than audio itself, need handle& fix')
                 overlap = true
             }
