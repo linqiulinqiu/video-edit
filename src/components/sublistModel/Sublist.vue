@@ -133,7 +133,10 @@ export default {
               ></el-option>
             </el-select>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="6">
+            <time-picker-vue :value="line" />
+          </el-col>
+          <!-- <el-col :span="3">
             <el-input-number
               :model-value="line.from"
               :precision="2"
@@ -143,10 +146,7 @@ export default {
               @input="edgeUpdate(index)"
               :placeholder="line.from.toString()"
               size="small"
-            ></el-input-number>
-            <!-- <span>start:{{ format(line.from) }}</span> -->
-          </el-col>
-          <el-col :span="1">-----</el-col>
+            ></el-input-number>  </el-col>  <el-col :span="1">-----</el-col>
           <el-col :span="3">
             <el-input-number
               :model-value="line.to"
@@ -158,8 +158,7 @@ export default {
               :placeholder="line.to.toString()"
               size="small"
             ></el-input-number>
-            <!-- <span>end:{{ format(line.to) }}</span> -->
-          </el-col>
+          </el-col> -->
           <el-col :span="2">
             <el-button plain size="default" @click="playVideo(index)">
               <el-icon size="20"><VideoPlay /></el-icon>
