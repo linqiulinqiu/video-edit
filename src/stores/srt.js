@@ -40,6 +40,37 @@ export const useSrtStore = defineStore('srt', {
 
             this.setLines(lines);
         },
+        async saveSrt(){
+            const chunks = []
+            for(let i in this.lines){
+                const line = this.lines[i]
+                const start_ms = parseInt(line.from*1000)
+                const item = {
+                    spk: line.speaker,
+                    start_ms : start_ms,
+                    duration_ms: parseInt(line.to*1000)- start_ms,
+                    body: line.text
+                }
+                chunks.push(item)
+            }
+            const spks = []
+            for(let i in this.spks){
+                const spk = this.spks[i]
+                spks.push({
+                    speaker_id: spk.speaker_id,
+                    gender: spk.gender,
+                    age: spk.age
+                })
+            }
+            const form = new FormData()
+            form.append('chunks', JSON.stringify(chunks))
+            form.append('spks', JSON.stringify(spks))
+            const resp = await fetch(`/subedit/save-snap/${this.sid}`, {
+                body: form,
+                method: 'POST'
+            });
+            console.log('resp of saveSrt', resp)
+        },
         setLines(lines) {
             let overlap = false
             let lastTo = 0
@@ -76,17 +107,7 @@ export const useSrtStore = defineStore('srt', {
             return overlap
         },
         setSpks(spks) {
-            const sysList = useSpStore().speakerList
-            for (var i in spks) {
-                for (var j in sysList) {
-                    if (spks[i].speaker_id == sysList[j].id) {
-                        spks[i]['name'] = sysList[j].name
-                        spks[i].gender= sysList[j].gender
-                    }
-                }
-            }
             this.spks = spks
         }
-
     }
 })

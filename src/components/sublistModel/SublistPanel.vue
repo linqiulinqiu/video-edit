@@ -1,12 +1,10 @@
 <script>
-import { mapState, mapStores } from "pinia";
+import { mapStores } from "pinia";
 import { useSrtStore } from "@/stores/srt";
-import { useWaveSelStore } from "@/stores/wavesel";
 import Sublist from "@/components/sublistModel/Sublist.vue";
 
 export default {
   computed: {
-    ...mapState(useWaveSelStore, ["duration"]),
     ...mapStores(useSrtStore),
   },
   components: {
@@ -14,8 +12,11 @@ export default {
   },
   methods: {
     async loadSrt() {
-      await this.srtStore.loadSrt(this.duration);
+      await this.srtStore.loadSrt();
     },
+    async saveSrt(){
+      await this.srtStore.saveSrt();
+    }
   },
 };
 </script>
@@ -23,6 +24,7 @@ export default {
   <el-col>
     <!-- <el-col?> -->
     <el-button @click="loadSrt()">Load</el-button>
+    <el-button @click="saveSrt()">Save</el-button>
     <!-- </el-col?> -->
     <Sublist />
   </el-col>
