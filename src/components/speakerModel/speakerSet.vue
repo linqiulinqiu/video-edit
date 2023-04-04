@@ -27,8 +27,7 @@ export default {
     </template>
     <el-select
       size="small"
-      :placeholder="spks[this.idx].name"
-      :value="spks[this.idx].speaker_id"
+      :model-value="spks[this.idx].speaker_id"
       @change="
         (v) => {
           setSpeaker(v, this.idx);

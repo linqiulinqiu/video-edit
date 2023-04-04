@@ -43,12 +43,14 @@ export default {
       console.log(" set taller", val, index);
       const lines = this.lines.concat();
       lines[index].speaker = val;
+      console.log("lines", lines);
       this.srtStore.setLines(lines);
     },
     textFocus() {
       this.showGroup = true;
     },
     textSelect(event) {
+      this.showGroup = true;
       const objArea = event.target;
       this.cursorPos = objArea.selectionStart;
     },
@@ -84,6 +86,9 @@ export default {
         this.$forceUpdate();
       }
     },
+    modifyText(text, idx) {
+      console.log("modify text : ", text, "idx = ", idx, this.lines[idx].text);
+    },
   },
   data() {
     return {
@@ -108,7 +113,7 @@ export default {
         @click="liClick(index)"
         :class="{ active: currentIndex == index }"
         v-for="(line, index) in lines"
-        :key="line.text"
+        :key="line"
       >
         <el-row>
           <el-col :span="1">
@@ -118,7 +123,7 @@ export default {
           <el-col :span="2">
             <el-select
               size="small"
-              :model-value="spks[line.speaker].name"
+              :model-value="line.speaker"
               @change="
                 (v) => {
                   setTalker(v, index);
@@ -128,12 +133,11 @@ export default {
               <el-option
                 v-for="(item, index) in spks"
                 :key="index"
-                :label="item.name"
                 :value="index"
               ></el-option>
             </el-select>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="8">
             <time-picker-vue :value="line" />
           </el-col>
           <!-- <el-col :span="3">
@@ -164,15 +168,21 @@ export default {
               <el-icon size="20"><VideoPlay /></el-icon>
             </el-button>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="10">
             <el-input
               type="textarea"
-              @focus="textFocus()"
-              v-model="line.text"
+              @focus="this.showGroup = true"
+              v-model="lines[index].text"
+              autofocus="true"
               @click="textSelect($event)"
             />
           </el-col>
-          <el-col class="btn-group" v-if="index == currentIndex">
+          <el-col
+            :span="5"
+            :offset="19"
+            class="btn-group"
+            v-if="index == currentIndex"
+          >
             <EditBtnGroupVue
               :curIndex="index"
               :cursorPos="cursorPos"
@@ -187,9 +197,9 @@ export default {
 </template>
 <style scoped>
 .active {
-  border: 1px solid rgb(54, 92, 85);
+  /* border: 1px solid rgb(54, 92, 85); */
   border-radius: 10px;
-  background-color: #235862ab;
+  background-color: #36727eab;
 }
 ul {
   padding-inline-start: 0px !important;
@@ -199,9 +209,17 @@ ul li {
   padding: 10px 10px;
   position: relative;
 }
-.btn-grounp {
+ul li:hover {
+  /* border: 1px solid rgb(54, 92, 85); */
+  border-radius: 10px;
+  background-color: #377885ab;
+}
+.btn-group.el-col {
   position: absolute;
   width: 200px;
   height: 50px;
+  right: 20px;
+  top: -23px;
+  /* background-color: aqua; */
 }
 </style>
