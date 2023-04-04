@@ -2,6 +2,7 @@
 <script>
 export default {
   props: ["value"],
+  emits: ['update:modelValue'],
   computed: {
     textFrom() {
       return this.formTime(this.from);
@@ -18,6 +19,24 @@ export default {
     };
   },
   methods: {
+    incrTime(isFrom, sec){
+      if(isFrom){
+        this.value.from += sec
+      }else{
+        this.value.to += sec
+      }
+      this.$emit('update:modelValue', this.value)
+   },
+    setTime(isFrom, time){
+      const offset = time.getTimezoneOffset() * 60
+      const sec = time.getTime()/1000-offset
+      if(isFrom){
+        this.value.from = sec
+      }else{
+        this.value.to = sec
+      }
+      this.$emit('update:modelValue', this.value)
+    },
     formTime(time) {
       //time is millisecondes
       const d = new Date(this.value.from * 1000);
@@ -25,54 +44,6 @@ export default {
       const offset = d.getTimezoneOffset() * 60 * 1000;
       const time_obj = new Date(time + offset);
       return time_obj;
-    },
-    parseTime(time) {
-      time = this.formTime(time);
-      console.log("time in formTime", time);
-
-      // const ftime =
-      //   "" +
-      //   time.getHours() +
-      //   ":" +
-      //   time.getMinutes() +
-      //   ":" +
-      //   (time.getSeconds() + time.getMilliseconds() / 1000).toFixed(2);
-      return time;
-    },
-    modifyTime(count, isFrom, time) {
-      let ms = time.getMilliseconds();
-
-      console.log(ms, typeof ms, time, this.from);
-      if (count == "+") {
-        ms = ms + 10;
-      } else if (count == "-") {
-        ms = ms - 10;
-      }
-      console.log("time type = ", time, typeof time, time.setMilliseconds());
-
-      if (isFrom) {
-        time.setMilliseconds(ms);
-        // console.log("ms = ", ms, t_ms);
-        this.from = this.formTime(time);
-        console.log("from ===", this.from);
-      } else {
-        this.to = this.formTime(this.to.setMilliseconds(ms));
-      }
-    },
-    // incr(idx) {
-    //   let ms = this.values[idx].getMilliseconds() + 10;
-    //   this.values[idx].setMilliseconds(ms);
-    //   //TODO: control range/min/max
-    //   console.log("values=", this.values);
-    //   this.values = this.values.concat();
-    // },
-    // decr(idx) {
-    //   let ms = this.values[idx].getMilliseconds() - 10;
-    //   this.values[idx].setMilliseconds(ms);
-    //   this.values = this.values.concat();
-    // },
-    changeFrom(val) {
-      console.log("change From = ", val);
     },
   },
 };
@@ -85,12 +56,12 @@ export default {
           <el-col :span="5">
             <el-button
               class="comp-btn"
-              @click="modifyTime('+', true, this.from)"
+              @click="incrTime(true,0.01)"
               >+
             </el-button>
             <el-button
               class="comp-btn"
-              @click="modifyTime('-', true, this.from)"
+              @click="incrTime(true,-0.01)"
               >-
             </el-button>
           </el-col>
@@ -101,7 +72,7 @@ export default {
               size="small"
               :default-value="from"
               format="H:mm:ss:SSS"
-              @change="changeFrom(this.from)"
+              @change="setTime(true, this.from)"
           /></el-col>
         </el-row>
       </el-col>
@@ -117,10 +88,10 @@ export default {
             ></el-time-picker>
           </el-col>
           <el-col :span="4">
-            <el-button class="comp-btn" @click="modifyTime('+', false, this.to)"
+            <el-button class="comp-btn" @click="incrTime(false, 0.01)"
               >+
             </el-button>
-            <el-button class="comp-btn" @click="modifyTime('-', false, this.to)"
+            <el-button class="comp-btn" @click="incrTime(false, -0.01)"
               >-
             </el-button>
           </el-col>

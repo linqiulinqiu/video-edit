@@ -71,6 +71,29 @@ export const useSrtStore = defineStore('srt', {
             });
             console.log('resp of saveSrt', resp)
         },
+        setLine(idx, line){
+            const ls = []
+            for(let i = 0; i< this.lines.length; i++){
+                ls.push( {
+                    from:this.lines[i].from,
+                    to:this.lines[i].to,
+                    speaker: this.lines[i].speaker,
+                    text: this.lines[i].text
+                })
+            }
+            line = {
+                    from: line.from, 
+                    to: line.to,
+                    speaker: line.speaker,
+                    text: line.text
+                }
+            if(idx>ls.length){
+                ls.push(line)
+            }else{
+                ls[idx] = line
+            }
+            this.setLines(ls)
+        },
         setLines(lines) {
             let overlap = false
             let lastTo = 0

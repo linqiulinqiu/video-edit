@@ -16,19 +16,8 @@ export default {
     TimePickerVue,
   },
   methods: {
-    format(seconds) {
-      let hour =
-        Math.floor(seconds / 3600) >= 10
-          ? Math.floor(seconds / 3600)
-          : "0" + Math.floor(seconds / 3600);
-      seconds -= 3600 * hour;
-      let min =
-        Math.floor(seconds / 60) >= 10
-          ? Math.floor(seconds / 60)
-          : "0" + Math.floor(seconds / 60);
-      seconds -= 60 * min;
-      let sec = seconds >= 10 ? seconds : "0" + seconds;
-      return hour + ":" + min + ":" + sec;
+    setLine(idx,val){
+      this.srtStore.setLine(idx, val)
     },
     playVideo(idx) {
       this.srtStore.activeLine = idx;
@@ -138,31 +127,8 @@ export default {
             </el-select>
           </el-col>
           <el-col :span="8">
-            <time-picker-vue :value="line" />
+            <time-picker-vue :value="line" @update:model-value="setLine(index, $event)"/>
           </el-col>
-          <!-- <el-col :span="3">
-            <el-input-number
-              :model-value="line.from"
-              :precision="2"
-              :step="0.01"
-              :min="line.min"
-              :max="line.to"
-              @input="edgeUpdate(index)"
-              :placeholder="line.from.toString()"
-              size="small"
-            ></el-input-number>  </el-col>  <el-col :span="1">-----</el-col>
-          <el-col :span="3">
-            <el-input-number
-              :model-value="line.to"
-              :precision="2"
-              :min="line.from"
-              :max="line.max"
-              @input="edgeUpdate(index)"
-              :step="0.01"
-              :placeholder="line.to.toString()"
-              size="small"
-            ></el-input-number>
-          </el-col> -->
           <el-col :span="2">
             <el-button plain size="default" @click="playVideo(index)">
               <el-icon size="20"><VideoPlay /></el-icon>
