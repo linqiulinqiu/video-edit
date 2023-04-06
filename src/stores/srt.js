@@ -87,7 +87,7 @@ export const useSrtStore = defineStore('srt', {
                     speaker: line.speaker,
                     text: line.text
                 }
-            if(idx>ls.length){
+            if(idx>=ls.length){
                 ls.push(line)
             }else{
                 ls[idx] = line

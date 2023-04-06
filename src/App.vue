@@ -59,6 +59,8 @@ export default {
 .sublist {
   overflow-y: auto;
   height: 500px;
+
+  transform: translate();
   /* height: calc(100vh - 200px); */
 }
 .sublist::-webkit-scrollbar {

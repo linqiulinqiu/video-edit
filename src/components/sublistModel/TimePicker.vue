@@ -2,7 +2,7 @@
 <script>
 export default {
   props: ["value"],
-  emits: ['update:modelValue'],
+  emits: ["update:modelValue"],
   computed: {
     textFrom() {
       return this.formTime(this.from);
@@ -12,30 +12,30 @@ export default {
     },
   },
   data() {
-    // const from_t = this.value.from * 1000;
+    console.log("value = ", this.value);
     return {
       from: this.formTime(this.value.from * 1000),
       to: this.formTime(this.value.to * 1000),
     };
   },
   methods: {
-    incrTime(isFrom, sec){
-      if(isFrom){
-        this.value.from += sec
-      }else{
-        this.value.to += sec
+    incrTime(isFrom, sec) {
+      if (isFrom) {
+        this.value.from += sec;
+      } else {
+        this.value.to += sec;
       }
-      this.$emit('update:modelValue', this.value)
-   },
-    setTime(isFrom, time){
-      const offset = time.getTimezoneOffset() * 60
-      const sec = time.getTime()/1000-offset
-      if(isFrom){
-        this.value.from = sec
-      }else{
-        this.value.to = sec
+      this.$emit("update:modelValue", this.value);
+    },
+    setTime(isFrom, time) {
+      const offset = time.getTimezoneOffset() * 60;
+      const sec = time.getTime() / 1000 - offset;
+      if (isFrom) {
+        this.value.from = sec;
+      } else {
+        this.value.to = sec;
       }
-      this.$emit('update:modelValue', this.value)
+      this.$emit("update:modelValue", this.value);
     },
     formTime(time) {
       //time is millisecondes
@@ -54,14 +54,10 @@ export default {
       <el-col :span="11">
         <el-row>
           <el-col :span="5">
-            <el-button
-              class="comp-btn"
-              @click="incrTime(true,0.01)"
+            <el-button class="comp-btn" @click="incrTime(true, 0.01)"
               >+
             </el-button>
-            <el-button
-              class="comp-btn"
-              @click="incrTime(true,-0.01)"
+            <el-button class="comp-btn" @click="incrTime(true, -0.01)"
               >-
             </el-button>
           </el-col>

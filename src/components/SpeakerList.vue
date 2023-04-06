@@ -3,11 +3,13 @@
 import { mapState, mapStores } from "pinia";
 import { useSrtStore } from "@/stores/srt";
 import { useSpStore } from "@/stores/splist";
-import SpeakerSetVue from "./speakerModel/speakerSet.vue";
+import SpeakerSetVue from "./speakerModel/SpeakerSet.vue";
+import VoiceDemoVue from "./speakerModel/VoiceDemo.vue";
 
 export default {
   components: {
     SpeakerSetVue,
+    VoiceDemoVue,
   },
   computed: {
     ...mapState(useSpStore, ["speakerList"]), // 以此确保本Component不会改动spList.speakerList(仅能读入，不可修改)
@@ -80,6 +82,7 @@ export default {
       </li>
       <li v-for="(spk, idx) in spks" :key="spk.name">
         <el-row>
+          <el-> {{ spk }}</el->
           <el-col :span="3">
             {{ spk.speaker_id }}
             <SpeakerSetVue :spks="spks" :idx="idx" />
@@ -87,9 +90,7 @@ export default {
           <el-col :span="3">{{ speakerList[spk.speaker_id].name }}</el-col>
           <el-col :span="3">{{ speakerList[spk.speaker_id].gender }} </el-col>
           <el-col :span="5">
-            <el-col :span="18">
-              <el-icon size="20"><VideoPlay /></el-icon>
-            </el-col>
+            <VoiceDemoVue :url="speakerList[spk.speaker_id].demo" />
           </el-col>
           <el-col :span="5"
             ><el-button @click="delSpeaker(spk.speaker_id, idx)"

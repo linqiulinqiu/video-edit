@@ -3,6 +3,7 @@ import { mapState, mapStores } from "pinia";
 import { useSpStore } from "@/stores/splist";
 import { useSrtStore } from "@/stores/srt";
 export default {
+  name: "SpeakerSet",
   props: ["spks", "idx"],
   computed: {
     ...mapState(useSpStore, ["speakerList"]),
