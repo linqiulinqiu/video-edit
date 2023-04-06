@@ -16,9 +16,19 @@ export default {
     return {
       from: this.formTime(this.value.from * 1000),
       to: this.formTime(this.value.to * 1000),
+      min: this.formTime(this.value.min * 1000),
+      max: this.formTime(this.value.max * 1000),
+      disableHours: "",
+      disableMinutes: "",
+      disableSeconds: "",
     };
   },
   methods: {
+    getRange() {
+      const minH = this.min.getHours();
+      const minM = this.min.getMinutes();
+      const minS = this.min.getSecondes();
+    },
     incrTime(isFrom, sec) {
       if (isFrom) {
         this.value.from += sec;
@@ -40,7 +50,6 @@ export default {
     formTime(time) {
       //time is millisecondes
       const d = new Date(this.value.from * 1000);
-      // console.log("d ", d);
       const offset = d.getTimezoneOffset() * 60 * 1000;
       const time_obj = new Date(time + offset);
       return time_obj;

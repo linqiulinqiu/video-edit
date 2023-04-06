@@ -2,6 +2,7 @@
   <el-col>
     <el-col v-if="isPlaying">
       <audio controls :src="this.url"></audio>
+      <!-- <el-icon><Operation /></el-icon> -->
     </el-col>
     <el-col v-else>
       <el-icon @click="this.isPlaying = true" size="20"><VideoPlay /></el-icon>
@@ -13,7 +14,7 @@
 export default {
   props: ["url"],
   data() {
-    console.log("url :",this.url)
+    console.log("url :", this.url);
     return {
       isPlaying: false,
     };
@@ -22,4 +23,8 @@ export default {
 </script>
 
 <style>
+audio {
+  width: 200px;
+  height: 30px;
+}
 </style>
