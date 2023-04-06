@@ -82,7 +82,6 @@ export default {
       </li>
       <li v-for="(spk, idx) in spks" :key="spk.name">
         <el-row>
-          <el-> {{ spk }}</el->
           <el-col :span="3">
             {{ spk.speaker_id }}
             <SpeakerSetVue :spks="spks" :idx="idx" />
