@@ -7,7 +7,7 @@ import TimePickerVue from "./TimePicker.vue";
 
 export default {
   computed: {
-    ...mapState(useSrtStore, ["activeLine", "lines", "spks"]),
+    ...mapState(useSrtStore, ["activeLine", "lines", "spks","audioOut"]),
     ...mapState(useWaveSelStore, ["duration"]),
     ...mapStores(useSrtStore),
   },
@@ -108,6 +108,11 @@ export default {
           <el-col :span="1">
             <el-icon v-if="index == currentIndex"><Right /></el-icon>
             <span>{{ index + 1 }}</span>
+          </el-col>
+          <el-col v-if="audioOut">
+            <audio v-if="index == currentIndex">
+              <source :src="'/subtitles/audio-out/'+srtStore.sid+'?cid='+index" type="audio/mpeg">
+            </audio>
           </el-col>
           <el-col :span="2">
             <el-select
