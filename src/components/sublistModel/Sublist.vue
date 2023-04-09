@@ -7,9 +7,24 @@ import TimePickerVue from "./TimePicker.vue";
 
 export default {
   computed: {
-    ...mapState(useSrtStore, ["activeLine", "lines", "spks","audioOut"]),
+    ...mapState(useSrtStore, ["activeLine", "lines", "spks","audioLens"]),
     ...mapState(useWaveSelStore, ["duration"]),
     ...mapStores(useSrtStore),
+    overlaps(){
+      const ols = []
+      const audioLens = this.audioLens
+      const lines = this.lines
+      for(let i in audioLens){
+        const durationMs = (lines[i].to - lines[i].from)*1000
+        const overlap = audioLens[i] - durationMs
+        if(overlap>0){
+          ols.push(overlap)
+        }else{
+          ols.push(0)
+        }
+      }
+      return ols
+    }
   },
   components: {
     EditBtnGroupVue,
@@ -109,10 +124,11 @@ export default {
             <el-icon v-if="index == currentIndex"><Right /></el-icon>
             <span>{{ index + 1 }}</span>
           </el-col>
-          <el-col v-if="audioOut">
+          <el-col v-if="audioLens">
             <audio v-if="index == currentIndex">
               <source :src="'/subtitles/audio-out/'+srtStore.sid+'?cid='+index" type="audio/mpeg">
             </audio>
+            <span v-if="overlaps[index]">Overlap {{ overlaps[index] }}</span>
           </el-col>
           <el-col :span="2">
             <el-select

@@ -16,6 +16,10 @@ export default {
     },
     async saveSrt(){
       await this.srtStore.saveSrt();
+    },
+    async makeAudio(){
+      console.log('TODO: make audio')
+      alert('TODO: make audio')
     }
   },
 };
@@ -25,6 +29,7 @@ export default {
     <!-- <el-col?> -->
     <el-button @click="loadSrt()">Load</el-button>
     <el-button @click="saveSrt()">Save</el-button>
+    <el-button v-if="srtStore.audioOut==false">Make Audio</el-button>
     <!-- </el-col?> -->
     <Sublist />
   </el-col>

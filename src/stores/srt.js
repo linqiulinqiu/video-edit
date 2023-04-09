@@ -8,8 +8,7 @@ export const useSrtStore = defineStore('srt', {
         lines: [],
         video:{},//video info
         sid: 0,
-        audioOut: false,
-        audioEnableIndex: -1,
+        audioLens: [],
         activeLine: -1
     }),
     actions: {
@@ -33,10 +32,9 @@ export const useSrtStore = defineStore('srt', {
                 lines.push(item)
             }
             if(body.subsnap.audio_lens.length == lines.length){
-                this.audioOut = true
-                this.audioEnableIndex = -1
+                this.audioLens = body.subsnap.audio_lens 
             }else{
-                this.audioOut = false
+                this.audioLens = []
             }
             this.video = {
                 time: body.video.duration_ms/1000,
