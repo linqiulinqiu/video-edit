@@ -14,7 +14,7 @@
 export default {
   props: ["url"],
   data() {
-    console.log("url :", this.url);
+    // console.log("url :", this.url);
     return {
       isPlaying: false,
     };
@@ -22,9 +22,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 audio {
   width: 200px;
   height: 30px;
+}
+.el-icon:hover {
+  color: aquamarine;
 }
 </style>

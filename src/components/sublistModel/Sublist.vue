@@ -7,32 +7,38 @@ import TimePickerVue from "./TimePicker.vue";
 
 export default {
   computed: {
-    ...mapState(useSrtStore, ["activeLine", "lines", "spks","audioLens"]),
+    ...mapState(useSrtStore, [
+      "activeLine",
+      "lines",
+      "spks",
+      "audioLens",
+      "reflines",
+    ]),
     ...mapState(useWaveSelStore, ["duration"]),
     ...mapStores(useSrtStore),
-    overlaps(){
-      const ols = []
-      const audioLens = this.audioLens
-      const lines = this.lines
-      for(let i in audioLens){
-        const durationMs = (lines[i].to - lines[i].from)*1000
-        const overlap = audioLens[i] - durationMs
-        if(overlap>0){
-          ols.push(overlap)
-        }else{
-          ols.push(0)
+    overlaps() {
+      const ols = [];
+      const audioLens = this.audioLens;
+      const lines = this.lines;
+      for (let i in audioLens) {
+        const durationMs = (lines[i].to - lines[i].from) * 1000;
+        const overlap = audioLens[i] - durationMs;
+        if (overlap > 0) {
+          ols.push(overlap);
+        } else {
+          ols.push(0);
         }
       }
-      return ols
-    }
+      return ols;
+    },
   },
   components: {
     EditBtnGroupVue,
     TimePickerVue,
   },
   methods: {
-    setLine(idx,val){
-      this.srtStore.setLine(idx, val)
+    setLine(idx, val) {
+      this.srtStore.setLine(idx, val);
     },
     playVideo(idx) {
       this.srtStore.activeLine = idx;
@@ -122,16 +128,29 @@ export default {
         <el-row>
           <el-col :span="1">
             <el-icon v-if="index == currentIndex"><Right /></el-icon>
-            <span>{{ index + 1 }}</span>
+            <el-text size="large">{{ index + 1 }}</el-text>
           </el-col>
-          <el-col v-if="audioLens">
-            <audio v-if="index == currentIndex">
-              <source :src="'/subtitles/audio-out/'+srtStore.sid+'?cid='+index" type="audio/mpeg">
-            </audio>
-            <span v-if="overlaps[index]">Overlap {{ overlaps[index] }}</span>
+          <el-col :span="23">
+            <el-col v-if="audioLens">
+              <audio v-if="index == currentIndex">
+                <source
+                  :src="
+                    '/subtitles/audio-out/' + srtStore.sid + '?cid=' + index
+                  "
+                  type="audio/mpeg"
+                />
+              </audio>
+              <el-text type="danger" v-if="overlaps[index]">
+                Overlap {{ overlaps[index] }}
+              </el-text>
+            </el-col>
           </el-col>
+        </el-row>
+
+        <el-row>
           <el-col :span="2">
             <el-select
+              class="m-top"
               size="small"
               :model-value="line.speaker"
               @change="
@@ -144,25 +163,37 @@ export default {
                 v-for="(item, index) in spks"
                 :key="index"
                 :value="index"
+                :label="'SID:' + line.speaker"
               ></el-option>
             </el-select>
           </el-col>
           <el-col :span="8">
-            <time-picker-vue :value="line" @update:model-value="setLine(index, $event)"/>
+            <time-picker-vue
+              :value="line"
+              @update:model-value="setLine(index, $event)"
+            />
           </el-col>
           <el-col :span="2">
-            <el-button plain size="default" @click="playVideo(index)">
+            <el-button
+              class="m-top"
+              plain
+              size="default"
+              @click="playVideo(index)"
+            >
               <el-icon size="20"><VideoPlay /></el-icon>
             </el-button>
           </el-col>
-          <el-col :span="10">
+          <el-col :span="12">
             <el-input
               type="textarea"
               @focus="this.showGroup = true"
               v-model="lines[index].text"
+              :autosize="{ minRows: 1, maxRows: 5 }"
               autofocus="true"
               @click="textSelect($event)"
             />
+
+            <el-text size="small">原文：{{ reflines[index] }}</el-text>
           </el-col>
           <el-col
             :span="5"
@@ -186,7 +217,7 @@ export default {
 .active {
   /* border: 1px solid rgb(54, 92, 85); */
   border-radius: 10px;
-  background-color: #36727eab;
+  background-color: #36727e50;
 }
 ul {
   padding-inline-start: 0px !important;
@@ -199,7 +230,7 @@ ul li {
 ul li:hover {
   /* border: 1px solid rgb(54, 92, 85); */
   border-radius: 10px;
-  background-color: #377885ab;
+  background-color: #37788528;
 }
 .btn-group.el-col {
   position: absolute;
@@ -208,5 +239,8 @@ ul li:hover {
   right: 20px;
   top: -23px;
   /* background-color: aqua; */
+}
+ul li .el-row > .el-col {
+  /* border: 1px solid #377885ab; */
 }
 </style>

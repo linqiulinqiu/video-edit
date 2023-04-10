@@ -38,6 +38,7 @@ export default {
       this.getRange();
     }
   },
+
   methods: {
     time_hms(time) {
       const hh = time.getHours();
@@ -46,15 +47,15 @@ export default {
       // const ms = time.getMilliseconds();
       return [hh, mm, ss];
     },
-    makeRange(start, end) {
-      if (start < end) {
+    makeRange(range) {
+      if (range[0] < range[1]) {
         let rangeArr = [];
-        for (let i = start; i <= end; i++) {
+        for (let i = range[0]; i <= range[1]; i++) {
           rangeArr.push(i);
         }
         return rangeArr;
       } else {
-        console.log("start=", start, "end=", end);
+        // console.log("start=", start, "end=", end);
         return [0];
       }
     },
@@ -64,7 +65,8 @@ export default {
         if (timeLimit.hasOwnProperty(item)) {
           const idx = idxArr.indexOf(item);
           if (idx != -1) {
-            timeLimit[item] = this.makeRange(min[idx], max[idx]);
+            // timeLimit[item] = this.makeRange(min[idx], max[idx]);
+            timeLimit = [min[idx], max[idx]];
           }
         }
       }
@@ -77,17 +79,17 @@ export default {
       const maxR = this.time_hms(this.max);
       this.time_range(minR, lFrom, this.fromlimit);
       this.time_range(lTo, maxR, this.tolimit);
-      console.log("fromLimit--toLimit:", this.fromlimit, this.tolimit);
+      // console.log("fromLimit--toLimit:", this.fromlimit, this.tolimit);
     },
-    disableHH(limit_h) {
-      return limit_h;
-    },
-    disableMM(limit_m) {
-      return limit_m;
-    },
-    disableSS(limit_s) {
-      return limit_s;
-    },
+    // disableHH(limit_h) {
+    //   return limit_h;
+    // },
+    // disableMM(limit_m) {
+    //   return limit_m;
+    // },
+    // disableSS(limit_s) {
+    //   return limit_s;
+    // },
     incrTime(isFrom, sec) {
       this.getRange();
       if (isFrom) {
@@ -132,7 +134,7 @@ export default {
           </el-col>
           <el-col :span="19"
             ><el-time-picker
-              class="pick-time"
+              class="pick-time m-top"
               v-model="from"
               size="small"
               :default-value="from"
@@ -141,11 +143,12 @@ export default {
           /></el-col>
         </el-row>
       </el-col>
-      <el-col :span="2"> -> </el-col>
+      <el-col :span="2" class="m-top"> -> </el-col>
       <el-col :span="11">
         <el-row>
           <el-col :span="19">
             <el-time-picker
+              class="m-top"
               v-model="to"
               size="small"
               :default-value="to"
@@ -160,7 +163,6 @@ export default {
             <el-button class="comp-btn" @click="incrTime(false, -0.01)"
               >-
             </el-button>
-            
           </el-col>
         </el-row>
       </el-col>
@@ -172,10 +174,11 @@ export default {
   float: left;
 }
 .comp-btn.el-button {
-  width: 22px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   padding: 0px;
   margin: 0px !important;
+  font-size: 18px;
 }
 .el-date-editor {
   --el-date-editor-width: 105px;

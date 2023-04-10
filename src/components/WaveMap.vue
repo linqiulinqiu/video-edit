@@ -65,6 +65,7 @@ export default {
       widget.waveSelStore.pos = e.start;
       widget.updateActiveLine();
     });
+    // this.waveform.on();
     // TODO: check overlap: cancel update when overlap
     this.waveform.on("region-update-end", (e) => {
       if (
@@ -142,8 +143,14 @@ export default {
 </script>
 
 <template>
-  <div>
-    <div ref="waveform"></div>
-  </div>
+  <el-scrollbar :span="22" :offset="1">
+    <div class="scroller-flex-content">
+      <div ref="waveform"></div>
+    </div>
+  </el-scrollbar>
 </template>
-<style></style>
+<style>
+.scrollbar-flex-content {
+  display: flex;
+}
+</style>

@@ -47,6 +47,7 @@ export const useSrtStore = defineStore('srt', {
                 id: body.video.id,
                 pathName: body.video.pathName
             }
+            console.log("refchunks",this.reflines)
             this.setSpks(body.subsnap.spks)
             this.setLines(lines);
         },

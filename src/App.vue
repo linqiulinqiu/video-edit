@@ -37,8 +37,10 @@ export default {
       <el-tabs>
         <el-tab-pane label="编辑内容">
           <el-row>
-            <el-col :span="16" class="sublist">
-              <SublistPanel />
+            <el-col :span="16">
+              <el-scrollbar max-height="500px">
+                <SublistPanel />
+              </el-scrollbar>
             </el-col>
             <el-col :span="8">
               <VideoPlayer />
@@ -56,33 +58,12 @@ export default {
 </template>
 
 <style scoped>
-.sublist {
-  overflow-y: auto;
-  height: 500px;
-
-  transform: translate();
-  /* height: calc(100vh - 200px); */
-}
-.sublist::-webkit-scrollbar {
-  background-color: azure;
-  width: 5px;
-  height: fit-content;
-  /* display: none; */
-}
-.sublist::-webkit-scrollbar-thumb {
-  background: rgba(39, 54, 49, 0.514);
-  border-radius: 5px;
-}
-.sublist.el-col::-webkit-scrollbar-track {
-  background-color: rgb(124, 179, 160);
-  border-radius: 5px;
-}
 .el-tabs {
   height: 800px;
-  background-color: #9dbfc1;
+  background-color: #9dbfc100;
 }
 .el-tabs__header {
-  background-color: #9dbfc1;
+  background-color: #9dbfc1ad;
 }
 #container {
   text-align: center;
