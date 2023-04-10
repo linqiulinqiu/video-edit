@@ -6,6 +6,7 @@ export const useSrtStore = defineStore('srt', {
     state: () => ({
         spks: [],
         lines: [],
+        reflines: [],
         video:{},//video info
         sid: 0,
         audioLens: [],
@@ -31,6 +32,11 @@ export const useSrtStore = defineStore('srt', {
                 item.text = line.body
                 lines.push(item)
             }
+            if('refchunks' in body && 'en-US' in body.refchunks){
+                this.reflines = body.refchunks['en-US']
+            }else{
+                this.reflines = []
+            }
             if(body.subsnap.audio_lens.length == lines.length){
                 this.audioLens = body.subsnap.audio_lens 
             }else{
@@ -41,9 +47,7 @@ export const useSrtStore = defineStore('srt', {
                 id: body.video.id,
                 pathName: body.video.pathName
             }
-
             this.setSpks(body.subsnap.spks)
-
             this.setLines(lines);
         },
         async saveSrt(){

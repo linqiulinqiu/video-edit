@@ -27,6 +27,7 @@ Vue 应用运行在 Web Server /subedit/dist 目录下，后端接口 URL 位于
   - subsnap.revision: 最新版本
   - subsnap.spks: 最新版本的说话人对应表
   - subsnap.chunks: 最新版本的句子/段落列表
+  - refchunks: 同视频其他语言的文字内容，用于参考(如果有)
 
 ### All Speakers
 
