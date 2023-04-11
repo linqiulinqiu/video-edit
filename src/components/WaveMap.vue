@@ -65,7 +65,6 @@ export default {
       widget.waveSelStore.pos = e.start;
       widget.updateActiveLine();
     });
-    // this.waveform.on();
     // TODO: check overlap: cancel update when overlap
     this.waveform.on("region-update-end", (e) => {
       if (
@@ -91,7 +90,6 @@ export default {
     async loadWaveform(id) {
       this.waveform.load(`/video-store/audio-stream/${id}`);
       // this.waveform.load(`/video-store/audio-stream/2`);
-
       this.updateRegions();
     },
     updateRegions() {
@@ -112,7 +110,6 @@ export default {
         if (i == this.activeLine) {
           prop.color = "rgba(0,0,0,0.3)";
         }
-        // console.log("add-region prop", prop);
         this.regions.push(this.waveform.addRegion(prop));
       }
     },
@@ -143,11 +140,11 @@ export default {
 </script>
 
 <template>
-  <el-scrollbar :span="22" :offset="1">
-    <div class="scroller-flex-content">
-      <div ref="waveform"></div>
-    </div>
-  </el-scrollbar>
+  <!-- <el-scrollbar :span="22" :offset="1"> -->
+  <el-col class="scroller-flex-content">
+    <div ref="waveform"></div>
+  </el-col>
+  <!-- </el-scrollbar> -->
 </template>
 <style>
 .scrollbar-flex-content {

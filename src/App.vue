@@ -33,10 +33,10 @@ export default {
 <template>
   <el-container id="container" style="width: 100%">
     <el-main>
-      <p>version = <b>0.0.8</b></p>
+      <p>version = <b>0.0.9</b></p>
       <el-tabs>
         <el-tab-pane label="编辑内容">
-          <el-row>
+          <el-row :gutter="20">
             <el-col :span="16">
               <el-scrollbar max-height="500px">
                 <SublistPanel />

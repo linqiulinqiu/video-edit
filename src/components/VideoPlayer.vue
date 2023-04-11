@@ -63,7 +63,8 @@ export default {
   mounted() {
     const options = {
       controls: true,
-      // fill: true,
+      fill: true,
+      aspectRatio: "4:3",
       autoplay: true,
     };
     this.player = videojs(this.$refs.videoPlayer, options, () => {});
@@ -91,11 +92,28 @@ export default {
 </script>
 
 <template>
-  <video
-    ref="videoPlayer"
-    class="video-js"
-    height="350"
-    width="500"
-    data-setup="{}"
-  ></video>
+  <el-col class="video-play">
+    <video
+      ref="videoPlayer"
+      class="video-js"
+      height="350"
+      width="500"
+      data-setup="{}"
+    ></video>
+  </el-col>
 </template>
+<style>
+.video-play {
+  margin-top: 55px;
+  padding: 15px;
+  background-color: #000;
+  /* border: 5px solid #000; */
+  border-radius: 20px;
+  text-align: center;
+  /* box-sizing: border-box; */
+}
+/* video.video-js {
+  margin: 0 auto;
+  border-radius: 15px;
+} */
+</style>

@@ -4,18 +4,15 @@ export default {
   props: ["value"],
   emits: ["update:modelValue"],
   computed: {
-    textFrom() {
-      return this.formTime(this.from);
+    from() {
+      return this.formTime(this.value.from * 1000);
     },
-    textTo() {
-      return this.formTime(this.to);
+    to() {
+      return this.formTime(this.value.to * 1000);
     },
   },
   data() {
-    // console.log("value = ", this.value);
     return {
-      from: this.formTime(this.value.from * 1000),
-      to: this.formTime(this.value.to * 1000),
       min: this.formTime(this.value.min * 1000),
       max: this.formTime(this.value.max * 1000),
       fromlimit: {
@@ -33,7 +30,6 @@ export default {
     };
   },
   mounted() {
-    console.log("value in mounted", this.value);
     if (this.value != "") {
       this.getRange();
     }
@@ -81,15 +77,6 @@ export default {
       this.time_range(lTo, maxR, this.tolimit);
       // console.log("fromLimit--toLimit:", this.fromlimit, this.tolimit);
     },
-    // disableHH(limit_h) {
-    //   return limit_h;
-    // },
-    // disableMM(limit_m) {
-    //   return limit_m;
-    // },
-    // disableSS(limit_s) {
-    //   return limit_s;
-    // },
     incrTime(isFrom, sec) {
       this.getRange();
       if (isFrom) {

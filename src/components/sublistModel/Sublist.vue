@@ -20,9 +20,11 @@ export default {
       const ols = [];
       const audioLens = this.audioLens;
       const lines = this.lines;
+      console.log("lines,audioLens,", audioLens, lines);
       for (let i in audioLens) {
         const durationMs = (lines[i].to - lines[i].from) * 1000;
-        const overlap = audioLens[i] - durationMs;
+        const overlap = (audioLens[i] - durationMs) / 1000;
+        console.log("overlap:", overlap, "durationMs:", durationMs);
         if (overlap > 0) {
           ols.push(overlap);
         } else {
@@ -118,17 +120,19 @@ export default {
 </script>
 <template>
   <el-col>
-    <ul :span="24">
+    <ul :span="24" class="linelist">
       <li
         @click="liClick(index)"
         :class="{ active: currentIndex == index }"
         v-for="(line, index) in lines"
         :key="line"
       >
-        <el-row>
+        <el-row class="list-title">
           <el-col :span="1">
-            <el-icon v-if="index == currentIndex"><Right /></el-icon>
-            <el-text size="large">{{ index + 1 }}</el-text>
+            <el-text type="primary"
+              ><el-icon v-if="index == currentIndex"><Right /></el-icon
+            ></el-text>
+            <el-text size="large" type="primary">{{ index + 1 }}</el-text>
           </el-col>
           <el-col :span="23">
             <el-col v-if="audioLens">
@@ -141,13 +145,13 @@ export default {
                 />
               </audio>
               <el-text type="danger" v-if="overlaps[index]">
-                Overlap {{ overlaps[index] }}
+                Overlap: {{ overlaps[index] }}s
               </el-text>
             </el-col>
           </el-col>
         </el-row>
 
-        <el-row>
+        <el-row class="list-oprate">
           <el-col :span="2">
             <el-select
               class="m-top"
@@ -215,32 +219,38 @@ export default {
 </template>
 <style scoped>
 .active {
-  /* border: 1px solid rgb(54, 92, 85); */
   border-radius: 10px;
-  background-color: #36727e50;
+  background-color: #36727e9c;
 }
-ul {
+ul.linelist {
   padding-inline-start: 0px !important;
 }
-ul li {
+ul.linelist li {
   text-align: center;
   padding: 10px 10px;
   position: relative;
+  margin-top: 25px;
+  border: 1px solid #377885ab;
+  border-radius: 20px;
 }
-ul li:hover {
-  /* border: 1px solid rgb(54, 92, 85); */
-  border-radius: 10px;
+ul li:not(.active):hover {
+  border-radius: 20px;
   background-color: #37788528;
 }
+.list-oprate {
+  padding-top: 10px;
+}
+
 .btn-group.el-col {
   position: absolute;
   width: 200px;
   height: 50px;
   right: 20px;
   top: -23px;
-  /* background-color: aqua; */
 }
-ul li .el-row > .el-col {
-  /* border: 1px solid #377885ab; */
+.list-title {
+  /* border: #36727e50 1px solid; */
+  border-radius: 5px;
+  background: #1d5d68;
 }
 </style>
