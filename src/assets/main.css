@@ -20,6 +20,19 @@ a,
 .m-top{
   margin-top: 13px;
 }
+::-webkit-scrollbar{
+  width: 8px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb{
+  /* background-color: #909399a6; */
+  background-color: #1d5d68d0;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-track{
+  background-color: #ffffff6b;
+  border-radius: 5px;
+}
 
 @media (hover: hover) {
   a:hover {

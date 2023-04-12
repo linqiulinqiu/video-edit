@@ -167,10 +167,4 @@ export default {
   margin: 0px !important;
   font-size: 18px;
 }
-.el-date-editor {
-  --el-date-editor-width: 105px;
-}
-.pick-time.el-input__wrapper {
-  width: 200px !important;
-}
 </style>

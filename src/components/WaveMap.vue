@@ -51,7 +51,8 @@ export default {
   mounted() {
     // Initialize WaveSurfer instance
     this.waveform = WaveSurfer.create({
-      container: this.$refs.waveform,
+      // container: this.$refs.waveform,
+      container: "#waveform",
       waveColor: "#358",
       progressColor: "#a75",
       plugins: [RegionsPlugin.create({})],
@@ -89,7 +90,6 @@ export default {
   methods: {
     async loadWaveform(id) {
       this.waveform.load(`/video-store/audio-stream/${id}`);
-      // this.waveform.load(`/video-store/audio-stream/2`);
       this.updateRegions();
     },
     updateRegions() {
@@ -140,14 +140,7 @@ export default {
 </script>
 
 <template>
-  <!-- <el-scrollbar :span="22" :offset="1"> -->
-  <el-col class="scroller-flex-content">
-    <div ref="waveform"></div>
-  </el-col>
-  <!-- </el-scrollbar> -->
+  <el-col id="waveform" ref="waveform"></el-col>
 </template>
 <style>
-.scrollbar-flex-content {
-  display: flex;
-}
 </style>

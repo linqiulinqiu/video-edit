@@ -67,6 +67,7 @@ export default {
 }
 #container {
   text-align: center;
+  min-width: 1440px;
 }
 .bgcolor {
   background-color: rgb(215, 243, 245);

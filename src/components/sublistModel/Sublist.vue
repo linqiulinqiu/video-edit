@@ -24,9 +24,9 @@ export default {
       for (let i in audioLens) {
         const durationMs = (lines[i].to - lines[i].from) * 1000;
         const overlap = (audioLens[i] - durationMs) / 1000;
-        console.log("overlap:", overlap, "durationMs:", durationMs);
         if (overlap > 0) {
-          ols.push(overlap);
+          const over = Math.ceil(overlap * 100) / 100;
+          ols.push(over);
         } else {
           ols.push(0);
         }
@@ -129,10 +129,10 @@ export default {
       >
         <el-row class="list-title">
           <el-col :span="1">
-            <el-text type="primary"
-              ><el-icon v-if="index == currentIndex"><Right /></el-icon
-            ></el-text>
-            <el-text size="large" type="primary">{{ index + 1 }}</el-text>
+            <el-text type="primary" size="large">
+              <el-icon v-if="index == currentIndex"><Right /></el-icon>
+              <span v-else>{{ index + 1 }}</span>
+            </el-text>
           </el-col>
           <el-col :span="23">
             <el-col v-if="audioLens">
@@ -153,8 +153,8 @@ export default {
 
         <el-row class="list-oprate">
           <el-col :span="2">
+            <span class="sid"><b> Speaker</b></span>
             <el-select
-              class="m-top"
               size="small"
               :model-value="line.speaker"
               @change="
@@ -167,7 +167,6 @@ export default {
                 v-for="(item, index) in spks"
                 :key="index"
                 :value="index"
-                :label="'SID:' + line.speaker"
               ></el-option>
             </el-select>
           </el-col>
@@ -177,17 +176,18 @@ export default {
               @update:model-value="setLine(index, $event)"
             />
           </el-col>
-          <el-col :span="2">
+          <el-col :span="1">
             <el-button
-              class="m-top"
+              class="m-top btn-play"
               plain
-              size="default"
+              circle
+              size="small"
               @click="playVideo(index)"
             >
               <el-icon size="20"><VideoPlay /></el-icon>
             </el-button>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="13">
             <el-input
               type="textarea"
               @focus="this.showGroup = true"
@@ -218,16 +218,28 @@ export default {
   </el-col>
 </template>
 <style scoped>
+.sid {
+  font-size: 8px;
+  position: relative;
+  top: -10px;
+  line-height: 10px;
+  text-align: left;
+}
+.btn-play.el-button {
+  padding: 5px;
+  background-color: #ffffff1f;
+}
 .active {
   border-radius: 10px;
   background-color: #36727e9c;
 }
+
 ul.linelist {
   padding-inline-start: 0px !important;
 }
 ul.linelist li {
   text-align: center;
-  padding: 10px 10px;
+  padding: 10px;
   position: relative;
   margin-top: 25px;
   border: 1px solid #377885ab;
@@ -240,13 +252,18 @@ ul li:not(.active):hover {
 .list-oprate {
   padding-top: 10px;
 }
-
+.list-oprate > .el-col > .el-select {
+  top: -10px;
+}
+.list-oprate > .el-col:nth-child(3) {
+  padding-right: 5px;
+}
 .btn-group.el-col {
   position: absolute;
   width: 200px;
   height: 50px;
-  right: 20px;
-  top: -23px;
+  /* right: 10px; */
+  top: -13px;
 }
 .list-title {
   /* border: #36727e50 1px solid; */
