@@ -68,7 +68,7 @@ export default {
           body: form,
           method: 'POST'
       });
-      const resj = resp.json()
+      const resj = await resp.json()
       console.log('resp-json', resj)
       if('url' in resj){
         this.url = resj.url
