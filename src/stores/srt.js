@@ -1,11 +1,11 @@
 
 import { defineStore } from 'pinia'
-import { useSpStore } from './splist';
 
 export const useSrtStore = defineStore('srt', {
     state: () => ({
         spks: [],
         lines: [],
+        lang_id: 0,
         reflines: [],
         video:{},//video info
         sid: 0,
@@ -22,6 +22,7 @@ export const useSrtStore = defineStore('srt', {
             console.log("body:",body)
             const chunks = body.subsnap.chunks
             const lines = [];
+            this.lang_id = body.lang_id
             for (var i in chunks) {
                 const line = chunks[i];
                 const item = {

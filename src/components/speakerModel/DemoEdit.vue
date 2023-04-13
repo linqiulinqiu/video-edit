@@ -6,7 +6,7 @@
           <el-option
             v-for="(spk, index) in speakerList"
             :key="spk.name"
-            :value="index"
+            :value="spk.id"
             :label="spk.id + ' -- ' + spk.name + ' -- ' + spk.gender"
           ></el-option>
         </el-select>
@@ -22,7 +22,7 @@
           :show-word-limit="true"
       /></el-col>
       <el-col :span="2">
-        <el-button>生成语音</el-button>
+        <el-button :disabled="!sid || !voiceTxt" @click="makeVoice">生成语音</el-button>
       </el-col>
       <el-col :span="4">
         <audio controls :src="this.url"></audio>
@@ -35,11 +35,13 @@
 </template>
 <script>
 import { mapState, mapStores } from "pinia";
+import { useSrtStore } from "@/stores/srt";
 import { useSpStore } from "@/stores/splist";
 
 export default {
   computed: {
     ...mapState(useSpStore, ["speakerList"]),
+    ...mapState(useSrtStore, ["lang_id"])
   },
   data() {
     return {
@@ -54,6 +56,18 @@ export default {
       this.url = this.speakerList[this.sid].demo;
       window.location.href = this.url;
     },
+    async makeVoice(){
+      // TODO: enable Download Button after voice made/ready
+      const form = new FormData()
+      form.append('lang', this.lang_id)
+      form.append('spk', this.sid)
+      form.append('text', this.voiceTxt)
+      const resp = await fetch('/made-cache/make-voice', {
+          body: form,
+          method: 'POST'
+      });
+      console.log('resp', resp)
+    }
   },
 };
 </script>
