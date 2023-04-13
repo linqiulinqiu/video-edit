@@ -57,6 +57,7 @@ export default {
       progressColor: "#a75",
       plugins: [RegionsPlugin.create({})],
     });
+    console.log("waveform :", waveform);
     const widget = this;
     this.waveform.on("ready", () => {
       this.waveSelStore.duration = this.waveform.getDuration();
@@ -140,7 +141,9 @@ export default {
 </script>
 
 <template>
-  <el-col id="waveform" ref="waveform"></el-col>
+  <el-scrollbar>
+    <el-col id="waveform" ref="waveform"></el-col>
+  </el-scrollbar>
 </template>
 <style>
 </style>

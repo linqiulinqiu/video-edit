@@ -73,7 +73,6 @@ export default {
           <el-row>
             <el-col :span="3">ID</el-col>
             <el-col :span="3">姓名</el-col>
-
             <el-col :span="3">性别</el-col>
             <el-col :span="5">示例</el-col>
             <el-col :span="5">删除</el-col>
@@ -89,7 +88,10 @@ export default {
           <el-col :span="3">{{ speakerList[spk.speaker_id].name }}</el-col>
           <el-col :span="3">{{ speakerList[spk.speaker_id].gender }} </el-col>
           <el-col :span="5">
-            <VoiceDemoVue :url="speakerList[spk.speaker_id].demo" />
+            <VoiceDemoVue
+              :url="speakerList[spk.speaker_id].demo"
+              :sid="spk.speaker_id"
+            />
           </el-col>
           <el-col :span="5"
             ><el-button @click="delSpeaker(spk.speaker_id, idx)"

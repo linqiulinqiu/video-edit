@@ -33,7 +33,7 @@ export default {
     },
     editLines(direction) {
       const index = this.curIndex;
-      const lines = this.lineList;
+      const lines = this.lineList.concat();
       const cutTxt = this.cutString(this.cursorPos, lines[index].text);
       const duration = lines[index].to - lines[index].from;
       const scale = this.cursorPos / lines[index].text.length;
@@ -53,7 +53,7 @@ export default {
       return lines;
     },
     delLine() {
-      const lines = this.lineList;
+      const lines = this.lineList.concat();
       lines.splice(this.curIndex, 1);
       this.srtStore.setLines(lines);
     },
@@ -88,8 +88,7 @@ export default {
         } else {
           this.lines[index + 1].from - 0.01;
         }
-        console.log(line);
-        const lines = this.lineList;
+        const lines = this.lineList.concat();
         lines.splice(index + 1, 0, line);
         this.srtStore.setLines(lines);
       }
@@ -103,7 +102,7 @@ export default {
           text: "",
           speaker: this.lines[0].speaker,
         };
-        const lines = this.lineList;
+        const lines = this.lineList.concat();
         lines.unshift(line);
         this.srtStore.setLines(lines);
       }
@@ -123,26 +122,37 @@ export default {
   <el-button-group v-show="this.operation">
     <tooltip :content="'删除当前段'">
       <el-button plain size="small" @click="delLine()"
-        ><el-icon><Delete /></el-icon></el-button
+        ><el-icon><Delete /></el-icon
+      ></el-button>
+    </tooltip>
+    <tooltip :content="'向上添加一句'"
+      ><el-button
+        v-if="curIndex == 0"
+        plain
+        size="small"
+        @click="addLineFirst()"
+      >
+        <el-icon><DocumentAdd /></el-icon> </el-button
     ></tooltip>
-    <el-button v-if="curIndex == 0" plain size="small" @click="addLineFirst()">
-      <el-icon><DocumentAdd /></el-icon>
-    </el-button>
-    <el-button v-if="curIndex != 0" plain size="small" @click="cutToPrev()"
-      ><el-icon><Top /></el-icon
-    ></el-button>
-    <el-button
-      v-if="curIndex != lines.length - 1"
-      plain
-      size="small"
-      @click="cutToNext()"
-      ><el-icon><Bottom /></el-icon
-    ></el-button>
-    <el-button plain size="small" @click="addLine()"
-      ><el-icon><Plus /></el-icon
-    ></el-button>
-    <el-button plain size="small" @click="showGroup = false"
-      ><el-icon><Close /></el-icon
-    ></el-button>
+    <tooltip :content="'向上分割'"
+      ><el-button v-if="curIndex != 0" plain size="small" @click="cutToPrev()"
+        ><el-icon><Top /></el-icon></el-button
+    ></tooltip>
+    <tooltip :content="'向下分割'"
+      ><el-button
+        v-if="curIndex != lines.length - 1"
+        plain
+        size="small"
+        @click="cutToNext()"
+        ><el-icon><Bottom /></el-icon></el-button
+    ></tooltip>
+    <tooltip :content="'加一句'"
+      ><el-button plain size="small" @click="addLine()"
+        ><el-icon><Plus /></el-icon></el-button
+    ></tooltip>
+    <tooltip :content="'关闭'">
+      <el-button plain size="small" @click="showGroup = false"
+        ><el-icon><Close /></el-icon></el-button
+    ></tooltip>
   </el-button-group>
 </template>
