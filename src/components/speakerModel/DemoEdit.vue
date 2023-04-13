@@ -25,10 +25,10 @@
         <el-button :disabled="!sid || !voiceTxt" @click="makeVoice">生成语音</el-button>
       </el-col>
       <el-col :span="4">
-        <audio controls :src="this.url"></audio>
+        <audio controls :src="url"></audio>
       </el-col>
       <el-col :span="2">
-        <el-button @click="downV">下载音频</el-button>
+        <el-button :disabled="url==''" @click="downV">下载音频</el-button>
       </el-col>
     </el-row>
   </el-col>
@@ -68,7 +68,11 @@ export default {
           body: form,
           method: 'POST'
       });
-      console.log('resp', resp)
+      const resj = resp.json()
+      console.log('resp-json', resj)
+      if('url' in resj){
+        this.url = resj.url
+      }
     }
   },
 };
