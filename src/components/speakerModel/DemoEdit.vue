@@ -7,6 +7,7 @@
             v-for="(spk, index) in speakerList"
             :key="spk.name"
             :value="index"
+            :label="spk.id + ' -- ' + spk.name + ' -- ' + spk.gender"
           ></el-option>
         </el-select>
       </el-col>
