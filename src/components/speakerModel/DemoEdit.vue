@@ -62,6 +62,8 @@ export default {
       form.append('lang', this.lang_id)
       form.append('spk', this.sid)
       form.append('text', this.voiceTxt)
+      form.append(document.querySelector('meta[name="csrf-token"]').getAttribute('content'))
+      
       const resp = await fetch('/made-cache/make-voice', {
           body: form,
           method: 'POST'
