@@ -25,7 +25,7 @@ export default {
       // alert("TODO: make audio");
       const loading = this.$loading({
         fullscreen: true,
-        background: "#668b6655",
+        background: "#9dbfc1ad",
         text: "视频生成中",
         lock: true,
       });
