@@ -22,16 +22,14 @@
           :show-word-limit="true"
       /></el-col>
       <el-col :span="2">
-        <el-button :disabled="!spkId || !voiceTxt" @click="makeVoice"
+        <MakevoiceBtn :sid="sid" :text="voiceTxt" :spkId="spkId" :res="mvRes" />
+        <!-- <el-button :disabled="!spkId || !voiceTxt" @click="makeVoice"
           >生成语音</el-button
-        >
+        > -->
       </el-col>
       <el-col :span="4">
         <audio controls :src="url"></audio>
       </el-col>
-      <!-- <el-col :span="2">
-        <el-button :disabled="url == ''" @click="downV">下载音频</el-button>
-      </el-col> -->
     </el-row>
   </el-col>
 </template>
@@ -39,8 +37,12 @@
 import { mapState, mapStores } from "pinia";
 import { useSrtStore } from "@/stores/srt";
 import { useSpStore } from "@/stores/splist";
+import MakevoiceBtn from "../lib/MakevoiceBtn.vue";
 
 export default {
+  components: {
+    MakevoiceBtn,
+  },
   computed: {
     ...mapState(useSpStore, ["speakerList"]),
     ...mapState(useSrtStore, ["sid"]),
@@ -50,6 +52,7 @@ export default {
       spkId: "",
       url: "",
       voiceTxt: "",
+      mvRes: "",
     };
   },
   methods: {

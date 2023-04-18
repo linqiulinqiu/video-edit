@@ -4,13 +4,14 @@ import { useSrtStore } from "@/stores/srt";
 import { useWaveSelStore } from "@/stores/wavesel";
 import EditBtnGroupVue from "./EditBtnGroup.vue";
 import TimePickerVue from "./TimePicker.vue";
-
+import MakevoiceBtn from "../lib/MakevoiceBtn.vue";
 export default {
   computed: {
     ...mapState(useSrtStore, [
       "activeLine",
       "lines",
       "spks",
+      "sid",
       "audioLens",
       "reflines",
     ]),
@@ -37,6 +38,7 @@ export default {
   components: {
     EditBtnGroupVue,
     TimePickerVue,
+    MakevoiceBtn,
   },
   methods: {
     setLine(idx, val) {
@@ -109,6 +111,7 @@ export default {
       showGroup: false,
       cursorPos: 0,
       isPlay: false,
+      mvRes: "",
     };
   },
   watch: {
@@ -134,7 +137,7 @@ export default {
               <span v-else>{{ index + 1 }}</span>
             </el-text>
           </el-col>
-          <el-col :span="23">
+          <el-col :span="20">
             <el-col v-if="audioLens">
               <audio v-if="index == currentIndex">
                 <source
@@ -149,11 +152,19 @@ export default {
               </el-text>
             </el-col>
           </el-col>
+          <el-col :span="3">
+            <MakevoiceBtn
+              :sid="sid"
+              :spkId="spks[line.speaker].speaker_id"
+              :text="line.text"
+              :res="mvRes"
+            />
+          </el-col>
         </el-row>
 
         <el-row class="list-oprate">
           <el-col :span="2">
-            <span class="sid"><b> Speaker</b></span>
+            <span class="sid"><b> SpeakerID</b></span>
             <el-select
               size="small"
               :model-value="line.speaker"
@@ -167,6 +178,7 @@ export default {
                 v-for="(item, index) in spks"
                 :key="index"
                 :value="index"
+                :label="item.speaker_id"
               ></el-option>
             </el-select>
           </el-col>

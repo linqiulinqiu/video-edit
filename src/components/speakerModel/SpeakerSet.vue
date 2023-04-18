@@ -38,7 +38,7 @@ export default {
       <el-option
         v-for="item in speakerList"
         :key="item.id"
-        :label="item.name + '--' + item.gender"
+        :label="item.id + '--' + item.name + '--' + item.gender"
         :value="item.id"
       ></el-option>
     </el-select>

@@ -71,7 +71,7 @@ export default {
       <li>
         <h2>
           <el-row>
-            <el-col :span="3">Index</el-col>
+            <el-col :span="3">ID</el-col>
             <el-col :span="3">姓名</el-col>
             <el-col :span="3">性别</el-col>
             <el-col :span="5">示例</el-col>
@@ -82,14 +82,14 @@ export default {
       <li v-for="(spk, idx) in spks" :key="spk.name">
         <el-row>
           <el-col :span="3">
-            {{ idx }}
+            {{ spk.speaker_id }}
             <SpeakerSetVue :spks="spks" :idx="idx" />
           </el-col>
-          <el-col :span="3">{{ speakerList[spk.speaker_id].name }}</el-col>
-          <el-col :span="3">{{ speakerList[spk.speaker_id].gender }} </el-col>
+          <el-col :span="3">{{ speakerList[spk.speaker_id-1].name }}</el-col>
+          <el-col :span="3">{{ speakerList[spk.speaker_id-1].gender }} </el-col>
           <el-col :span="5">
             <VoiceDemoVue
-              :url="speakerList[spk.speaker_id].demo"
+              :url="speakerList[spk.speaker_id-1].demo"
               :sid="spk.speaker_id"
             />
           </el-col>
@@ -106,9 +106,6 @@ export default {
   </el-col>
 </template>
 <style>
-.save-btn {
-  /* margin-top: 30px; */
-}
 .spk_list li {
   padding: 10px;
   height: 50px;
