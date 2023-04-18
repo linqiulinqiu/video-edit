@@ -10,9 +10,7 @@ export const useSrtStore = defineStore('srt', {
         video:{},//video info
         sid: 0,
         audioLens: [],
-        audioOut:true,
         activeLine: -1,
-        history_lines:[],
     }),
     actions: {
         setSid(sid){
@@ -53,7 +51,6 @@ export const useSrtStore = defineStore('srt', {
             console.log("refchunks",this.reflines)
             this.setSpks(body.subsnap.spks)
             this.setLines(lines);
-            this.keepHistory(lines)
         },
         async saveSrt(){
             const chunks = []
@@ -147,8 +144,6 @@ export const useSrtStore = defineStore('srt', {
         setSpks(spks) {
             this.spks = spks
         },
-        keepHistory(newlines) {
-            this.history_lines.unshift(newlines)
-        }
+        undo(){}
     }
 })

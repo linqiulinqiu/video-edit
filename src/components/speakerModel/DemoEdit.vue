@@ -2,7 +2,7 @@
   <el-col>
     <el-row :gutter="10">
       <el-col :span="3">
-        <el-select v-model="sid" placeholder="Speaker ID">
+        <el-select v-model="spkId" placeholder="Speaker ID">
           <el-option
             v-for="spk in speakerList"
             :key="spk.name"
@@ -22,7 +22,7 @@
           :show-word-limit="true"
       /></el-col>
       <el-col :span="2">
-        <el-button :disabled="!sid || !voiceTxt" @click="makeVoice"
+        <el-button :disabled="!spkId || !voiceTxt" @click="makeVoice"
           >生成语音</el-button
         >
       </el-col>
@@ -43,11 +43,11 @@ import { useSpStore } from "@/stores/splist";
 export default {
   computed: {
     ...mapState(useSpStore, ["speakerList"]),
-    ...mapState(useSrtStore, ["lang_id"]),
+    ...mapState(useSrtStore, ["sid"]),
   },
   data() {
     return {
-      sid: "",
+      spkId: "",
       url: "",
       voiceTxt: "",
     };
@@ -55,7 +55,7 @@ export default {
   methods: {
     downV() {
       //下载音频
-      this.url = this.speakerList[this.sid].demo;
+      this.url = this.speakerList[this.spkId].demo;
       window.location.href = this.url;
     },
     async makeVoice() {
@@ -67,9 +67,9 @@ export default {
         lock: true,
       });
       const form = new FormData();
-      form.append("lang", this.lang_id);
-      form.append("spk", this.sid);
+      form.append("spk", this.spkId);
       form.append("text", this.voiceTxt);
+      form.append("sid", this.sid);
       form.append(
         "csrf",
         document

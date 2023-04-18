@@ -67,11 +67,11 @@ export default {
 </script>
 <template>
   <el-col>
-    <ul>
+    <ul class="spk_list">
       <li>
         <h2>
           <el-row>
-            <el-col :span="3">ID</el-col>
+            <el-col :span="3">Index</el-col>
             <el-col :span="3">姓名</el-col>
             <el-col :span="3">性别</el-col>
             <el-col :span="5">示例</el-col>
@@ -82,7 +82,7 @@ export default {
       <li v-for="(spk, idx) in spks" :key="spk.name">
         <el-row>
           <el-col :span="3">
-            {{ spk.speaker_id }}
+            {{ idx }}
             <SpeakerSetVue :spks="spks" :idx="idx" />
           </el-col>
           <el-col :span="3">{{ speakerList[spk.speaker_id].name }}</el-col>
@@ -93,11 +93,11 @@ export default {
               :sid="spk.speaker_id"
             />
           </el-col>
-          <el-col :span="5"
-            ><el-button @click="delSpeaker(spk.speaker_id, idx)"
-              >Delete (delete this, and move all rest up)</el-button
-            ></el-col
-          >
+          <el-col :span="5">
+            <el-button @click="delSpeaker(spk.speaker_id, idx)">
+              Delete
+            </el-button>
+          </el-col>
         </el-row>
       </li>
     </ul>
@@ -108,5 +108,9 @@ export default {
 <style>
 .save-btn {
   /* margin-top: 30px; */
+}
+.spk_list li {
+  padding: 10px;
+  height: 50px;
 }
 </style>

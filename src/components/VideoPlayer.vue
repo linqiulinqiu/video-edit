@@ -104,16 +104,10 @@ export default {
 </template>
 <style>
 .video-play {
-  margin-top: 55px;
+  margin-top: 25px;
   padding: 15px;
   background-color: #000;
-  /* border: 5px solid #000; */
   border-radius: 20px;
   text-align: center;
-  /* box-sizing: border-box; */
 }
-/* video.video-js {
-  margin: 0 auto;
-  border-radius: 15px;
-} */
 </style>
