@@ -28,6 +28,7 @@ export default {
         text: "音频生成中",
         lock: true,
       });
+      this.isMake = true;
       var needMake = [];
       for (let idx in this.audioLens) {
         console.log("len,", idx);
@@ -65,6 +66,7 @@ export default {
           });
         }
       }
+      this.isMake = false;
       loading.close();
     },
   },
