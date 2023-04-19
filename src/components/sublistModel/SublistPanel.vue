@@ -71,7 +71,7 @@ export default {
           console.log("resp in makeAudios:", resp);
         }
       }
-      // this.isMake = false;
+      this.isMake = false;
       loading.close();
     },
   },
