@@ -24,14 +24,13 @@ export default {
     async makeAudio() {
       const loading = this.$loading({
         fullscreen: true,
-        background: "#9dbfc1ad",
+        background: "#9dbfc101",
         text: "音频生成中",
         lock: true,
       });
       this.isMake = true;
       var needMake = [];
       for (let idx in this.audioLens) {
-        console.log("len,", idx);
         if (this.audioLens[idx] == 0) {
           needMake.push(idx);
         }
@@ -55,15 +54,15 @@ export default {
               .querySelector('meta[name="csrf-token"]')
               .getAttribute("content")
           );
-          await fetch("/made-cache/make-voice", {
+          const resp = await fetch("/made-cache/make-voice", {
             body: form,
             method: "POST",
           }).then(() => {
-            // obj.percent_stage += 1;
             progress += 1;
             obj.percent_stage = (progress / needMake.length) * 100;
             console.log("percent:", obj.percent_stage);
           });
+          console.log("resp in makeAudios:", resp);
         }
       }
       this.isMake = false;
@@ -84,7 +83,7 @@ export default {
     <el-button @click="saveSrt()">Save</el-button>
     <el-button @click="makeAudio()"> Make Audio </el-button>
   </el-col>
-  <el-col v-else>
+  <el-col v-else :span="14" :offset="5">
     <el-progress
       :indeterminate="true"
       :text-inside="true"

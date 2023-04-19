@@ -10,7 +10,7 @@ export default {
     async makeVoice() {
       const loading = this.$loading({
         fullscreen: true,
-        background: "#9dbfc1ad",
+        background: "#9dbfc101",
         text: "音频生成中",
         lock: true,
       });
