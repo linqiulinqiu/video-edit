@@ -37,7 +37,7 @@ export default {
       }
       console.log(needMake);
       const obj = this;
-      let progress = 0;
+      // let progress = 0;
       if (needMake.length == 0) {
         this.percent_stage = 1 * 100;
       } else {
@@ -57,11 +57,12 @@ export default {
           const resp = await fetch("/made-cache/make-voice", {
             body: form,
             method: "POST",
-          }).then(() => {
-            progress += 1;
-            obj.percent_stage = (progress / needMake.length) * 100;
-            console.log("percent:", obj.percent_stage);
           });
+          // .then(() => {
+          //   progress += 1;
+          //   obj.percent_stage = (progress / needMake.length) * 100;
+          //   console.log("percent:", obj.percent_stage);
+          // });
           console.log("resp in makeAudios:", resp);
         }
       }
@@ -72,7 +73,7 @@ export default {
   data() {
     return {
       isMake: false,
-      percent_stage: 0,
+      percent_stage: 50,
     };
   },
 };
