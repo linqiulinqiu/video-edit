@@ -4,7 +4,7 @@ import VideoPlayer from "./components/VideoPlayer.vue";
 import EditorStatus from "./components/EditorStatus.vue";
 import SublistPanel from "./components/sublistModel/SublistPanel.vue";
 import SpeakerList from "./components/SpeakerList.vue";
-import { mapStores } from "pinia";
+import { mapStores} from "pinia";
 import { useSpStore } from "@/stores/splist";
 import { useSrtStore } from "@/stores/srt";
 import queryString from "query-string";
@@ -31,13 +31,16 @@ export default {
     }
     this.spListStore.load();
   },
+  methods: {
+    makeVoice() {},
+  },
 };
 </script>
 
 <template>
   <el-container id="container" style="width: 100%">
     <el-main>
-      <p>version = <b>0.0.13</b></p>
+      <p>version = <b>0.0.14</b></p>
       <SublistPanel />
       <el-tabs>
         <el-tab-pane label="编辑内容">

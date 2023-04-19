@@ -111,7 +111,7 @@ export default {
       showGroup: false,
       cursorPos: 0,
       isPlay: false,
-      mvRes: "",
+      mvRes: "44444444445",
     };
   },
   watch: {
@@ -157,7 +157,6 @@ export default {
               :sid="sid"
               :spkId="spks[line.speaker].speaker_id"
               :text="line.text"
-              :res="mvRes"
             />
           </el-col>
         </el-row>

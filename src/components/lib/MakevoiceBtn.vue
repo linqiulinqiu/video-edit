@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  props: ["sid", "spkId", "text", "res"],
+  props: ["sid", "spkId", "text", "url"],
   methods: {
     async makeVoice() {
       const loading = this.$loading({
@@ -30,7 +30,7 @@ export default {
       });
       const resj = await resp.json();
       console.log("resp-json", resj);
-      //   this.res = resj;
+      this.url(resj);
       loading.close();
     },
   },
