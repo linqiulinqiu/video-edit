@@ -37,7 +37,7 @@ export default {
       }
       console.log(needMake);
       const obj = this;
-      // let progress = 0;
+      let progress = 0;
       if (needMake.length == 0) {
         this.percent_stage = 1 * 100;
       } else {
