@@ -3,6 +3,10 @@ import { defineStore } from 'pinia'
 
 export const useSrtStore = defineStore('srt', {
     state: () => ({
+        stored: {
+            spks:[],
+            lines: []   
+        },
         spks: [],
         lines: [],
         lang_id: 0,
@@ -12,6 +16,26 @@ export const useSrtStore = defineStore('srt', {
         audioLens: [],
         activeLine: -1,
     }),
+    getters:{
+        tdirty(){   // text related dirty, when it's true, voice make should be enabled
+            if(this.spks.length!=this.stored.spks.length || this.lines.length!=this.stored.lines.length) return true
+            for(let i in this.spks){
+                if(this.spks[i].speaker_id!=this.stored.spks[i].speaker_id) return true
+            }
+            for(let i in this.lines){
+                if(this.lines[i].text!=this.stored.lines[i].text) return true
+            }
+            return false
+        },
+        dirty(){    // any dirty, when true, undo should be enabled
+            if(this.tdirty) return true
+            for(let i in this.lines){
+                if(this.lines[i].start_ms!=this.stored.lines[i].start_ms) return true
+                if(this.lines[i].duration_ms!=this.stored.lines[i].duration_ms) return true
+            }
+            return false
+        }
+    },
     actions: {
         setSid(sid){
             this.sid = sid
@@ -51,6 +75,10 @@ export const useSrtStore = defineStore('srt', {
             console.log("refchunks",this.reflines)
             this.setSpks(body.subsnap.spks)
             this.setLines(lines);
+            this.stored = {
+                spks: body.subsnap.spks,
+                lines: lines
+            }
         },
         async saveSrt(){
             const chunks = []
@@ -81,6 +109,10 @@ export const useSrtStore = defineStore('srt', {
                 body: form,
                 method: 'POST'
             });
+            this.stored = {
+                spks: this.spks,
+                lines: this.lines
+            }
             console.log('resp of saveSrt', resp)
         },
         setLine(idx, line){
@@ -139,6 +171,7 @@ export const useSrtStore = defineStore('srt', {
                 overlap = true
             }
             this.lines = [...lines]
+
             return overlap
         },
         setSpks(spks) {

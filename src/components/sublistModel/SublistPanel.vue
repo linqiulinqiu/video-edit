@@ -6,10 +6,21 @@ import Sublist from "@/components/sublistModel/Sublist.vue";
 export default {
   computed: {
     ...mapStores(useSrtStore),
-    ...mapState(useSrtStore, ["sid", "lines", "audioLens", "spks"]),
+    ...mapState(useSrtStore, ["sid", "lines", "audioLens", "spks","tdirty"]),
     percent() {
       return Math.floor(this.percent_stage);
     },
+    canMake(){
+
+      let nm = 0
+       for (let i in this.audioLens) {
+        if (this.audioLens[i] == 0) {
+          nm++
+        }
+      }
+      if(nm>0) return true
+      return false
+    }
   },
   components: {
     Sublist,
@@ -87,7 +98,7 @@ export default {
   <el-col v-if="!isMake">
     <el-button @click="loadSrt()">Load</el-button>
     <el-button @click="saveSrt()">Save</el-button>
-    <el-button @click="makeAudio()"> Make Audio </el-button>
+    <el-button :disabled="tdirty==false" @click="makeAudio()"> Make Audio </el-button>
   </el-col>
   <el-col v-else :span="14" :offset="5">
     <el-progress
