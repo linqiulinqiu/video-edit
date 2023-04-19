@@ -38,6 +38,7 @@ export default {
       console.log(needMake);
       const obj = this;
       let progress = 0;
+      console.log("spks:", this.spks);
       if (needMake.length == 0) {
         this.percent_stage = 1 * 100;
       } else {
@@ -45,7 +46,7 @@ export default {
           const idx = needMake[i];
           const line = this.lines[idx];
           const form = new FormData();
-          form.append("spk", this.spks[line.speaker]);
+          form.append("spk", this.spks[line.speaker].speaker_id);
           form.append("text", line.text);
           form.append("sid", this.sid);
           form.append(
@@ -53,6 +54,13 @@ export default {
             document
               .querySelector('meta[name="csrf-token"]')
               .getAttribute("content")
+          );
+          console.log(
+            "form:",
+            form,
+            "spk:",
+            this.spks[line.speaker],
+            this.spks
           );
           const resp = await fetch("/made-cache/make-voice", {
             body: form,
