@@ -16,7 +16,7 @@ export default {
       });
       const form = new FormData();
       form.append("spk", this.spkId);
-      form.append("text", this.voiceTxt);
+      form.append("text", this.text);
       form.append("sid", this.sid);
       form.append(
         "csrf",
@@ -28,7 +28,6 @@ export default {
         body: form,
         method: "POST",
       });
-      console.log("this.url in mv", this.url);
       if (this.url) {
         const resj = await resp.json();
         console.log("resp-json", resj);

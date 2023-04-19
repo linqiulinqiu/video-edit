@@ -58,42 +58,10 @@ export default {
   },
   methods: {
     updateUrl(e) {
-      console.log("loadUrl", e);
       if ("url" in e) {
         this.url = e.url;
-        console.log("url in updateUrl", this.url);
       }
     },
-    // async makeVoice() {
-    //   // TODO: enable Download Button after voice made/ready
-    //   const loading = this.$loading({
-    //     fullscreen: true,
-    //     background: "#9dbfc1ad",
-    //     text: "音频生成中",
-    //     lock: true,
-    //   });
-    //   const form = new FormData();
-    //   form.append("spk", this.spkId);
-    //   form.append("text", this.voiceTxt);
-    //   form.append("sid", this.sid);
-    //   form.append(
-    //     "csrf",
-    //     document
-    //       .querySelector('meta[name="csrf-token"]')
-    //       .getAttribute("content")
-    //   );
-
-    //   const resp = await fetch("/made-cache/make-voice", {
-    //     body: form,
-    //     method: "POST",
-    //   });
-    //   const resj = await resp.json();
-    //   console.log("resp-json", resj);
-    //   if ("url" in resj) {
-    //     this.url = resj.url;
-    //   }
-    //   loading.close();
-    // },
   },
 };
 </script>
