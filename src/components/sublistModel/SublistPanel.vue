@@ -8,7 +8,7 @@ export default {
     ...mapStores(useSrtStore),
     ...mapState(useSrtStore, ["sid", "lines", "audioLens", "spks"]),
     percent() {
-      return this.percent_stage;
+      return Math.floor(this.percent_stage);
     },
   },
   components: {
@@ -24,7 +24,7 @@ export default {
     async makeAudio() {
       const loading = this.$loading({
         fullscreen: true,
-        background: "#9dbfc101",
+        background: "#9dbfc122",
         text: "音频生成中",
         lock: true,
       });
@@ -35,10 +35,8 @@ export default {
           needMake.push(idx);
         }
       }
-      console.log(needMake);
       const obj = this;
       let progress = 0;
-      console.log("spks:", this.spks);
       if (needMake.length == 0) {
         this.percent_stage = 1 * 100;
       } else {
@@ -73,7 +71,7 @@ export default {
           console.log("resp in makeAudios:", resp);
         }
       }
-      this.isMake = false;
+      // this.isMake = false;
       loading.close();
     },
   },
@@ -93,7 +91,7 @@ export default {
   </el-col>
   <el-col v-else :span="14" :offset="5">
     <el-progress
-      :indeterminate="true"
+      color="#1d5d68"
       :text-inside="true"
       :stroke-width="26"
       :percentage="percent"
