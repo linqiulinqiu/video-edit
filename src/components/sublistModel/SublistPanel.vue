@@ -1,11 +1,12 @@
 <script>
-import { mapStores } from "pinia";
+import { mapState, mapStores } from "pinia";
 import { useSrtStore } from "@/stores/srt";
 import Sublist from "@/components/sublistModel/Sublist.vue";
 
 export default {
   computed: {
     ...mapStores(useSrtStore),
+    ...mapState(useSrtStore, ["sid", "lines", "audioLens"]),
     percent() {
       return this.percent_stage;
     },
@@ -21,25 +22,50 @@ export default {
       await this.srtStore.saveSrt();
     },
     async makeAudio() {
-      console.log("TODO: make audio");
-      // alert("TODO: make audio");
       const loading = this.$loading({
         fullscreen: true,
         background: "#9dbfc1ad",
-        text: "视频生成中",
+        text: "音频生成中",
         lock: true,
       });
-      this.isMake = true;
+      var needMake = [];
+      for (let idx in this.audioLens) {
+        console.log("len,", idx);
+        if (this.audioLens[idx] == 0) {
+          needMake.push(idx);
+        }
+      }
+      console.log(needMake);
       const obj = this;
-      const per = setInterval(function () {
-        obj.percent_stage += 1;
-        // console.log("percent", obj.percent);
-      }, 100);
-      setTimeout(() => {
-        loading.close();
-        clearInterval(per);
-        obj.isMake = false;
-      }, 10000);
+      let progress = 0;
+      if (needMake.length == 0) {
+        this.percent_stage = 1 * 100;
+      } else {
+        for (let i in needMake) {
+          const idx = needMake[i];
+          const line = this.lines[idx];
+          const form = new FormData();
+          form.append("spk", line.speaker);
+          form.append("text", line.text);
+          form.append("sid", this.sid);
+          form.append(
+            "csrf",
+            document
+              .querySelector('meta[name="csrf-token"]')
+              .getAttribute("content")
+          );
+          await fetch("/made-cache/make-voice", {
+            body: form,
+            method: "POST",
+          }).then(() => {
+            // obj.percent_stage += 1;
+            progress += 1;
+            obj.percent_stage = (progress / needMake.length) * 100;
+            console.log("percent:", obj.percent_stage);
+          });
+        }
+      }
+      loading.close();
     },
   },
   data() {
@@ -54,13 +80,14 @@ export default {
   <el-col v-if="!isMake">
     <el-button @click="loadSrt()">Load</el-button>
     <el-button @click="saveSrt()">Save</el-button>
-    <el-button v-if="srtStore.audioOut == false" @click="makeAudio">
-      Make Audio
-    </el-button>
-    <!-- <el-button @click="makeAudio">生成视频</el-button> -->
+    <el-button @click="makeAudio()"> Make Audio </el-button>
   </el-col>
   <el-col v-else>
-    <!-- <el-loading></el-loading> -->
-    <el-progress type="circle" :percentage="percent" />
+    <el-progress
+      :indeterminate="true"
+      :text-inside="true"
+      :stroke-width="26"
+      :percentage="percent"
+    />
   </el-col>
 </template>
