@@ -54,7 +54,6 @@ export default {
       spkId: "",
       url: "",
       voiceTxt: "",
-      mvRes: "",
     };
   },
   methods: {
@@ -62,6 +61,7 @@ export default {
       console.log("loadUrl", e);
       if ("url" in e) {
         this.url = e.url;
+        console.log("url in updateUrl", this.url);
       }
     },
     // async makeVoice() {
