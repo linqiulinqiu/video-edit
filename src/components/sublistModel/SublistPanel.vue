@@ -6,7 +6,7 @@ import Sublist from "@/components/sublistModel/Sublist.vue";
 export default {
   computed: {
     ...mapStores(useSrtStore),
-    ...mapState(useSrtStore, ["sid", "lines", "audioLens"]),
+    ...mapState(useSrtStore, ["sid", "lines", "audioLens", "spks"]),
     percent() {
       return this.percent_stage;
     },
@@ -45,7 +45,7 @@ export default {
           const idx = needMake[i];
           const line = this.lines[idx];
           const form = new FormData();
-          form.append("spk", line.speaker);
+          form.append("spk", this.spks[line.speaker]);
           form.append("text", line.text);
           form.append("sid", this.sid);
           form.append(
@@ -57,12 +57,11 @@ export default {
           const resp = await fetch("/made-cache/make-voice", {
             body: form,
             method: "POST",
+          }).then(() => {
+            progress += 1;
+            obj.percent_stage = (progress / needMake.length) * 100;
+            console.log("percent:", obj.percent_stage);
           });
-          // .then(() => {
-          //   progress += 1;
-          //   obj.percent_stage = (progress / needMake.length) * 100;
-          //   console.log("percent:", obj.percent_stage);
-          // });
           console.log("resp in makeAudios:", resp);
         }
       }
@@ -73,7 +72,7 @@ export default {
   data() {
     return {
       isMake: false,
-      percent_stage: 50,
+      percent_stage: 0,
     };
   },
 };
