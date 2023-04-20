@@ -12,14 +12,17 @@ export default {
       "lines",
       "spks",
       "sid",
-      "audioLens",
+      "audio",
       "reflines",
     ]),
     ...mapState(useWaveSelStore, ["duration"]),
     ...mapStores(useSrtStore),
     overlaps() {
       const ols = [];
-      const audioLens = this.audioLens;
+      var audioLens = [];
+      for (let i in this.audio) {
+        audioLens.push(this.audio[i].len);
+      }
       const lines = this.lines;
       console.log("lines,audioLens,", audioLens, lines);
       for (let i in audioLens) {
@@ -34,6 +37,7 @@ export default {
       }
       return ols;
     },
+    audioSrc() {},
   },
   components: {
     EditBtnGroupVue,
@@ -117,6 +121,7 @@ export default {
   watch: {
     activeLine: function (newL, oldL) {
       this.currentIndex = newL;
+      console.log("newl", newL, this.currentIndex, this.activeLine);
     },
   },
 };
@@ -138,15 +143,14 @@ export default {
             </el-text>
           </el-col>
           <el-col :span="20">
-            <el-col v-if="audioLens">
-              <audio v-if="index == currentIndex">
-                <source
-                  :src="
-                    '/subtitles/audio-out/' + srtStore.sid + '?cid=' + index
-                  "
-                  type="audio/mpeg"
-                />
-              </audio>
+            <el-col v-if="audio[index].len > 0 || audio[index].hash != ''">
+              <audio
+                controls
+                v-if="index == currentIndex"
+                :src="
+                  '/storage/tts/cache/' + spks[line.speaker] + '?cid=' + index
+                "
+              />
               <el-text type="danger" v-if="overlaps[index]">
                 Overlap: {{ overlaps[index] }}s
               </el-text>
@@ -154,6 +158,7 @@ export default {
           </el-col>
           <el-col :span="3">
             <MakevoiceBtn
+              class="mv-btn"
               :sid="sid"
               :spkId="spks[line.speaker].speaker_id"
               :text="line.text"
@@ -212,7 +217,7 @@ export default {
           </el-col>
           <el-col
             :span="5"
-            :offset="19"
+            :offset="16"
             class="btn-group"
             v-if="index == currentIndex"
           >
@@ -229,6 +234,9 @@ export default {
   </el-col>
 </template>
 <style scoped>
+.mv-btn {
+  float: right;
+}
 .sid {
   font-size: 8px;
   position: relative;

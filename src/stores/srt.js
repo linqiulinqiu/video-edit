@@ -13,11 +13,12 @@ export const useSrtStore = defineStore('srt', {
         reflines: [],
         video:{},//video info
         sid: 0,
-        audioLens: [],
+        audio: [],
         activeLine: -1,
     }),
     getters:{
-        tdirty(){   // text related dirty, when it's true, voice make should be enabled
+        tdirty() {   // text related dirty, when it's true, voice make should be enabled
+            console.log('call tdirty', this.lines, this.stored)
             if(this.spks.length!=this.stored.spks.length || this.lines.length!=this.stored.lines.length) return true
             for(let i in this.spks){
                 if(this.spks[i].speaker_id!=this.stored.spks[i].speaker_id) return true
@@ -62,10 +63,10 @@ export const useSrtStore = defineStore('srt', {
             }else{
                 this.reflines = []
             }
-            if(body.subsnap.audio_lens.length == lines.length){
-                this.audioLens = body.subsnap.audio_lens 
+            if(body.subsnap.audio.length == lines.length){
+                this.audio = body.subsnap.audio
             }else{
-                this.audioLens = []
+                this.audio = []
             }
             this.video = {
                 time: body.video.duration_ms/1000,
@@ -75,9 +76,9 @@ export const useSrtStore = defineStore('srt', {
             console.log("refchunks",this.reflines)
             this.setSpks(body.subsnap.spks)
             this.setLines(lines);
-            this.stored = {
-                spks: body.subsnap.spks,
-                lines: lines
+            this.stored = { // TODO: optimize for speed
+                spks: JSON.parse(JSON.stringify(body.subsnap.spks)),
+                lines: JSON.parse(JSON.stringify(lines))
             }
         },
         async saveSrt(){
@@ -110,8 +111,8 @@ export const useSrtStore = defineStore('srt', {
                 method: 'POST'
             });
             this.stored = {
-                spks: this.spks,
-                lines: this.lines
+                spks: JSON.parse(JSON.stringify(this.spks)),
+                lines: JSON.parse(JSON.stringify(this.lines))
             }
             console.log('resp of saveSrt', resp)
         },

@@ -6,21 +6,20 @@ import Sublist from "@/components/sublistModel/Sublist.vue";
 export default {
   computed: {
     ...mapStores(useSrtStore),
-    ...mapState(useSrtStore, ["sid", "lines", "audioLens", "spks","tdirty"]),
+    ...mapState(useSrtStore, ["sid", "lines", "audio", "spks", "tdirty"]),
     percent() {
       return Math.floor(this.percent_stage);
     },
-    canMake(){
-
-      let nm = 0
-       for (let i in this.audioLens) {
-        if (this.audioLens[i] == 0) {
-          nm++
+    canMake() {
+      let nm = 0;
+      for (let i in this.audio) {
+        if (this.audio[i].len == 0) {
+          nm++;
         }
       }
-      if(nm>0) return true
-      return false
-    }
+      if (nm > 0) return true;
+      return false;
+    },
   },
   components: {
     Sublist,
@@ -41,8 +40,8 @@ export default {
       });
       this.isMake = true;
       var needMake = [];
-      for (let idx in this.audioLens) {
-        if (this.audioLens[idx] == 0) {
+      for (let idx in this.audio) {
+        if (this.audio[idx].len == 0) {
           needMake.push(idx);
         }
       }
@@ -64,13 +63,6 @@ export default {
               .querySelector('meta[name="csrf-token"]')
               .getAttribute("content")
           );
-          console.log(
-            "form:",
-            form,
-            "spk:",
-            this.spks[line.speaker],
-            this.spks
-          );
           const resp = await fetch("/made-cache/make-voice", {
             body: form,
             method: "POST",
@@ -81,6 +73,7 @@ export default {
           });
           console.log("resp in makeAudios:", resp);
         }
+        await this.srtStore.saveSrt();
       }
       this.isMake = false;
       loading.close();
@@ -98,7 +91,9 @@ export default {
   <el-col v-if="!isMake">
     <el-button @click="loadSrt()">Load</el-button>
     <el-button @click="saveSrt()">Save</el-button>
-    <el-button :disabled="tdirty==false" @click="makeAudio()"> Make Audio </el-button>
+    <el-button :disabled="tdirty == false" @click="makeAudio()">
+      Make Audio
+    </el-button>
   </el-col>
   <el-col v-else :span="14" :offset="5">
     <el-progress
