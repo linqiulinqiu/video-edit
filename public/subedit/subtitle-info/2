@@ -1,1 +1,108 @@
-{"id":2,"lang_id":2,"video_id":1,"creator_id":1,"note":"","created_at":"2023-02-13T05:33:57.000000Z","updated_at":"2023-02-13T05:33:57.000000Z","refchunks":{"en-US":["Let's think for a bit about it.","The patients who are already on.","Drugs for their type 2 diabetes."]},"subsnap":{"id":124,"subtitle_id":2,"spks":[{"age":18,"gender":"f","speaker_id":14},{"age":18,"gender":"f","speaker_id":5},{"age":18,"gender":"f","speaker_id":3}],"revision":3,"audio_lens":[1728,2268,2664],"chunks":[{"spk":0,"body":"\u8ba9\u6211\u4eec\u8003\u8651\u4e00\u4e0b\u3002","start_ms":450,"duration_ms":1740},{"spk":1,"body":"\u5df2\u7ecf\u5728\u7684\u75c5\u4eba\u3002","start_ms":2200,"duration_ms":1790},{"spk":2,"body":"\u6cbb\u75972\u578b\u7cd6\u5c3f\u75c5\u7684\u836f\u7269\u3002","start_ms":4000,"duration_ms":2590}],"created_at":"2023-04-01T03:13:10.000000Z","updated_at":"2023-04-08T15:35:20.000000Z"},"lang":{"id":2,"name":"zh-CN","lcname":"zh-CN","created_at":"2023-02-13T05:24:39.000000Z","updated_at":"2023-02-13T05:24:39.000000Z"},"video":{"id":1,"pathname":"public\/upload\/video-store\/1\/2023-02-13\/short-test.mp4","name":"short-test.mp4","duration_ms":7019,"creator_id":1,"audio_stat":"extracted","created_at":"2023-02-13T05:32:47.000000Z","updated_at":"2023-02-13T05:33:15.000000Z"}}
+{
+  "id": 2,
+  "lang_id": 2,
+  "video_id": 1,
+  "creator_id": 1,
+  "note": "",
+  "created_at": "2023-02-13T05:33:57.000000Z",
+  "updated_at": "2023-02-13T05:33:57.000000Z",
+  "refchunks": {
+    "en-US": [
+      "Let's think for a bit about it.",
+      "The patients who are already on.",
+      "Drugs for their type 2 diabetes."
+    ]
+  },
+  "subsnap": {
+    "id": 135,
+    "subtitle_id": 2,
+    "spks": [
+      {
+        "age": 18,
+        "gender": "f",
+        "speaker_id": 14
+      },
+      {
+        "age": 18,
+        "gender": "f",
+        "speaker_id": 5
+      },
+      {
+        "age": 18,
+        "gender": "f",
+        "speaker_id": 3
+      }
+    ],
+    "revision": 6,
+    "chunks": [
+      {
+        "spk": 0,
+        "body": "让我们考虑一下。",
+        "start_ms": 450,
+        "duration_ms": 1740
+      },
+      {
+        "spk": 1,
+        "body": "已经在的患者。",
+        "start_ms": 2200,
+        "duration_ms": 1790
+      },
+      {
+        "spk": 2,
+        "body": "治疗2型糖尿病的药物。",
+        "start_ms": 4000,
+        "duration_ms": 2590
+      }
+    ],
+    "created_at": "2023-04-19T13:44:04.000000Z",
+    "updated_at": "2023-04-19T14:10:38.000000Z",
+    "nzlines": 3,
+    "audio": [
+      {
+        "len": 1728,
+        "hash": "14-2-5cae39d0b5614841df12a6c58b42d1dc"
+      },
+      {
+        "len": 2232,
+        "hash": "5-2-b0ae93e001b1dfa8fe893fd86e8022a6"
+      },
+      {
+        "len": 2664,
+        "hash": "3-2-82b918ff1409c98659a0fdcf66ff3063"
+      }
+    ],
+    "subtitle": {
+      "id": 2,
+      "lang_id": 2,
+      "video_id": 1,
+      "creator_id": 1,
+      "note": "",
+      "created_at": "2023-02-13T05:33:57.000000Z",
+      "updated_at": "2023-02-13T05:33:57.000000Z",
+      "lang": {
+        "id": 2,
+        "name": "zh-CN",
+        "lcname": "zh-CN",
+        "created_at": "2023-02-13T05:24:39.000000Z",
+        "updated_at": "2023-02-13T05:24:39.000000Z"
+      }
+    }
+  },
+  "lang": {
+    "id": 2,
+    "name": "zh-CN",
+    "lcname": "zh-CN",
+    "created_at": "2023-02-13T05:24:39.000000Z",
+    "updated_at": "2023-02-13T05:24:39.000000Z"
+  },
+  "video": {
+    "id": 1,
+    "pathname": "public/upload/video-store/1/2023-02-13/short-test.mp4",
+    "name": "short-test.mp4",
+    "duration_ms": 7019,
+    "creator_id": 1,
+    "audio_stat": "extracted",
+    "created_at": "2023-02-13T05:32:47.000000Z",
+    "updated_at": "2023-02-13T05:33:15.000000Z"
+  }
+}

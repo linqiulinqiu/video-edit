@@ -41,11 +41,9 @@ export default {
       var srcArr = [];
       for (let i in this.audio) {
         const hash = this.audio[i].hash;
-        const speaker = this.lines[i].speaker;
-        const src = "/storage/tts/cache/" + speaker + "-2-" + hash + ".mp3";
+        const src = "/storage/tts/cache/" + hash + ".mp3";
         srcArr.push(src);
       }
-      console.log("srcArr:", srcArr);
       return srcArr;
     },
   },
