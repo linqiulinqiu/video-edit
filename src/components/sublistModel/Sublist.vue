@@ -37,7 +37,17 @@ export default {
       }
       return ols;
     },
-    audioSrc() {},
+    audioSrc() {
+      var srcArr = [];
+      for (let i in this.audio) {
+        const hash = this.audio[i].hash;
+        const speaker = this.lines[i].speaker;
+        const src = "/storage/tts/cache/" + speaker + "-2-" + hash + ".mp3";
+        srcArr.push(src);
+      }
+      console.log("srcArr:", srcArr);
+      return srcArr;
+    },
   },
   components: {
     EditBtnGroupVue,
@@ -115,7 +125,6 @@ export default {
       showGroup: false,
       cursorPos: 0,
       isPlay: false,
-      mvRes: "44444444445",
     };
   },
   watch: {
@@ -147,28 +156,26 @@ export default {
               <audio
                 controls
                 v-if="index == currentIndex"
-                :src="
-                  '/storage/tts/cache/' + spks[line.speaker] + '?cid=' + index
-                "
+                :src="audioSrc[index]"
               />
               <el-text type="danger" v-if="overlaps[index]">
                 Overlap: {{ overlaps[index] }}s
               </el-text>
             </el-col>
           </el-col>
-          <el-col :span="3">
+          <!-- <el-col :span="3">
             <MakevoiceBtn
               class="mv-btn"
               :sid="sid"
               :spkId="spks[line.speaker].speaker_id"
               :text="line.text"
             />
-          </el-col>
+          </el-col> -->
         </el-row>
 
         <el-row class="list-oprate">
           <el-col :span="2">
-            <span class="sid"><b> SpeakerID</b></span>
+            <span class="sid"><b> Speaker</b></span>
             <el-select
               size="small"
               :model-value="line.speaker"
@@ -182,7 +189,7 @@ export default {
                 v-for="(item, index) in spks"
                 :key="index"
                 :value="index"
-                :label="item.speaker_id"
+                :label="index"
               ></el-option>
             </el-select>
           </el-col>

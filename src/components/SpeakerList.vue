@@ -71,6 +71,7 @@ export default {
       <li>
         <h2>
           <el-row>
+            <el-col :span="1">Index</el-col>
             <el-col :span="3">ID</el-col>
             <el-col :span="3">姓名</el-col>
             <el-col :span="3">性别</el-col>
@@ -81,15 +82,18 @@ export default {
       </li>
       <li v-for="(spk, idx) in spks" :key="spk.name">
         <el-row>
+          <el-col :span="1">{{ idx }}</el-col>
           <el-col :span="3">
             {{ spk.speaker_id }}
             <SpeakerSetVue :spks="spks" :idx="idx" />
           </el-col>
-          <el-col :span="3">{{ speakerList[spk.speaker_id-1].name }}</el-col>
-          <el-col :span="3">{{ speakerList[spk.speaker_id-1].gender }} </el-col>
+          <el-col :span="3">{{ speakerList[spk.speaker_id - 1].name }}</el-col>
+          <el-col :span="3"
+            >{{ speakerList[spk.speaker_id - 1].gender }}
+          </el-col>
           <el-col :span="5">
             <VoiceDemoVue
-              :url="speakerList[spk.speaker_id-1].demo"
+              :url="speakerList[spk.speaker_id - 1].demo"
               :sid="spk.speaker_id"
             />
           </el-col>
