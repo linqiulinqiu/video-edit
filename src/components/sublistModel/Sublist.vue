@@ -62,7 +62,7 @@ export default {
     },
     liClick(index) {
       this.currentIndex = index;
-      this.srtStore.activeLine = index;
+      // this.srtStore.activeLine = index;
     },
     setTalker(val, index) {
       // this.lines[index].speaker = val;
