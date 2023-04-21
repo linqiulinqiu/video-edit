@@ -51,8 +51,8 @@ export default {
   mounted() {
     // Initialize WaveSurfer instance
     this.waveform = WaveSurfer.create({
-      // container: this.$refs.waveform,
-      container: "#waveform",
+      container: this.$refs.waveform,
+      // container: "#waveform",
       waveColor: "#358",
       progressColor: "#a75",
       plugins: [RegionsPlugin.create({})],
