@@ -69,9 +69,7 @@ export default {
           }).then(() => {
             progress += 1;
             obj.percent_stage = (progress / needMake.length) * 100;
-            console.log("percent:", obj.percent_stage);
           });
-          console.log("resp in makeAudios:", resp);
         }
         await this.srtStore.saveSrt();
       }

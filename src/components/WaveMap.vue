@@ -57,7 +57,6 @@ export default {
       progressColor: "#a75",
       plugins: [RegionsPlugin.create({})],
     });
-    console.log("waveform :", waveform);
     const widget = this;
     this.waveform.on("ready", () => {
       this.waveSelStore.duration = this.waveform.getDuration();

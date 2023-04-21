@@ -24,7 +24,6 @@ export default {
         audioLens.push(this.audio[i].len);
       }
       const lines = this.lines;
-      console.log("lines,audioLens,", audioLens, lines);
       for (let i in audioLens) {
         const durationMs = (lines[i].to - lines[i].from) * 1000;
         const overlap = (audioLens[i] - durationMs) / 1000;
@@ -62,14 +61,10 @@ export default {
     },
     liClick(index) {
       this.currentIndex = index;
-      // this.srtStore.activeLine = index;
     },
     setTalker(val, index) {
-      // this.lines[index].speaker = val;
-      console.log(" set taller", val, index);
       const lines = this.lines.concat();
       lines[index].speaker = val;
-      console.log("lines", lines);
       this.srtStore.setLines(lines);
     },
     textFocus() {
@@ -95,7 +90,6 @@ export default {
       const duration = this.duration;
       if (index >= this.lines.length) {
         console.log("enter");
-
         if (line.to >= duration) {
           line.to = duration;
           fixed = true;
@@ -128,7 +122,6 @@ export default {
   watch: {
     activeLine: function (newL, oldL) {
       this.currentIndex = newL;
-      console.log("newl", newL, this.currentIndex, this.activeLine);
     },
   },
 };
@@ -140,7 +133,7 @@ export default {
         @click="liClick(index)"
         :class="{ active: currentIndex == index }"
         v-for="(line, index) in lines"
-        :key="line"
+        :key="index"
       >
         <el-row class="list-title">
           <el-col :span="1">
@@ -172,11 +165,11 @@ export default {
         </el-row>
 
         <el-row class="list-oprate">
-          <el-col :span="2">
+          <el-col :span="3">
             <span class="sid"><b> Speaker</b></span>
             <el-select
               size="small"
-              :model-value="line.speaker"
+              :model-value="spks[line.speaker].name"
               @change="
                 (v) => {
                   setTalker(v, index);
@@ -185,9 +178,9 @@ export default {
             >
               <el-option
                 v-for="(item, index) in spks"
-                :key="index"
+                :key="item.name"
                 :value="index"
-                :label="index"
+                :label="item.name"
               ></el-option>
             </el-select>
           </el-col>
@@ -208,7 +201,7 @@ export default {
               <el-icon size="20"><VideoPlay /></el-icon>
             </el-button>
           </el-col>
-          <el-col :span="13">
+          <el-col :span="12">
             <el-input
               type="textarea"
               @focus="this.showGroup = true"
@@ -231,6 +224,8 @@ export default {
               :cursorPos="cursorPos"
               :lines="lines"
               :showGroup="showGroup"
+              :audio="audio"
+              :refLines="reflines"
             />
           </el-col>
         </el-row>

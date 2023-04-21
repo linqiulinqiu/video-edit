@@ -12,7 +12,7 @@ export default {
   components: {
     Tooltip,
   },
-  props: ["curIndex", "showGroup", "lines", "cursorPos"],
+  props: ["curIndex", "showGroup", "lines", "cursorPos", "audio", "refLines"],
   watch: {
     showGroup: function (newBool, oldBool) {
       this.operation = newBool;
@@ -23,6 +23,9 @@ export default {
       operation: this.showGroup,
       isClick: false,
       lineList: this.lines.concat(),
+      audiolist: this.audio.concat(),
+      reflines: this.refLines.concat(),
+      adItem: { len: 0, hash: "" },
     };
   },
   methods: {
@@ -33,7 +36,7 @@ export default {
     },
     editLines(direction) {
       const index = this.curIndex;
-      const lines = this.lineList.concat();
+      const lines = this.lineList;
       const cutTxt = this.cutString(this.cursorPos, lines[index].text);
       const duration = lines[index].to - lines[index].from;
       const scale = this.cursorPos / lines[index].text.length;
@@ -53,9 +56,12 @@ export default {
       return lines;
     },
     delLine() {
-      const lines = this.lineList.concat();
-      lines.splice(this.curIndex, 1);
-      this.srtStore.setLines(lines);
+      this.lineList.splice(this.curIndex, 1);
+      this.srtStore.setLines(this.lineList);
+      this.audiolist.splice(this.curIndex, 1);
+      this.srtStore.setAudio(this.audiolist);
+      this.reflines.splice(this.curIndex, 1);
+      this.srtStore.setReflines(this.reflines);
     },
     detectLines() {
       let isBlank = false;
@@ -76,7 +82,6 @@ export default {
       const index = this.curIndex;
       const isOk = this.detectLines();
       if (!isOk) {
-        console.log(this.lines[index]);
         let line = {
           from: this.lines[index].to + 0.01,
           to: "",
@@ -86,11 +91,14 @@ export default {
         if (index == this.lines.length - 1) {
           line.to = this.video.time;
         } else {
-          this.lines[index + 1].from - 0.01;
+          line.to = this.lines[index + 1].from - 0.01;
         }
-        const lines = this.lineList.concat();
-        lines.splice(index + 1, 0, line);
-        this.srtStore.setLines(lines);
+        this.lineList.splice(index + 1, 0, line);
+        this.srtStore.setLines(this.lineList);
+        this.audiolist.splice(index + 1, 0, this.adItem);
+        this.srtStore.setAudio(this.audiolist);
+        this.reflines.splice(index + 1, 0, "");
+        this.srtStore.setReflines(this.reflines);
       }
     },
     addLineFirst() {
@@ -102,18 +110,28 @@ export default {
           text: "",
           speaker: this.lines[0].speaker,
         };
-        const lines = this.lineList.concat();
-        lines.unshift(line);
-        this.srtStore.setLines(lines);
+        this.lineList.unshift(line);
+        this.srtStore.setLines(this.lineList);
+        this.audiolist.unshift(this.adItem);
+        this.srtStore.setAudio(this.audiolist);
+        this.reflines.unshift(""), this.srtStore.setReflines(this.reflines);
       }
     },
     cutToPrev() {
       const cutLines = this.editLines("last");
       this.srtStore.setLines(cutLines);
+      const idx = this.curIndex;
+      this.audiolist[idx - 1] = this.adItem;
+      this.audiolist[idx] = this.adItem;
+      this.srtStore.setAudio(this.audiolist);
     },
     cutToNext() {
       const cutLines = this.editLines("next");
       this.srtStore.setLines(cutLines);
+      const idx = this.curIndex;
+      this.audiolist[idx + 1] = this.adItem;
+      this.audiolist[idx] = this.adItem;
+      this.srtStore.setAudio(this.audiolist);
     },
   },
 };

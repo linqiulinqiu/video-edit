@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  props: { sid: null, spkId: null, text: null, url: { default: false } },
+  props: ["sid", "spkId", "text", "url"],
   methods: {
     async makeVoice() {
       const loading = this.$loading({
@@ -28,11 +28,8 @@ export default {
         body: form,
         method: "POST",
       });
-      if (this.url) {
-        const resj = await resp.json();
-        console.log("resp-json", resj);
-        this.url(resj);
-      }
+      const resj = await resp.json();
+      this.url(resj);
 
       loading.close();
     },

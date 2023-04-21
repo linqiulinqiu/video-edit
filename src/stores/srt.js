@@ -1,50 +1,51 @@
 
 import { defineStore } from 'pinia'
+import { useSpStore } from './splist'
 
 export const useSrtStore = defineStore('srt', {
     state: () => ({
         stored: {
-            spks:[],
-            lines: []   
+            spks: [],
+            lines: []
         },
         spks: [],
         lines: [],
         lang_id: 0,
         reflines: [],
-        video:{},//video info
+        video: {},//video info
         sid: 0,
         audio: [],
         activeLine: -1,
     }),
-    getters:{
+    getters: {
         tdirty() {   // text related dirty, when it's true, voice make should be enabled
             console.log('call tdirty', this.lines, this.stored)
-            if(this.spks.length!=this.stored.spks.length || this.lines.length!=this.stored.lines.length) return true
-            for(let i in this.spks){
-                if(this.spks[i].speaker_id!=this.stored.spks[i].speaker_id) return true
+            if (this.spks.length != this.stored.spks.length || this.lines.length != this.stored.lines.length) return true
+            for (let i in this.spks) {
+                if (this.spks[i].speaker_id != this.stored.spks[i].speaker_id) return true
             }
-            for(let i in this.lines){
-                if(this.lines[i].text!=this.stored.lines[i].text) return true
+            for (let i in this.lines) {
+                if (this.lines[i].text != this.stored.lines[i].text) return true
             }
             return false
         },
-        dirty(){    // any dirty, when true, undo should be enabled
-            if(this.tdirty) return true
-            for(let i in this.lines){
-                if(this.lines[i].start_ms!=this.stored.lines[i].start_ms) return true
-                if(this.lines[i].duration_ms!=this.stored.lines[i].duration_ms) return true
+        dirty() {    // any dirty, when true, undo should be enabled
+            if (this.tdirty) return true
+            for (let i in this.lines) {
+                if (this.lines[i].start_ms != this.stored.lines[i].start_ms) return true
+                if (this.lines[i].duration_ms != this.stored.lines[i].duration_ms) return true
             }
             return false
         }
     },
     actions: {
-        setSid(sid){
+        setSid(sid) {
             this.sid = sid
         },
         async loadSrt() {
             const resp = await fetch(`/subedit/subtitle-info/${this.sid}`);
             const body = await resp.json();
-            console.log("body:",body)
+            console.log("body:", body)
             const chunks = body.subsnap.chunks
             const lines = [];
             this.lang_id = body.lang_id
@@ -58,22 +59,21 @@ export const useSrtStore = defineStore('srt', {
                 item.text = line.body
                 lines.push(item)
             }
-            if('refchunks' in body && 'en-US' in body.refchunks){
+            if ('refchunks' in body && 'en-US' in body.refchunks) {
                 this.reflines = body.refchunks['en-US']
-            }else{
+            } else {
                 this.reflines = []
             }
-            if(body.subsnap.audio.length == lines.length){
+            if (body.subsnap.audio.length == lines.length) {
                 this.audio = body.subsnap.audio
-            }else{
+            } else {
                 this.audio = []
             }
             this.video = {
-                time: body.video.duration_ms/1000,
+                time: body.video.duration_ms / 1000,
                 id: body.video.id,
                 pathName: body.video.pathName
             }
-            console.log("refchunks",this.reflines)
             this.setSpks(body.subsnap.spks)
             this.setLines(lines);
             this.stored = { // TODO: optimize for speed
@@ -81,21 +81,21 @@ export const useSrtStore = defineStore('srt', {
                 lines: JSON.parse(JSON.stringify(lines))
             }
         },
-        async saveSrt(){
+        async saveSrt() {
             const chunks = []
-            for(let i in this.lines){
+            for (let i in this.lines) {
                 const line = this.lines[i]
-                const start_ms = parseInt(line.from*1000)
+                const start_ms = parseInt(line.from * 1000)
                 const item = {
                     spk: line.speaker,
-                    start_ms : start_ms,
-                    duration_ms: parseInt(line.to*1000)- start_ms,
+                    start_ms: start_ms,
+                    duration_ms: parseInt(line.to * 1000) - start_ms,
                     body: line.text
                 }
                 chunks.push(item)
             }
             const spks = []
-            for(let i in this.spks){
+            for (let i in this.spks) {
                 const spk = this.spks[i]
                 spks.push({
                     speaker_id: spk.speaker_id,
@@ -114,27 +114,26 @@ export const useSrtStore = defineStore('srt', {
                 spks: JSON.parse(JSON.stringify(this.spks)),
                 lines: JSON.parse(JSON.stringify(this.lines))
             }
-            console.log('resp of saveSrt', resp)
         },
-        setLine(idx, line){
+        setLine(idx, line) {
             const ls = []
-            for(let i = 0; i< this.lines.length; i++){
-                ls.push( {
-                    from:this.lines[i].from,
-                    to:this.lines[i].to,
+            for (let i = 0; i < this.lines.length; i++) {
+                ls.push({
+                    from: this.lines[i].from,
+                    to: this.lines[i].to,
                     speaker: this.lines[i].speaker,
                     text: this.lines[i].text
                 })
             }
             line = {
-                    from: line.from, 
-                    to: line.to,
-                    speaker: line.speaker,
-                    text: line.text
-                }
-            if(idx>=ls.length){
+                from: line.from,
+                to: line.to,
+                speaker: line.speaker,
+                text: line.text
+            }
+            if (idx >= ls.length) {
                 ls.push(line)
-            }else{
+            } else {
                 ls[idx] = line
             }
             this.setLines(ls)
@@ -176,8 +175,24 @@ export const useSrtStore = defineStore('srt', {
             return overlap
         },
         setSpks(spks) {
+            const sp = useSpStore().speakerList
+            for (let i in spks) {
+                const spk = spks[i];
+                for (let k in sp) {
+                    if (sp[k].id == spk.speaker_id) {
+                        spk['name'] = sp[k].name
+                        spk["demo"] = sp[k].demo
+                    }
+                }
+            }
             this.spks = spks
         },
-        undo(){}
+        setAudio(audio) {
+            this.audio = audio
+        },
+        setReflines(lines) {
+            this.reflines =lines
+        },
+        undo() { }
     }
 })

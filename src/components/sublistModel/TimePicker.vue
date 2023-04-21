@@ -51,7 +51,6 @@ export default {
         }
         return rangeArr;
       } else {
-        // console.log("start=", start, "end=", end);
         return [0];
       }
     },
@@ -75,7 +74,6 @@ export default {
       const maxR = this.time_hms(this.max);
       this.time_range(minR, lFrom, this.fromlimit);
       this.time_range(lTo, maxR, this.tolimit);
-      // console.log("fromLimit--toLimit:", this.fromlimit, this.tolimit);
     },
     incrTime(isFrom, sec) {
       this.getRange();
