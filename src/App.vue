@@ -40,7 +40,7 @@ export default {
 <template>
   <el-container id="container" style="width: 100%">
     <el-main>
-      <p>version = <b>0.0.14</b></p>
+      <p>version = <b>0.0.15</b></p>
       <SublistPanel />
       <el-tabs>
         <el-tab-pane label="编辑内容">

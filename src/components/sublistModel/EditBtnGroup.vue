@@ -114,7 +114,8 @@ export default {
         this.srtStore.setLines(this.lineList);
         this.audiolist.unshift(this.adItem);
         this.srtStore.setAudio(this.audiolist);
-        this.reflines.unshift(""), this.srtStore.setReflines(this.reflines);
+        this.reflines.unshift("");
+        this.srtStore.setReflines(this.reflines);
       }
     },
     cutToPrev() {

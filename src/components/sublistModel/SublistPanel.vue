@@ -10,15 +10,20 @@ export default {
     percent() {
       return Math.floor(this.percent_stage);
     },
-    canMake() {
+    canDown() {
       let nm = 0;
-      for (let i in this.audio) {
-        if (this.audio[i].len == 0) {
-          nm++;
+      if (this.audio.length > 0) {
+        for (let i in this.audio) {
+          if (this.audio[i].len > 0) {
+            nm++;
+          }
         }
       }
       if (nm > 0) return true;
       return false;
+    },
+    link() {
+      return "https://gwl.brimod.com/made-cache/audio-out/" + this.sid;
     },
   },
   components: {
@@ -26,7 +31,13 @@ export default {
   },
   methods: {
     async loadSrt() {
+      const loading = this.$loading({
+        fullscreen: true,
+        background: "#9dbfc155",
+        text: "加载中......",
+      });
       await this.srtStore.loadSrt();
+      loading.close();
     },
     async saveSrt() {
       await this.srtStore.saveSrt();
@@ -92,6 +103,10 @@ export default {
     <el-button :disabled="tdirty == false" @click="makeAudio()">
       Make Audio
     </el-button>
+    <el-button :disabled="!canDown">
+      <el-link :href="link" :disabled="!canDown"
+        ><el-icon><Download /></el-icon></el-link
+    ></el-button>
   </el-col>
   <el-col v-else :span="14" :offset="5">
     <el-progress

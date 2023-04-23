@@ -213,12 +213,7 @@ export default {
 
             <el-text size="small">原文：{{ reflines[index] }}</el-text>
           </el-col>
-          <el-col
-            :span="5"
-            :offset="16"
-            class="btn-group"
-            v-if="index == currentIndex"
-          >
+          <el-col class="btn-group" v-if="index == currentIndex">
             <EditBtnGroupVue
               :curIndex="index"
               :cursorPos="cursorPos"
@@ -280,12 +275,10 @@ ul li:not(.active):hover {
 .btn-group.el-col {
   position: absolute;
   width: 200px;
-  height: 50px;
-  /* right: 10px; */
-  top: -13px;
+  right: 0px;
+  top: -15px;
 }
 .list-title {
-  /* border: #36727e50 1px solid; */
   border-radius: 5px;
   background: #1d5d68;
 }

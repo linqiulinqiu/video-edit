@@ -15,6 +15,7 @@ export default {
   },
   watch: {
     video(newV) {
+      console.log("video :", this.video);
       this.loadWaveform(newV.id);
     },
     pos(newPos, oldPos) {
@@ -57,6 +58,7 @@ export default {
       progressColor: "#a75",
       plugins: [RegionsPlugin.create({})],
     });
+    console.log("waveform", this.waveform, this.video);
     const widget = this;
     this.waveform.on("ready", () => {
       this.waveSelStore.duration = this.waveform.getDuration();
@@ -89,6 +91,7 @@ export default {
   },
   methods: {
     async loadWaveform(id) {
+      console.log("idddddddddddddddd=", id);
       this.waveform.load(`/video-store/audio-stream/${id}`);
       this.updateRegions();
     },
