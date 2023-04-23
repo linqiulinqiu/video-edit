@@ -34,11 +34,7 @@ export default {
   },
   methods: {
     back() {
-      // console.log("this.id", this.video);
       history.back();
-      // const backUrl =
-      //   "https://gwl.brimod.com/subtitles/for-video/" + this.video.id;
-      // window.open(backUrl);
     },
   },
 };

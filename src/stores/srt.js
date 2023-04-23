@@ -29,12 +29,10 @@ export const useSrtStore = defineStore("srt", {
         t = true;
       // return true;
       for (let i in this.spks) {
-        if (this.spks[i].speaker_id != this.stored.spks[i].speaker_id)
-          //
-          t = true;
+        if (this.spks[i].speaker_id != this.stored.spks[i].speaker_id) t = true;
       }
       for (let i in this.lines) {
-        if (this.lines[i].text == this.stored.lines[i].text) t = true;
+        if (this.lines[i].text == this.stored.lines[i].text) t = false;
       }
       for (let i in this.audio) {
         if (this.audio[i].len == 0) t = true;

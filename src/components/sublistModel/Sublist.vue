@@ -154,20 +154,12 @@ export default {
               </el-text>
             </el-col>
           </el-col>
-          <!-- <el-col :span="3">
-            <MakevoiceBtn
-              class="mv-btn"
-              :sid="sid"
-              :spkId="spks[line.speaker].speaker_id"
-              :text="line.text"
-            />
-          </el-col> -->
         </el-row>
 
         <el-row class="list-oprate">
           <el-col :span="3">
-            <span class="sid"><b> Speaker</b></span>
             <el-select
+              class="m-top"
               size="small"
               :model-value="spks[line.speaker].name"
               @change="
@@ -211,7 +203,7 @@ export default {
               @click="textSelect($event)"
             />
 
-            <el-text size="small">原文：{{ reflines[index] }}</el-text>
+            <el-text size="small">{{ reflines[index] }}</el-text>
           </el-col>
           <el-col class="btn-group" v-if="index == currentIndex">
             <EditBtnGroupVue
@@ -233,11 +225,7 @@ export default {
   float: right;
 }
 .sid {
-  font-size: 8px;
-  position: relative;
-  top: -10px;
-  line-height: 10px;
-  text-align: left;
+  margin-top: px;
 }
 .btn-play.el-button {
   padding: 5px;
@@ -266,9 +254,9 @@ ul li:not(.active):hover {
 .list-oprate {
   padding-top: 10px;
 }
-.list-oprate > .el-col > .el-select {
+/* .list-oprate > .el-col > .el-select {
   top: -10px;
-}
+} */
 .list-oprate > .el-col:nth-child(3) {
   padding-right: 5px;
 }
