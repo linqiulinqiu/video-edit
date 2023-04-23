@@ -45,6 +45,7 @@ export default {
       }
       const obj = this;
       let progress = 0;
+      console.log(needMake);
       if (needMake.length == 0) {
         this.percent_stage = 1 * 100;
       } else {
@@ -68,6 +69,7 @@ export default {
             progress += 1;
             obj.percent_stage = (progress / needMake.length) * 100;
           });
+          console.log("resp after mkvoice", i, resp);
         }
         await this.srtStore.saveSrt();
       }

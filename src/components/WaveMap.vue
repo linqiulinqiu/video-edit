@@ -91,7 +91,6 @@ export default {
   },
   methods: {
     async loadWaveform(id) {
-      console.log("idddddddddddddddd=", id);
       this.waveform.load(`/video-store/audio-stream/${id}`);
       this.updateRegions();
     },
