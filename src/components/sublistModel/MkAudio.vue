@@ -10,6 +10,8 @@ export default {
       return Math.floor(this.percent_stage);
     },
     canDown() {
+      console.log("tdirty in mk", this.tdirty);
+
       let nm = 0;
       if (this.audio.length > 0) {
         for (let i in this.audio) {
@@ -86,25 +88,12 @@ export default {
 </script>
 <template>
   <el-button v-if="tdirty" @click="makeAudio()"> Make Audio</el-button>
-  <el-button v-else-if="canDown" @click="window.open(link)">
-    Down Audio
-  </el-button>
-
-  <!-- <el-col v-if="tdirty">
-    <el-button :disabled="tdirty == false" @click="makeAudio()">
-      Make Audio
-    </el-button>
-    <el-button :disabled="!canDown">
-      <el-link :href="link" :disabled="!canDown"
-        ><el-icon><Download /></el-icon></el-link
-    ></el-button>
-  </el-col> -->
-  <!-- <el-col v-else :span="14" :offset="5">
-    <el-progress
-      color="#1d5d68"
-      :text-inside="true"
-      :stroke-width="26"
-      :percentage="percent"
-    />
-  </el-col> -->
+  <el-button v-else-if="canDown" @click="downAudio()"> Down Audio </el-button>
+  <!-- <el-progress
+    v-else
+    color="#1d5d68"
+    :text-inside="true"
+    :stroke-width="26"
+    :percentage="percent"
+  /> -->
 </template>

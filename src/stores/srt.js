@@ -20,7 +20,7 @@ export const useSrtStore = defineStore("srt", {
   getters: {
     tdirty() {
       // text related dirty, when it's true, voice make should be enabled
-      console.log("call tdirty", this.lines, this.stored);
+      console.log("call tdirty", this.tdirty, this.stored);
       let t = false;
       if (
         this.spks.length != this.stored.spks.length ||
@@ -32,7 +32,7 @@ export const useSrtStore = defineStore("srt", {
         if (this.spks[i].speaker_id != this.stored.spks[i].speaker_id) t = true;
       }
       for (let i in this.lines) {
-        if (this.lines[i].text == this.stored.lines[i].text) t = false;
+        if (this.lines[i].text != this.stored.lines[i].text) t = true;
       }
       for (let i in this.audio) {
         if (this.audio[i].len == 0) t = true;
@@ -58,7 +58,7 @@ export const useSrtStore = defineStore("srt", {
     async loadSrt() {
       const resp = await fetch(`/subedit/subtitle-info/${this.sid}`);
       const body = await resp.json();
-      console.log("body:", body);
+      console.log("load data:", body);
       const chunks = body.subsnap.chunks;
       const lines = [];
       this.lang_id = body.lang_id;
@@ -83,15 +83,11 @@ export const useSrtStore = defineStore("srt", {
       } else {
         this.audio = [];
       }
-      this.video = Object.assign(
-        {},
-        {
-          time: body.video.duration_ms / 1000,
-          id: body.video.id,
-          pathName: body.video.pathname,
-        }
-      );
-      console.log("this.video--", this.video);
+      this.video = {
+        time: body.video.duration_ms / 1000,
+        id: body.video.id,
+        pathName: body.video.pathname,
+      };
       this.setSpks(body.subsnap.spks);
       this.setLines(lines);
       this.setStored(body.subsnap.spks, lines, body.subsnap.audio);
@@ -164,9 +160,9 @@ export const useSrtStore = defineStore("srt", {
       } else {
         ls[idx] = line;
       }
-      this.setLines(ls);
+      this.setLines(ls, true);
     },
-    setLines(lines) {
+    setLines(lines, initAudio = false) {
       let overlap = false;
       let lastTo = 0;
       for (let i = 0; i < lines.length; i++) {
@@ -206,9 +202,10 @@ export const useSrtStore = defineStore("srt", {
         const line = lines[i];
         const key = `${this.spks[line.speaker]["speaker_id"]}--${line.text}`;
         if (key in this.stored.audio) {
+          console.log("audiooo", this.audio, this.stored.audio);
           this.audio[i].len = this.stored.audio[i].len;
           this.audio[i].hash = this.stored.audio[i].hash;
-        } else {
+        } else if (initAudio) {
           this.audio[i].len = 0;
           this.audio[i].hash = "";
         }
