@@ -4,7 +4,7 @@ import VideoPlayer from "./components/VideoPlayer.vue";
 import EditorStatus from "./components/EditorStatus.vue";
 import SublistPanel from "./components/sublistModel/SublistPanel.vue";
 import SpeakerList from "./components/SpeakerList.vue";
-import { mapStores} from "pinia";
+import { mapStores, mapState } from "pinia";
 import { useSpStore } from "@/stores/splist";
 import { useSrtStore } from "@/stores/srt";
 import queryString from "query-string";
@@ -23,6 +23,7 @@ export default {
   },
   computed: {
     ...mapStores(useSrtStore, useSpStore),
+    ...mapState(useSrtStore, ["video"]),
   },
   mounted() {
     const qs = queryString.parse(location.search);
@@ -32,7 +33,13 @@ export default {
     this.spListStore.load();
   },
   methods: {
-    makeVoice() {},
+    back() {
+      // console.log("this.id", this.video);
+      history.back();
+      // const backUrl =
+      //   "https://gwl.brimod.com/subtitles/for-video/" + this.video.id;
+      // window.open(backUrl);
+    },
   },
 };
 </script>
@@ -40,8 +47,14 @@ export default {
 <template>
   <el-container id="container" style="width: 100%">
     <el-main>
-      <p>version = <b>0.0.15</b></p>
-      <SublistPanel />
+      <el-row>
+        <el-button @click="back()">
+          <el-icon><Back /></el-icon>
+        </el-button>
+        <p>version = <b>0.0.15</b></p>
+        <SublistPanel />
+      </el-row>
+
       <el-tabs>
         <el-tab-pane label="编辑内容">
           <el-row :gutter="20">
