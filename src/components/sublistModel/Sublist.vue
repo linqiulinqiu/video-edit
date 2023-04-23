@@ -100,7 +100,8 @@ export default {
       } else {
         console.log("line.to = ", line.to, this.lines[index + 1].from);
       }
-      this.srtStore.setLines(this.lines);
+      console.log("lines:", this.lines);
+      this.srtStore.setLines(this.lines, true);
       if (fixed) {
         console.log("fixed line", index, this.lines);
         this.$forceUpdate();
@@ -108,6 +109,9 @@ export default {
     },
     modifyText(text, idx) {
       console.log("modify text : ", text, "idx = ", idx, this.lines[idx].text);
+      const line = this.lines[idx];
+      line.text = text;
+      this.setLine(idx, line);
     },
   },
   data() {
@@ -197,10 +201,11 @@ export default {
             <el-input
               type="textarea"
               @focus="this.showGroup = true"
-              v-model="lines[index].text"
+              v-model="line.text"
               :autosize="{ minRows: 1, maxRows: 5 }"
               autofocus="true"
               @click="textSelect($event)"
+              @change="modifyText(line.text, index)"
             />
 
             <el-text size="small">{{ reflines[index] }}</el-text>

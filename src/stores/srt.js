@@ -20,7 +20,7 @@ export const useSrtStore = defineStore("srt", {
   getters: {
     tdirty() {
       // text related dirty, when it's true, voice make should be enabled
-      console.log("call tdirty", this.tdirty, this.stored);
+      console.log("call tdirty", this.tdirty, this.stored, this.lines);
       let t = false;
       if (
         this.spks.length != this.stored.spks.length ||
@@ -201,10 +201,11 @@ export const useSrtStore = defineStore("srt", {
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const key = `${this.spks[line.speaker]["speaker_id"]}--${line.text}`;
+        console.log("key", key);
         if (key in this.stored.audio) {
           console.log("audiooo", this.audio, this.stored.audio);
-          this.audio[i].len = this.stored.audio[i].len;
-          this.audio[i].hash = this.stored.audio[i].hash;
+          this.audio[i].len = this.stored.audio[k].len;
+          this.audio[i].hash = this.stored.audio[k].hash;
         } else if (initAudio) {
           this.audio[i].len = 0;
           this.audio[i].hash = "";

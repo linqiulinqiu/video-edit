@@ -38,6 +38,7 @@ export default {
       });
       this.making = true;
       var needMake = [];
+      console.log("this.auddio in make", this.audio);
       for (let idx in this.audio) {
         if (this.audio[idx].len == 0) {
           needMake.push(idx);
