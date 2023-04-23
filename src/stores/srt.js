@@ -81,6 +81,7 @@ export const useSrtStore = defineStore("srt", {
       }
       if (body.subsnap.audio.length == lines.length) {
         this.setAudio(body.subsnap.audio);
+        console.log("in load, this.audio == ", this.audio);
       } else {
         this.audio = [];
       }
