@@ -20,7 +20,6 @@ export const useSrtStore = defineStore("srt", {
   getters: {
     tdirty() {
       // text related dirty, when it's true, voice make should be enabled
-      console.log("call tdirty", this.tdirty, this.stored, this.lines);
       let t = false;
       if (
         this.spks.length != this.stored.spks.length ||
@@ -40,7 +39,7 @@ export const useSrtStore = defineStore("srt", {
       return t;
     },
     dirty() {
-      // any dirty, when true, undo should be enabled
+      // any dirty, when true, undo/save should be enabled
       if (this.tdirty) return true;
       for (let i in this.lines) {
         if (this.lines[i].start_ms != this.stored.lines[i].start_ms)
@@ -77,20 +76,15 @@ export const useSrtStore = defineStore("srt", {
       } else {
         this.reflines = [];
       }
-      if (body.subsnap.audio.length == lines.length) {
-        this.setAudio(body.subsnap.audio);
-        console.log("in load, this.audio == ", this.audio);
-      } else {
-        this.audio = [];
-      }
+      this.audio = body.subsnap.audio;
       this.video = {
         time: body.video.duration_ms / 1000,
         id: body.video.id,
         pathName: body.video.pathname,
       };
       this.setSpks(body.subsnap.spks);
-      this.setLines(lines);
       this.setStored(body.subsnap.spks, lines, body.subsnap.audio);
+      this.setLines(lines);
     },
     setStored(spks, lines, orig_audio) {
       const audio = {};
@@ -160,9 +154,9 @@ export const useSrtStore = defineStore("srt", {
       } else {
         ls[idx] = line;
       }
-      this.setLines(ls, true);
+      this.setLines(ls);
     },
-    setLines(lines, initAudio = false) {
+    setLines(lines) {
       let overlap = false;
       let lastTo = 0;
       for (let i = 0; i < lines.length; i++) {
@@ -197,7 +191,6 @@ export const useSrtStore = defineStore("srt", {
         overlap = true;
       }
 
-      // TBD: use setAudio?
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         const key = `${this.spks[line.speaker]["speaker_id"]}--${line.text}`;
@@ -227,9 +220,6 @@ export const useSrtStore = defineStore("srt", {
         }
       }
       this.spks = spks;
-    },
-    setAudio(audio) {
-      this.audio = audio;
     },
     setReflines(lines) {
       this.reflines = lines;
