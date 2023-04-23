@@ -204,8 +204,8 @@ export const useSrtStore = defineStore("srt", {
         console.log("key", key);
         if (key in this.stored.audio) {
           console.log("audiooo", this.audio, this.stored.audio);
-          this.audio[i].len = this.stored.audio[k].len;
-          this.audio[i].hash = this.stored.audio[k].hash;
+          this.audio[i].len = this.stored.audio[key].len;
+          this.audio[i].hash = this.stored.audio[key].hash;
         } else if (initAudio) {
           this.audio[i].len = 0;
           this.audio[i].hash = "";
