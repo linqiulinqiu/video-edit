@@ -199,7 +199,7 @@ export const useSrtStore = defineStore("srt", {
           console.log("audiooo", this.audio, this.stored.audio);
           this.audio[i].len = this.stored.audio[key].len;
           this.audio[i].hash = this.stored.audio[key].hash;
-        } else if (initAudio) {
+        } else{
           this.audio[i].len = 0;
           this.audio[i].hash = "";
         }
