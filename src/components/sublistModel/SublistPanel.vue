@@ -6,7 +6,7 @@ import MkAudio from "./MkAudio.vue";
 export default {
   computed: {
     ...mapStores(useSrtStore),
-    ...mapState(useSrtStore, ["dirty"])
+    ...mapState(useSrtStore, ["dirty", "lang_id"]),
   },
   components: {
     Sublist,
@@ -38,6 +38,6 @@ export default {
   <el-col v-if="!making">
     <el-button @click="loadSrt()">Load</el-button>
     <el-button :disabled="!dirty" @click="saveSrt()">Save</el-button>
-    <mk-audio />
+    <mk-audio v-if="lang_id !== 1" />
   </el-col>
 </template>

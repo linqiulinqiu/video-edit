@@ -127,7 +127,7 @@ export const useSrtStore = defineStore("srt", {
       const form = new FormData();
       form.append("chunks", JSON.stringify(chunks));
       form.append("spks", JSON.stringify(spks));
-      const resp = await fetch(`/subedit/save-snap/${this.sid}`, {
+      await fetch(`/subedit/save-snap/${this.sid}`, {
         body: form,
         method: "POST",
       });
@@ -157,6 +157,19 @@ export const useSrtStore = defineStore("srt", {
       this.setLines(ls);
     },
     setLines(lines) {
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const key = `${this.spks[line.speaker]["speaker_id"]}--${line.text}`;
+        console.log("key", key);
+        if (key in this.stored.audio) {
+          console.log("audiooo", this.audio, this.stored.audio);
+          this.audio[i].len = this.stored.audio[key].len;
+          this.audio[i].hash = this.stored.audio[key].hash;
+        } else {
+          this.audio[i].len = 0;
+          this.audio[i].hash = "";
+        }
+      }
       let overlap = false;
       let lastTo = 0;
       for (let i = 0; i < lines.length; i++) {
@@ -191,19 +204,6 @@ export const useSrtStore = defineStore("srt", {
         overlap = true;
       }
 
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const key = `${this.spks[line.speaker]["speaker_id"]}--${line.text}`;
-        console.log("key", key);
-        if (key in this.stored.audio) {
-          console.log("audiooo", this.audio, this.stored.audio);
-          this.audio[i].len = this.stored.audio[key].len;
-          this.audio[i].hash = this.stored.audio[key].hash;
-        } else{
-          this.audio[i].len = 0;
-          this.audio[i].hash = "";
-        }
-      }
       this.lines = [...lines];
 
       return overlap;

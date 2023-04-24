@@ -56,12 +56,13 @@ export default {
       return lines;
     },
     delLine() {
-      this.lineList.splice(this.curIndex, 1);
-      this.srtStore.setLines(this.lineList);
-      this.audiolist.splice(this.curIndex, 1);
-      this.srtStore.setAudio(this.audiolist);
+      // this.audiolist.splice(this.curIndex, 1);
+      // this.srtStore.setAudio(this.audiolist);
       this.reflines.splice(this.curIndex, 1);
       this.srtStore.setReflines(this.reflines);
+
+      this.lineList.splice(this.curIndex, 1);
+      this.srtStore.setLines(this.lineList);
     },
     detectLines() {
       let isBlank = false;
@@ -95,8 +96,8 @@ export default {
         }
         this.lineList.splice(index + 1, 0, line);
         this.srtStore.setLines(this.lineList);
-        this.audiolist.splice(index + 1, 0, this.adItem);
-        this.srtStore.setAudio(this.audiolist);
+        // this.audiolist.splice(index + 1, 0, this.adItem);
+        // this.srtStore.setAudio(this.audiolist);
         this.reflines.splice(index + 1, 0, "");
         this.srtStore.setReflines(this.reflines);
       }
@@ -112,8 +113,8 @@ export default {
         };
         this.lineList.unshift(line);
         this.srtStore.setLines(this.lineList);
-        this.audiolist.unshift(this.adItem);
-        this.srtStore.setAudio(this.audiolist);
+        // this.audiolist.unshift(this.adItem);
+        // this.srtStore.setAudio(this.audiolist);
         this.reflines.unshift("");
         this.srtStore.setReflines(this.reflines);
       }
@@ -121,18 +122,18 @@ export default {
     cutToPrev() {
       const cutLines = this.editLines("last");
       this.srtStore.setLines(cutLines);
-      const idx = this.curIndex;
-      this.audiolist[idx - 1] = this.adItem;
-      this.audiolist[idx] = this.adItem;
-      this.srtStore.setAudio(this.audiolist);
+      // const idx = this.curIndex;
+      // this.audiolist[idx - 1] = this.adItem;
+      // this.audiolist[idx] = this.adItem;
+      // this.srtStore.setAudio(this.audiolist);
     },
     cutToNext() {
       const cutLines = this.editLines("next");
       this.srtStore.setLines(cutLines);
-      const idx = this.curIndex;
-      this.audiolist[idx + 1] = this.adItem;
-      this.audiolist[idx] = this.adItem;
-      this.srtStore.setAudio(this.audiolist);
+      // const idx = this.curIndex;
+      // this.audiolist[idx + 1] = this.adItem;
+      // this.audiolist[idx] = this.adItem;
+      // this.srtStore.setAudio(this.audiolist);
     },
   },
 };

@@ -21,17 +21,22 @@ export default {
       const ols = [];
       var audioLens = [];
       for (let i in this.audio) {
+        console.log("i", i);
         audioLens.push(this.audio[i].len);
       }
       const lines = this.lines;
+
+      console.log("lines in overlap :", lines);
       for (let i in audioLens) {
-        const durationMs = (lines[i].to - lines[i].from) * 1000;
-        const overlap = (audioLens[i] - durationMs) / 1000;
-        if (overlap > 0) {
-          const over = Math.ceil(overlap * 100) / 100;
-          ols.push(over);
-        } else {
-          ols.push(0);
+        if (i in lines) {
+          const durationMs = (lines[i].to - lines[i].from) * 1000;
+          const overlap = (audioLens[i] - durationMs) / 1000;
+          if (overlap > 0) {
+            const over = Math.ceil(overlap * 100) / 100;
+            ols.push(over);
+          } else {
+            ols.push(0);
+          }
         }
       }
       return ols;
@@ -64,8 +69,9 @@ export default {
     },
     setTalker(val, index) {
       const lines = this.lines.concat();
-      lines[index].speaker = val;
-      this.srtStore.setLines(lines);
+      let line = lines[index];
+      line.speaker = val;
+      this.setLine(index, line);
     },
     textFocus() {
       this.showGroup = true;
@@ -108,7 +114,6 @@ export default {
       }
     },
     modifyText(text, idx) {
-      console.log("modify text : ", text, "idx = ", idx, this.lines[idx].text);
       const line = this.lines[idx];
       line.text = text;
       this.setLine(idx, line);
@@ -176,7 +181,7 @@ export default {
                 v-for="(item, index) in spks"
                 :key="item.name"
                 :value="index"
-                :label="item.name"
+                :label="item.speaker_id + ' -- ' + item.name"
               ></el-option>
             </el-select>
           </el-col>
@@ -198,15 +203,17 @@ export default {
             </el-button>
           </el-col>
           <el-col :span="12">
-            <el-input
-              type="textarea"
-              @focus="this.showGroup = true"
-              v-model="line.text"
-              :autosize="{ minRows: 1, maxRows: 5 }"
-              autofocus="true"
-              @click="textSelect($event)"
-              @change="modifyText(line.text, index)"
-            />
+            <el-col>
+              <el-input
+                type="textarea"
+                @focus="this.showGroup = true"
+                v-model="line.text"
+                :autosize="{ minRows: 1, maxRows: 5 }"
+                autofocus="true"
+                @click="textSelect($event)"
+                @change="modifyText(line.text, index)"
+              />
+            </el-col>
 
             <el-text size="small">{{ reflines[index] }}</el-text>
           </el-col>

@@ -10,6 +10,10 @@ export default {
     to() {
       return this.formTime(this.value.to * 1000);
     },
+    fromDis(){
+      
+    },
+    toDis(){}
   },
   data() {
     return {
