@@ -62,12 +62,8 @@ export default {
     setLine(idx, val) {
       this.srtStore.setLine(idx, val);
     },
-    playVideo(idx) {
-      this.srtStore.activeLine = idx;
-      this.isPlay != this.isPlay;
-    },
     liClick(index) {
-      this.currentIndex = index;
+      this.srtStore.activeLine = index;
     },
     setTalker(val, index) {
       const lines = this.lines.concat();
@@ -92,10 +88,8 @@ export default {
   data() {
     return {
       currentIndex: this.activeLine,
-      isControl: false,
       showGroup: false,
       cursorPos: 0,
-      isPlay: false,
     };
   },
   watch: {
@@ -156,7 +150,7 @@ export default {
                 v-for="(item, index) in spks"
                 :key="item.name"
                 :value="index"
-                :label="item.speaker_id + ' -- ' + item.name"
+                :label="index + ' -- ' + item.name"
               ></el-option>
             </el-select>
           </el-col>
@@ -166,7 +160,7 @@ export default {
               @update:model-value="setLine(index, $event)"
             />
           </el-col>
-          <el-col :span="1">
+          <!-- <el-col :span="1">
             <el-button
               class="m-top btn-play"
               plain
@@ -176,8 +170,8 @@ export default {
             >
               <el-icon size="20"><VideoPlay /></el-icon>
             </el-button>
-          </el-col>
-          <el-col :span="12">
+          </el-col> -->
+          <el-col :span="13">
             <el-col>
               <el-input
                 type="textarea"
