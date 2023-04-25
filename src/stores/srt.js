@@ -24,19 +24,21 @@ export const useSrtStore = defineStore("srt", {
       if (
         this.spks.length != this.stored.spks.length ||
         this.lines.length != this.stored.lines.length
-      )
-        t = true;
-      // return true;
+      ) {
+        return true;
+      }
+      //TODO: check spks and stored.spks are actually the same
       for (let i in this.spks) {
-        if (this.spks[i].speaker_id != this.stored.spks[i].speaker_id) t = true;
+        if (this.spks[i].speaker_id != this.stored.spks[i].speaker_id)
+          return true;
       }
       for (let i in this.lines) {
-        if (this.lines[i].text != this.stored.lines[i].text) t = true;
+        if (this.lines[i].text != this.stored.lines[i].text) return true;
       }
       for (let i in this.audio) {
-        if (this.audio[i].len == 0) t = true;
+        if (this.audio[i].len == 0) return true;
       }
-      return t;
+      return false;
     },
     dirty() {
       // any dirty, when true, undo/save should be enabled
@@ -157,56 +159,67 @@ export const useSrtStore = defineStore("srt", {
       this.setLines(ls);
     },
     setLines(lines) {
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const key = `${this.spks[line.speaker]["speaker_id"]}--${line.text}`;
-        console.log("key", key);
-        if (key in this.stored.audio) {
-          console.log("audiooo", this.audio, this.stored.audio);
-          this.audio[i].len = this.stored.audio[key].len;
-          this.audio[i].hash = this.stored.audio[key].hash;
-        } else {
-          this.audio[i].len = 0;
-          this.audio[i].hash = "";
+      if (lines.length > 0) {
+        const audio = [];
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          const key = `${this.spks[line.speaker]["speaker_id"]}--${line.text}`;
+          if (key in this.stored.audio) {
+            audio.push({
+              len: this.stored.audio[key].len,
+              hash: this.stored.audio[key].hash,
+            });
+          } else {
+            audio.push({
+              len: 0,
+              hash: "",
+            });
+          }
         }
-      }
-      let overlap = false;
-      let lastTo = 0;
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        if (line.from < lastTo) {
-          console.log("overlap! lf-lt", line.from, lastTo);
+        this.audio = audio;
+        let overlap = false;
+        let lastTo = 0;
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
+          if (line.from < lastTo) {
+            overlap = true;
+          }
+          lastTo = line.to;
+        }
+        if (lines.length == 1) {
+          lines[0].min = lines[0].from;
+          lines[0].max = lines[0].to;
+        } else {
+          for (let i = 0; i < lines.length; i++) {
+            let min = "";
+            let max = "";
+            if (i == 0) {
+              min = 0;
+              max = lines[i + 1].from;
+            } else if (i == lines.length - 1) {
+              min = lines[i - 1].to;
+              max = lines[i].to;
+            } else {
+              min = lines[i - 1].to;
+              max = lines[i + 1].from;
+            }
+            lines[i].min = min;
+            lines[i].max = max;
+          }
+        }
+        if (lastTo >= this.video.time) {
+          lines[lines.length - 1].to = this.video.time;
+          console.log(
+            "Overlap! Seems OpenAI generate srt longer than audio itself, need handle& fix"
+          );
           overlap = true;
         }
-        lastTo = line.to;
+        this.lines = [...lines];
+        return overlap;
+      } else {
+        this.lines = [];
+        return false;
       }
-      for (let i = 0; i < lines.length; i++) {
-        let min = "";
-        let max = "";
-        if (i == 0) {
-          min = 0;
-          max = lines[i + 1].from;
-        } else if (i == lines.length - 1) {
-          min = lines[i - 1].to;
-          max = lines[i].to;
-        } else {
-          min = lines[i - 1].to;
-          max = lines[i + 1].from;
-        }
-        lines[i].min = min;
-        lines[i].max = max;
-      }
-      if (lastTo >= this.video.time) {
-        lines[lines.length - 1].to = this.video.time;
-        console.log(
-          "Overlap! Seems OpenAI generate srt longer than audio itself, need handle& fix"
-        );
-        overlap = true;
-      }
-
-      this.lines = [...lines];
-
-      return overlap;
     },
     setSpks(spks) {
       const sp = useSpStore().speakerList;

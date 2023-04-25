@@ -12,7 +12,7 @@ export default {
   components: {
     Tooltip,
   },
-  props: ["curIndex", "showGroup", "lines", "cursorPos", "audio", "refLines"],
+  props: ["curIndex", "showGroup", "lines", "cursorPos",],
   watch: {
     showGroup: function (newBool, oldBool) {
       this.operation = newBool;
@@ -21,11 +21,7 @@ export default {
   data() {
     return {
       operation: this.showGroup,
-      isClick: false,
       lineList: this.lines.concat(),
-      audiolist: this.audio.concat(),
-      reflines: this.refLines.concat(),
-      adItem: { len: 0, hash: "" },
     };
   },
   methods: {
@@ -40,6 +36,7 @@ export default {
       const cutTxt = this.cutString(this.cursorPos, lines[index].text);
       const duration = lines[index].to - lines[index].from;
       const scale = this.cursorPos / lines[index].text.length;
+
       if (direction == "last") {
         const cutTime = scale * duration;
         lines[index - 1].text = lines[index - 1].text + cutTxt[0];
@@ -55,14 +52,16 @@ export default {
       }
       return lines;
     },
-    delLine() {
-      // this.audiolist.splice(this.curIndex, 1);
-      // this.srtStore.setAudio(this.audiolist);
-      this.reflines.splice(this.curIndex, 1);
-      this.srtStore.setReflines(this.reflines);
-
+    delLine(index) {
       this.lineList.splice(this.curIndex, 1);
       this.srtStore.setLines(this.lineList);
+    },
+    mergeLines(index) {
+      // merge line[index] and line[index+1]
+    },
+    splitLine(index, textOffset, withNext) {
+      // textOffset = 0, withNext=true, insert prev
+      // textOffset = text.length, insert next
     },
     detectLines() {
       let isBlank = false;
@@ -96,10 +95,6 @@ export default {
         }
         this.lineList.splice(index + 1, 0, line);
         this.srtStore.setLines(this.lineList);
-        // this.audiolist.splice(index + 1, 0, this.adItem);
-        // this.srtStore.setAudio(this.audiolist);
-        this.reflines.splice(index + 1, 0, "");
-        this.srtStore.setReflines(this.reflines);
       }
     },
     addLineFirst() {
@@ -113,27 +108,15 @@ export default {
         };
         this.lineList.unshift(line);
         this.srtStore.setLines(this.lineList);
-        // this.audiolist.unshift(this.adItem);
-        // this.srtStore.setAudio(this.audiolist);
-        this.reflines.unshift("");
-        this.srtStore.setReflines(this.reflines);
       }
     },
     cutToPrev() {
       const cutLines = this.editLines("last");
       this.srtStore.setLines(cutLines);
-      // const idx = this.curIndex;
-      // this.audiolist[idx - 1] = this.adItem;
-      // this.audiolist[idx] = this.adItem;
-      // this.srtStore.setAudio(this.audiolist);
     },
     cutToNext() {
       const cutLines = this.editLines("next");
       this.srtStore.setLines(cutLines);
-      // const idx = this.curIndex;
-      // this.audiolist[idx + 1] = this.adItem;
-      // this.audiolist[idx] = this.adItem;
-      // this.srtStore.setAudio(this.audiolist);
     },
   },
 };

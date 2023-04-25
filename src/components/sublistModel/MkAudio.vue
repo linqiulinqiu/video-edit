@@ -10,8 +10,6 @@ export default {
       return Math.floor(this.percent_stage);
     },
     canDown() {
-      console.log("tdirty in mk", this.tdirty);
-
       let nm = 0;
       if (this.audio.length > 0) {
         for (let i in this.audio) {
@@ -38,7 +36,6 @@ export default {
       });
       this.making = true;
       var needMake = [];
-      console.log("this.auddio in make", this.audio);
       for (let idx in this.audio) {
         if (this.audio[idx].len == 0) {
           needMake.push(idx);
@@ -63,14 +60,13 @@ export default {
               .querySelector('meta[name="csrf-token"]')
               .getAttribute("content")
           );
-          const resp = await fetch("/made-cache/make-voice", {
+          await fetch("/made-cache/make-voice", {
             body: form,
             method: "POST",
           }).then(() => {
             progress += 1;
             obj.percent_stage = (progress / needMake.length) * 100;
           });
-          console.log("resp after mkvoice", i, resp);
         }
         await this.srtStore.saveSrt();
       }

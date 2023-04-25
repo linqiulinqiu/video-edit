@@ -44,7 +44,7 @@ export default {
           this.player.currentTime(start);
           this.playerStore.pos = start;
           this.waveSelStore.pos = null;
-          const playPromise = this.player.play();
+          const playPromise = this.player.pause();
           if (playPromise != undefined) {
             playPromise
               .then((_) => {

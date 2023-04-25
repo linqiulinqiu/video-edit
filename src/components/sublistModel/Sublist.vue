@@ -21,21 +21,23 @@ export default {
       const ols = [];
       var audioLens = [];
       for (let i in this.audio) {
-        console.log("i", i);
         audioLens.push(this.audio[i].len);
       }
       const lines = this.lines;
-
-      console.log("lines in overlap :", lines);
       for (let i in audioLens) {
         if (i in lines) {
           const durationMs = (lines[i].to - lines[i].from) * 1000;
-          const overlap = (audioLens[i] - durationMs) / 1000;
-          if (overlap > 0) {
-            const over = Math.ceil(overlap * 100) / 100;
-            ols.push(over);
+          // overlap "unknown", "ok", "overlap"
+          if (audioLens.length <= i || audioLens[i] == 0) {
+            ols.push(-1);
           } else {
-            ols.push(0);
+            const overlap = (audioLens[i] - durationMs) / 1000;
+            if (overlap > 0) {
+              const over = Math.ceil(overlap * 100) / 100;
+              ols.push(over);
+            } else {
+              ols.push(0);
+            }
           }
         }
       }
@@ -81,38 +83,6 @@ export default {
       const objArea = event.target;
       this.cursorPos = objArea.selectionStart;
     },
-    edgeUpdate(index) {
-      const line = this.lines[index];
-      let fixed = false;
-      if (index <= 0) {
-        if (line.from < 0) {
-          line.from = 0;
-          fixed = true;
-        }
-      } else if (line.from < this.lines[index - 1].to) {
-        line.from = this.lines[index - 1].to;
-        fixed = true;
-      }
-      const duration = this.duration;
-      if (index >= this.lines.length) {
-        console.log("enter");
-        if (line.to >= duration) {
-          line.to = duration;
-          fixed = true;
-        }
-      } else if (line.to > this.lines[index + 1].from) {
-        line.to = this.lines[index + 1].from;
-        fixed = true;
-      } else {
-        console.log("line.to = ", line.to, this.lines[index + 1].from);
-      }
-      console.log("lines:", this.lines);
-      this.srtStore.setLines(this.lines, true);
-      if (fixed) {
-        console.log("fixed line", index, this.lines);
-        this.$forceUpdate();
-      }
-    },
     modifyText(text, idx) {
       const line = this.lines[idx];
       line.text = text;
@@ -152,14 +122,19 @@ export default {
             </el-text>
           </el-col>
           <el-col :span="20">
-            <el-col v-if="audio[index].len > 0 || audio[index].hash != ''">
+            <el-col v-if="audio[index].len > 0">
               <audio
                 controls
                 v-if="index == currentIndex"
                 :src="audioSrc[index]"
               />
               <el-text type="danger" v-if="overlaps[index]">
-                Overlap: {{ overlaps[index] }}s
+                Overlap : {{ overlaps[index] }}s
+              </el-text>
+            </el-col>
+            <el-col v-else>
+              <el-text type="warning" v-if="overlaps[index] == '-1'">
+                Overlap : unknown
               </el-text>
             </el-col>
           </el-col>
@@ -207,11 +182,11 @@ export default {
               <el-input
                 type="textarea"
                 @focus="this.showGroup = true"
-                v-model="line.text"
+                :model-value="line.text"
                 :autosize="{ minRows: 1, maxRows: 5 }"
                 autofocus="true"
                 @click="textSelect($event)"
-                @change="modifyText(line.text, index)"
+                @input="modifyText($event, index)"
               />
             </el-col>
 

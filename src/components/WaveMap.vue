@@ -15,7 +15,6 @@ export default {
   },
   watch: {
     video(newV) {
-      console.log("video in watch:", this.video);
       this.loadWaveform(newV.id);
     },
     pos(newPos, oldPos) {
@@ -58,7 +57,6 @@ export default {
       progressColor: "#a75",
       plugins: [RegionsPlugin.create({})],
     });
-    // console.log("waveform", this.waveform, this.video);
     const widget = this;
     this.waveform.on("ready", () => {
       this.waveSelStore.duration = this.waveform.getDuration();
