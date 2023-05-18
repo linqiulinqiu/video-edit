@@ -20,7 +20,6 @@ export const useSrtStore = defineStore("srt", {
   getters: {
     tdirty() {
       // text related dirty, when it's true, voice make should be enabled
-      let t = false;
       if (
         this.spks.length != this.stored.spks.length ||
         this.lines.length != this.stored.lines.length

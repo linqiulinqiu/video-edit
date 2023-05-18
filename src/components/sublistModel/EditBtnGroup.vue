@@ -12,7 +12,7 @@ export default {
   components: {
     Tooltip,
   },
-  props: ["curIndex", "showGroup", "lines", "cursorPos",],
+  props: ["curIndex", "showGroup", "lines", "cursorPos"],
   watch: {
     showGroup: function (newBool, oldBool) {
       this.operation = newBool;
@@ -49,19 +49,23 @@ export default {
         lines[index + 1].text = cutTxt[1] + lines[index + 1].text;
         lines[index].to = lines[index].to - cutTime;
         lines[index + 1].from = lines[index + 1].from + cutTime;
+      } else if (direction == "splite") {
+        const cutTime = (1 - scale) * duration;
+        lines[index].text = cutTxt[0];
+        lines[index].to = lines[index].to - cutTime;
+        let line = {
+          from: lines[index].to + 0.01,
+          to: lines[index].to + 0.01 + cutTime,
+          speaker: lines[index].speaker,
+          text: cutTxt[1],
+        };
+        lines.splice(index + 1, 0, line);
       }
       return lines;
     },
     delLine(index) {
       this.lineList.splice(this.curIndex, 1);
       this.srtStore.setLines(this.lineList);
-    },
-    mergeLines(index) {
-      // merge line[index] and line[index+1]
-    },
-    splitLine(index, textOffset, withNext) {
-      // textOffset = 0, withNext=true, insert prev
-      // textOffset = text.length, insert next
     },
     detectLines() {
       let isBlank = false;
@@ -79,23 +83,8 @@ export default {
       return isBlank;
     },
     addLine() {
-      const index = this.curIndex;
-      const isOk = this.detectLines();
-      if (!isOk) {
-        let line = {
-          from: this.lines[index].to + 0.01,
-          to: "",
-          text: "",
-          speaker: this.lines[index].speaker,
-        };
-        if (index == this.lines.length - 1) {
-          line.to = this.video.time;
-        } else {
-          line.to = this.lines[index + 1].from - 0.01;
-        }
-        this.lineList.splice(index + 1, 0, line);
-        this.srtStore.setLines(this.lineList);
-      }
+      const lines = this.editLines("splite");
+      this.srtStore.setLines(lines);
     },
     addLineFirst() {
       const isOk = this.detectLines();
@@ -128,15 +117,16 @@ export default {
         ><el-icon><Delete /></el-icon
       ></el-button>
     </tooltip>
-    <tooltip :content="'向上添加一句'"
-      ><el-button
+    <tooltip :content="'向上添加一句'">
+      <el-button
         v-if="curIndex == 0"
         plain
         size="small"
         @click="addLineFirst()"
       >
-        <el-icon><DocumentAdd /></el-icon> </el-button
-    ></tooltip>
+        <el-icon><DocumentAdd /></el-icon>
+      </el-button>
+    </tooltip>
     <tooltip :content="'向上分割'"
       ><el-button v-if="curIndex != 0" plain size="small" @click="cutToPrev()"
         ><el-icon><Top /></el-icon></el-button
@@ -149,7 +139,7 @@ export default {
         @click="cutToNext()"
         ><el-icon><Bottom /></el-icon></el-button
     ></tooltip>
-    <tooltip :content="'加一句'"
+    <tooltip :content="'从光标位置分割成两句'"
       ><el-button plain size="small" @click="addLine()"
         ><el-icon><Plus /></el-icon></el-button
     ></tooltip>

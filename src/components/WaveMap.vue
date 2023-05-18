@@ -6,6 +6,7 @@ import { usePlayerStore } from "@/stores/player";
 
 import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.min.js";
+import Timeline from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
 
 export default {
   computed: {
@@ -55,7 +56,12 @@ export default {
       container: "#waveform",
       waveColor: "#358",
       progressColor: "#a75",
-      plugins: [RegionsPlugin.create({})],
+      backend: "MediaElement",
+      minPxPerSet: 50,
+      scrollParent: true,
+      plugins: [
+        RegionsPlugin.create({}),
+      ],
     });
     const widget = this;
     this.waveform.on("ready", () => {
@@ -142,6 +148,7 @@ export default {
 <template>
   <el-scrollbar>
     <el-col id="waveform" ref="waveform"></el-col>
+    <el-col id="timeline" ref="wave-timeline"></el-col>
   </el-scrollbar>
 </template>
 <style>
