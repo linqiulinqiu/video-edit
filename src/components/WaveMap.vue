@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       regions: [],
+      minPxPerSet: 50,
     };
   },
   mounted() {
@@ -57,11 +58,9 @@ export default {
       waveColor: "#358",
       progressColor: "#a75",
       backend: "MediaElement",
-      minPxPerSet: 50,
+      minPxPerSet: this.minPxPerSet,
       scrollParent: true,
-      plugins: [
-        RegionsPlugin.create({}),
-      ],
+      plugins: [RegionsPlugin.create({})],
     });
     const widget = this;
     this.waveform.on("ready", () => {
@@ -141,12 +140,18 @@ export default {
       }
       this.srtStore.activeLine = al;
     },
+    audioZoom(pxPerSet) {
+      this.minPxPerSet = pxPerSet;
+      this.waveform.zoom(pxPerSet);
+      console.log("this.waveform:", this.waveform);
+    },
   },
 };
 </script>
 
 <template>
   <el-scrollbar>
+    <el-button @click="audioZoom(2)">音频缩放</el-button>
     <el-col id="waveform" ref="waveform"></el-col>
     <el-col id="timeline" ref="wave-timeline"></el-col>
   </el-scrollbar>
