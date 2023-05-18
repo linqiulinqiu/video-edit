@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     ...mapStores(useSrtStore, useSpStore),
-    ...mapState(useSrtStore, ["video"]),
+    ...mapState(useSrtStore, ["video", "loadDone"]),
   },
   mounted() {
     const qs = queryString.parse(location.search);
@@ -63,8 +63,8 @@ export default {
               <VideoPlayer />
             </el-col>
           </el-row>
-          <EditorStatus />
-          <WaveMap />
+          <EditorStatus v-if="loadDone" />
+          <WaveMap v-if="loadDone" />
         </el-tab-pane>
         <el-tab-pane label="语音设置">
           <SpeakerList />

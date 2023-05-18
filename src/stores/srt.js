@@ -16,6 +16,7 @@ export const useSrtStore = defineStore("srt", {
     sid: 0,
     audio: [],
     activeLine: -1,
+    loadDone: false,
   }),
   getters: {
     tdirty() {

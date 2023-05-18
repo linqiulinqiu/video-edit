@@ -20,6 +20,13 @@ a,
 .m-top{
   margin-top: 13px;
 }
+.el-loading-spinner{
+  top: 35%;
+}
+.el-loading-spinner .el-loading-text{
+  color: #054028;
+  font-size: 22px;
+}
 ::-webkit-scrollbar{
   width: 8px;
   height: 10px;
