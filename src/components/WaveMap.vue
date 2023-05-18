@@ -48,6 +48,7 @@ export default {
     return {
       regions: [],
       minPxPerSet: 50,
+      pxArr: [50, 100, 200, 400],
     };
   },
   mounted() {
@@ -143,7 +144,7 @@ export default {
     audioZoom(pxPerSet) {
       this.minPxPerSet = pxPerSet;
       this.waveform.zoom(pxPerSet);
-      console.log("this.waveform:", this.waveform);
+      console.log("pxPerSet:", pxPerSet);
     },
   },
 };
@@ -151,7 +152,19 @@ export default {
 
 <template>
   <el-scrollbar>
-    <el-button @click="audioZoom(2)">音频缩放</el-button>
+    <el-select
+      v-model="minPxPerSet"
+      :placeholder="minPxPerSet / 50 + 'x'"
+      @change="audioZoom(minPxPerSet)"
+    >
+      <el-option
+        v-for="item in pxArr"
+        :key="item"
+        :label="item / 50 + 'x'"
+        :value="item"
+      ></el-option>
+    </el-select>
+    <!-- <el-button @click="audioZoom(100)">音频2X缩放</el-button> -->
     <el-col id="waveform" ref="waveform"></el-col>
     <el-col id="timeline" ref="wave-timeline"></el-col>
   </el-scrollbar>
