@@ -61,10 +61,13 @@ export default {
       backend: "MediaElement",
       minPxPerSet: this.minPxPerSet,
       scrollParent: true,
-      forceDecode: true,
       plugins: [RegionsPlugin.create({})],
     });
     const widget = this;
+    this.waveform.on("zoom", () => {
+      this.waveform.params.minPxPerSet = this.minPxPerSet;
+      console.log("zoom", this.waveform.params.minPxPerSet);
+    });
     this.waveform.on("ready", () => {
       this.waveSelStore.duration = this.waveform.getDuration();
       console.log("waveform ready", this.waveSelStore.duration);
@@ -96,6 +99,7 @@ export default {
   },
   methods: {
     async loadWaveform(id) {
+      console.log(`load waveform id=${id}`);
       this.waveform.load(`/video-store/audio-stream/${id}`);
       this.updateRegions();
     },
@@ -145,7 +149,13 @@ export default {
     audioZoom(pxPerSet) {
       this.minPxPerSet = pxPerSet;
       this.waveform.zoom(pxPerSet);
-      console.log("pxPerSet:", pxPerSet);
+      console.log(
+        "pxPerSet:",
+        pxPerSet,
+        "this.waveform:",
+        this.waveform,
+        this.waveform.params.minPxPerSet
+      );
     },
   },
 };
@@ -170,5 +180,3 @@ export default {
     <el-col id="waveform" ref="waveform"></el-col>
   </el-scrollbar>
 </template>
-<style>
-</style>

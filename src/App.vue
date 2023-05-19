@@ -63,8 +63,8 @@ export default {
               <VideoPlayer />
             </el-col>
           </el-row>
-          <EditorStatus v-if="loadDone" />
-          <WaveMap v-if="loadDone" />
+          <EditorStatus v-show="loadDone" />
+          <WaveMap v-show="loadDone" />
         </el-tab-pane>
         <el-tab-pane label="语音设置">
           <SpeakerList />

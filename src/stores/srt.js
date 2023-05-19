@@ -8,6 +8,7 @@ export const useSrtStore = defineStore("srt", {
       lines: [],
       audio: {},
     },
+    history: [],
     spks: [],
     lines: [],
     lang_id: 0,
@@ -15,6 +16,7 @@ export const useSrtStore = defineStore("srt", {
     refaudio: [],
     sid: 0,
     audio: [],
+    video: {},
     activeLine: -1,
     loadDone: false,
   }),
@@ -79,11 +81,14 @@ export const useSrtStore = defineStore("srt", {
         this.reflines = [];
       }
       this.audio = body.subsnap.audio;
-      this.video = {
-        time: body.video.duration_ms / 1000,
-        id: body.video.id,
-        pathName: body.video.pathname,
-      };
+      this.video = Object.assign(
+        {},
+        {
+          time: body.video.duration_ms / 1000,
+          id: body.video.id,
+          pathName: body.video.pathname,
+        }
+      );
       this.setSpks(body.subsnap.spks);
       this.setStored(body.subsnap.spks, lines, body.subsnap.audio);
       this.setLines(lines);
@@ -160,6 +165,12 @@ export const useSrtStore = defineStore("srt", {
     },
     setLines(lines) {
       if (lines.length > 0) {
+        // a smarter way: check audio/lines/spks changed, only push changed data into history
+        this.history.push({
+          audio: this.audio,
+          lines: this.lines,
+          spks: this.spks,
+        }); // when undo: pop history to this, when load/save cleanup history
         const audio = [];
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
