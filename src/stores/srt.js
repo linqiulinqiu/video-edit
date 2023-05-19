@@ -92,6 +92,7 @@ export const useSrtStore = defineStore("srt", {
       this.setSpks(body.subsnap.spks);
       this.setStored(body.subsnap.spks, lines, body.subsnap.audio);
       this.setLines(lines);
+      this.history = [];
     },
     setStored(spks, lines, orig_audio) {
       const audio = {};
@@ -139,6 +140,7 @@ export const useSrtStore = defineStore("srt", {
         method: "POST",
       });
       this.setStored(this.spks, this.lines, this.audio); //TODO: confirm audio updated from make-audio
+      this.history = [];
     },
     setLine(idx, line) {
       const ls = [];
@@ -171,6 +173,7 @@ export const useSrtStore = defineStore("srt", {
           lines: this.lines,
           spks: this.spks,
         }); // when undo: pop history to this, when load/save cleanup history
+
         const audio = [];
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
@@ -226,6 +229,7 @@ export const useSrtStore = defineStore("srt", {
           overlap = true;
         }
         this.lines = [...lines];
+
         return overlap;
       } else {
         this.lines = [];

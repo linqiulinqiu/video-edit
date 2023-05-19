@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  props: ["url", "sid"],
+  props: ["url"],
   data() {
     return {
       isPlaying: false,
@@ -21,7 +21,6 @@ export default {
 </script>
 
 <style scoped>
-
 .el-icon:hover {
   color: aquamarine;
 }

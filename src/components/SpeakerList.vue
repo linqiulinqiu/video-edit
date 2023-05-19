@@ -4,10 +4,12 @@ import { mapState, mapStores } from "pinia";
 import { useSrtStore } from "@/stores/srt";
 import { useSpStore } from "@/stores/splist";
 import SpeakerSetVue from "./speakerModel/SpeakerSet.vue";
+import VoiceDemo from "./speakerModel/VoiceDemo.vue";
 
 export default {
   components: {
     SpeakerSetVue,
+    VoiceDemo,
   },
   computed: {
     ...mapState(useSpStore, ["speakerList"]), // 以此确保本Component不会改动spList.speakerList(仅能读入，不可修改)
@@ -88,7 +90,8 @@ export default {
             {{ speakerList[spk.speaker_id - 1].gender }}
           </el-col>
           <el-col :span="5">
-            <audio :src="spk.demo" controls></audio>
+            <VoiceDemo :url="spk.demo" />
+            <!-- <audio :src="spk.demo" controls></audio> -->
           </el-col>
           <el-col :span="5">
             <el-button

@@ -6,7 +6,7 @@ import MkAudio from "./MkAudio.vue";
 export default {
   computed: {
     ...mapStores(useSrtStore),
-    ...mapState(useSrtStore, ["dirty", "lang_id"]),
+    ...mapState(useSrtStore, ["dirty", "lang_id", "history"]),
   },
   components: {
     Sublist,
@@ -26,6 +26,16 @@ export default {
     async saveSrt() {
       await this.srtStore.saveSrt();
     },
+    // undo() {},
+    redo() {
+      console.log("history", this.history);
+      const last = this.history.pop();
+      // const last = this.history.pop();
+      console.log("last history", last);
+      this.srtStore.setLines(last.lines);
+      this.srtStore.audio = last.audio;
+      this.srtStore.setSpks(last.spks);
+    },
   },
   data() {
     return {};
@@ -34,6 +44,8 @@ export default {
 </script>
 <template>
   <el-col>
+    <!-- <el-button @click="undo">Undo</el-button> -->
+    <el-button v-if="this.history.length > 0" @click="redo">Redo</el-button>
     <el-button @click="loadSrt()">Load</el-button>
     <el-button :disabled="!dirty" @click="saveSrt()">Save</el-button>
     <mk-audio v-if="lang_id == 2" />

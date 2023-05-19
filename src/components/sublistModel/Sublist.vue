@@ -128,7 +128,7 @@ export default {
             </el-col>
             <el-col v-else>
               <el-text type="warning" v-if="overlaps[index] == '-1'">
-                Overlap : unknown
+                Unknown
               </el-text>
             </el-col>
           </el-col>
@@ -160,17 +160,6 @@ export default {
               @update:model-value="setLine(index, $event)"
             />
           </el-col>
-          <!-- <el-col :span="1">
-            <el-button
-              class="m-top btn-play"
-              plain
-              circle
-              size="small"
-              @click="playVideo(index)"
-            >
-              <el-icon size="20"><VideoPlay /></el-icon>
-            </el-button>
-          </el-col> -->
           <el-col :span="13">
             <el-col>
               <el-input
