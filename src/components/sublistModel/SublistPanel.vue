@@ -32,6 +32,7 @@ export default {
       await this.srtStore.saveSrt();
       this.srtStore.loadDone = true;
       loading.close();
+      this.$message("保存已完成");
     },
     // undo() {},
     redo() {

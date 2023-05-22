@@ -72,6 +72,7 @@ export default {
       }
       this.making = false;
       loading.close();
+      this.$message("生成音频已完成");
     },
     downAudio() {
       window.open(this.link);
