@@ -24,13 +24,19 @@ export default {
       loading.close();
     },
     async saveSrt() {
+      const loading = this.$loading({
+        fullscreen: true,
+        background: "#9dbfc155",
+        text: "保存中......",
+      });
       await this.srtStore.saveSrt();
+      this.srtStore.loadDone = true;
+      loading.close();
     },
     // undo() {},
     redo() {
       console.log("history", this.history);
       const last = this.history.pop();
-      // const last = this.history.pop();
       console.log("last history", last);
       this.srtStore.setLines(last.lines);
       this.srtStore.audio = last.audio;
@@ -47,7 +53,7 @@ export default {
     <!-- <el-button @click="undo">Undo</el-button> -->
     <el-button v-if="this.history.length > 0" @click="redo">Redo</el-button>
     <el-button @click="loadSrt()">Load</el-button>
-    <el-button :disabled="!dirty" @click="saveSrt()">Save</el-button>
+    <el-button :disabled="!dirty" @click="saveSrt">Save</el-button>
     <mk-audio v-if="lang_id == 2" />
   </el-col>
 </template>
