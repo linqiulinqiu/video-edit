@@ -39,11 +39,12 @@ export default {
       for (let idx in this.audio) {
         if (this.audio[idx].len == 0) {
           needMake.push(idx);
+          // console.log("needMake i:", idx);
         }
       }
       const obj = this;
       let progress = 0;
-      console.log(needMake);
+      console.log("needMake.length", needMake.length);
       if (needMake.length == 0) {
         this.percent_stage = 1 * 100;
       } else {
