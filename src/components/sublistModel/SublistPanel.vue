@@ -29,7 +29,8 @@ export default {
         background: "#9dbfc155",
         text: "保存中......",
       });
-      await this.srtStore.saveSrt();
+      const res = await this.srtStore.saveSrt();
+      console.log("save res", res);
       this.srtStore.loadDone = true;
       loading.close();
       this.$message("保存已完成");
