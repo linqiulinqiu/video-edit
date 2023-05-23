@@ -115,7 +115,7 @@ export default {
       console.log(`load waveform id=${id}`);
       // const res = await this.waveform.load(`/video-store/audio-stream/${id}`);
       const blob = await fetch(`/video-store/audio-stream/${id}`);
-      const res = await this.waveform.loadBlob(blob);
+      const res = await this.waveform.load(blob);
       console.log("loadwaveform res", res);
       this.updateRegions();
     },
