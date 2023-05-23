@@ -50,6 +50,7 @@ export default {
       regions: [],
       pxArr: [5, 25, 50, 100, 200, 400],
       minPxPerSec: 50,
+      errTxt: "",
     };
   },
   mounted() {
@@ -80,6 +81,7 @@ export default {
     const widget = this;
     this.waveform.on("error", (e) => {
       console.log("waveform error", e);
+      this.errTxt = e + "，请刷新页面后再查看。";
     });
     this.waveform.on("ready", () => {
       this.waveSelStore.duration = this.waveform.getDuration();
@@ -182,6 +184,7 @@ export default {
     <el-col>
       <span>音频缩放倍数：</span>
       <el-select
+        class="sel-width"
         v-model="minPxPerSec"
         :placeholder="minPxPerSec / 50 + 'x'"
         @change="audioZoom(minPxPerSec)"
@@ -191,9 +194,17 @@ export default {
           :key="item"
           :label="item / 50 + 'x'"
           :value="item"
-        ></el-option> </el-select
-    ></el-col>
+        ></el-option>
+      </el-select>
+      <el-text type="danger">{{ errTxt }}</el-text>
+    </el-col>
     <el-col id="waveform" ref="waveform"></el-col>
     <!-- <el-col id="timeline" ref="timeline"></el-col> -->
   </el-scrollbar>
 </template>
+<style scoped>
+.el-select.sel-width {
+  width: 100px;
+  margin-bottom: 5px;
+}
+</style>
