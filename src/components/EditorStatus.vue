@@ -18,12 +18,14 @@ export default {
 
 <template>
   <el-row>
-    <el-col :span="2" class="editState">
+    <el-col :span="5" class="editState">
+      <el-text type="info">时间: </el-text>
       <el-text>
         {{ pos.toFixed(2) }}/{{ waveSelStore.duration.toFixed(2) }}
       </el-text>
     </el-col>
     <el-col :span="5" class="editState">
+      <el-text type="info"> 阶段：</el-text>
       <el-text v-if="srtStore.activeLine >= 0">
         {{ srtStore.activeLine }}/{{ srtStore.lines.length }}
       </el-text>
