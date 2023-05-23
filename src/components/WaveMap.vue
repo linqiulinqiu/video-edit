@@ -68,6 +68,9 @@ export default {
     //   this.waveform.params.minPxPerSet = this.minPxPerSet;
     //   console.log("zoom", this.waveform.params.minPxPerSet);
     // });
+    this.waveform.on("error", (e) => {
+      console.log("waveform error", e);
+    });
     this.waveform.on("ready", () => {
       this.waveSelStore.duration = this.waveform.getDuration();
       console.log("waveform ready", this.waveSelStore.duration);
