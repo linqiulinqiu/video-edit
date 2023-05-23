@@ -64,13 +64,7 @@ export default {
       scrollParent: true,
       plugins: [
         RegionsPlugin.create({}),
-        Timeline.create({
-          container: "#timeline",
-          minPxPerSec: this.minPxPerSec,
-          labels: true,
-          zoomDebounce: 20,
-          // formatTimeCallback:function()
-        }),
+
         cursor.create({
           showTime: true,
           opacity: 1,
