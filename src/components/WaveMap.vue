@@ -112,11 +112,11 @@ export default {
   },
   methods: {
     async loadWaveform(id) {
-      console.log(`load waveform id=${id}`);
-      // const res = await this.waveform.load(`/video-store/audio-stream/${id}`);
-      const blob = await fetch(`/video-store/audio-stream/${id}`);
-      const res = await this.waveform.load(blob);
-      console.log("loadwaveform res", res);
+      const res = await this.waveform.load(`/video-store/audio-stream/${id}`);
+      // const blob = await fetch(`/video-store/audio-stream/${id}`);
+      // console.log("blob:", blob);
+      // const res = await this.waveform.load(blob.url);
+      console.log("loadwaveform res", res, `load waveform id=${id}`);
       this.updateRegions();
     },
     updateRegions() {
@@ -194,6 +194,6 @@ export default {
         ></el-option> </el-select
     ></el-col>
     <el-col id="waveform" ref="waveform"></el-col>
-    <el-col id="timeline" ref="timeline"></el-col>
+    <!-- <el-col id="timeline" ref="timeline"></el-col> -->
   </el-scrollbar>
 </template>
