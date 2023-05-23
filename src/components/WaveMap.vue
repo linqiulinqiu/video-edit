@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       regions: [],
-      pxArr: [25, 50, 100, 200, 400],
+      pxArr: [5, 25, 50, 100, 200, 400],
       minPxPerSec: 50,
     };
   },
@@ -64,10 +64,13 @@ export default {
       scrollParent: true,
       plugins: [
         RegionsPlugin.create({}),
-        Timeline.create({
-          container: "#timeline",
-          timeInterval: this.minPxPerSec,
-        }),
+        // Timeline.create({
+        //   container: "#timeline",
+        //   minPxPerSec: this.minPxPerSec,
+        //   labels: true,
+        //   zoomDebounce: 20,
+        //   // formatTimeCallback:function()
+        // }),
         cursor.create({
           showTime: true,
           opacity: 1,
@@ -116,8 +119,10 @@ export default {
   methods: {
     async loadWaveform(id) {
       console.log(`load waveform id=${id}`);
-      const res = await this.waveform.load(`/video-store/audio-stream/${id}`);
-      console.log("loadwaveform res", res, this.Timeline);
+      // const res = await this.waveform.load(`/video-store/audio-stream/${id}`);
+      const blob = await fetch(`/video-store/audio-stream/${id}`);
+      const res = await this.waveform.loadBlob(blob);
+      console.log("loadwaveform res", res);
       this.updateRegions();
     },
     updateRegions() {
