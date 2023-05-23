@@ -7,6 +7,7 @@ import { usePlayerStore } from "@/stores/player";
 import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.min.js";
 import Timeline from "wavesurfer.js/dist/plugin/wavesurfer.timeline.js";
+import cursor from "wavesurfer.js/dist/plugin/wavesurfer.cursor.js";
 
 export default {
   computed: {
@@ -61,13 +62,25 @@ export default {
       backend: "MediaElement",
       minPxPerSec: this.minPxPerSec,
       scrollParent: true,
-      plugins: [RegionsPlugin.create({})],
+      plugins: [
+        RegionsPlugin.create({}),
+        Timeline.create({
+          container: "#timeline",
+          timeInterval: this.minPxPerSec,
+        }),
+        cursor.create({
+          showTime: true,
+          opacity: 1,
+          customShowTimeStyle: {
+            "background-color": "#000",
+            color: "#fff",
+            padding: "2px",
+            "font-size": "10px",
+          },
+        }),
+      ],
     });
     const widget = this;
-    // this.waveform.on("zoom", () => {
-    //   this.waveform.params.minPxPerSet = this.minPxPerSet;
-    //   console.log("zoom", this.waveform.params.minPxPerSet);
-    // });
     this.waveform.on("error", (e) => {
       console.log("waveform error", e);
     });
@@ -104,7 +117,7 @@ export default {
     async loadWaveform(id) {
       console.log(`load waveform id=${id}`);
       const res = await this.waveform.load(`/video-store/audio-stream/${id}`);
-      console.log("loadwaveform res", res);
+      console.log("loadwaveform res", res, this.Timeline);
       this.updateRegions();
     },
     updateRegions() {
@@ -182,5 +195,6 @@ export default {
         ></el-option> </el-select
     ></el-col>
     <el-col id="waveform" ref="waveform"></el-col>
+    <el-col id="timeline" ref="timeline"></el-col>
   </el-scrollbar>
 </template>
