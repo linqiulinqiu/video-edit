@@ -64,10 +64,10 @@ export default {
       plugins: [RegionsPlugin.create({})],
     });
     const widget = this;
-    this.waveform.on("zoom", () => {
-      this.waveform.params.minPxPerSet = this.minPxPerSet;
-      console.log("zoom", this.waveform.params.minPxPerSet);
-    });
+    // this.waveform.on("zoom", () => {
+    //   this.waveform.params.minPxPerSet = this.minPxPerSet;
+    //   console.log("zoom", this.waveform.params.minPxPerSet);
+    // });
     this.waveform.on("ready", () => {
       this.waveSelStore.duration = this.waveform.getDuration();
       console.log("waveform ready", this.waveSelStore.duration);
