@@ -117,6 +117,7 @@ export const useSrtStore = defineStore("srt", {
       const chunks = [];
       for (let i in this.lines) {
         const line = this.lines[i];
+        line.text = line.text.trim();
         const start_ms = parseInt(line.from * 1000);
         const item = {
           spk: line.speaker,
@@ -198,6 +199,7 @@ export const useSrtStore = defineStore("srt", {
         let lastTo = 0;
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
+          line.text = line.text.trim();
           if (line.from < lastTo) {
             overlap = true;
           }
