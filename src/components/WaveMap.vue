@@ -48,7 +48,7 @@ export default {
     return {
       regions: [],
       pxArr: [25, 50, 100, 200, 400],
-      minPxPerSet: 50,
+      minPxPerSec: 50,
     };
   },
   mounted() {
@@ -59,7 +59,7 @@ export default {
       waveColor: "#358",
       progressColor: "#a75",
       backend: "MediaElement",
-      minPxPerSet: this.minPxPerSet,
+      minPxPerSec: this.minPxPerSec,
       scrollParent: true,
       plugins: [RegionsPlugin.create({})],
     });
@@ -150,15 +150,15 @@ export default {
       }
       this.srtStore.activeLine = al;
     },
-    audioZoom(pxPerSet) {
-      this.minPxPerSet = pxPerSet;
-      this.waveform.zoom(pxPerSet);
+    audioZoom(pxPerSec) {
+      this.minPxPerSec = pxPerSec;
+      this.waveform.zoom(pxPerSec);
       console.log(
-        "pxPerSet:",
-        pxPerSet,
+        "pxPerSec:",
+        pxPerSec,
         "this.waveform:",
         this.waveform,
-        this.waveform.params.minPxPerSet
+        this.waveform.params.minPxPerSec
       );
     },
   },
@@ -170,9 +170,9 @@ export default {
     <el-col>
       <span>音频缩放倍数：</span>
       <el-select
-        v-model="minPxPerSet"
-        :placeholder="minPxPerSet / 50 + 'x'"
-        @change="audioZoom(minPxPerSet)"
+        v-model="minPxPerSec"
+        :placeholder="minPxPerSec / 50 + 'x'"
+        @change="audioZoom(minPxPerSec)"
       >
         <el-option
           v-for="item in pxArr"
