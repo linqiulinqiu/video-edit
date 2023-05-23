@@ -100,7 +100,8 @@ export default {
   methods: {
     async loadWaveform(id) {
       console.log(`load waveform id=${id}`);
-      this.waveform.load(`/video-store/audio-stream/${id}`);
+      const res = await this.waveform.load(`/video-store/audio-stream/${id}`);
+      console.log("loadwaveform res", res);
       this.updateRegions();
     },
     updateRegions() {
