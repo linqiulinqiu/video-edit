@@ -172,7 +172,6 @@ export default {
                 @input="modifyText($event, index)"
               />
             </el-col>
-
             <el-text size="small">{{ reflines[index] }}</el-text>
           </el-col>
           <el-col class="btn-group" v-if="index == currentIndex">

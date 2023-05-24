@@ -117,26 +117,17 @@ export default {
         ><el-icon><Delete /></el-icon
       ></el-button>
     </tooltip>
-    <tooltip :content="'向上添加一句'">
-      <el-button
-        v-if="curIndex == 0"
-        plain
-        size="small"
-        @click="addLineFirst()"
-      >
+    <tooltip :content="'向上添加一句'" v-if="curIndex == 0">
+      <el-button plain size="small" @click="addLineFirst()">
         <el-icon><DocumentAdd /></el-icon>
       </el-button>
     </tooltip>
-    <tooltip :content="'向上分割'"
-      ><el-button v-if="curIndex != 0" plain size="small" @click="cutToPrev()"
+    <tooltip v-if="curIndex != 0" :content="'向上分割'"
+      ><el-button plain size="small" @click="cutToPrev()"
         ><el-icon><Top /></el-icon></el-button
     ></tooltip>
-    <tooltip :content="'向下分割'"
-      ><el-button
-        v-if="curIndex != lines.length - 1"
-        plain
-        size="small"
-        @click="cutToNext()"
+    <tooltip v-if="curIndex != lines.length - 1" :content="'向下分割'"
+      ><el-button plain size="small" @click="cutToNext()"
         ><el-icon><Bottom /></el-icon></el-button
     ></tooltip>
     <tooltip :content="'从光标位置分割成两句'"
