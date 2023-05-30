@@ -54,8 +54,9 @@ export default {
                 console.log("play error", error);
               });
           }
-          const line = this.lines[newAl];
-          this.player.play(line.from, line.to);
+          // const line = this.lines[newAl];
+          // console.log("this.player", this.player);
+          // // this.player.play(line.from, line.to);
           this.playing = true;
         }
       }
@@ -66,7 +67,7 @@ export default {
       controls: true,
       fill: true,
       aspectRatio: "4:3",
-      autoplay: true,
+      autoplay: false,
     };
     this.player = videojs(this.$refs.videoPlayer, options, () => {});
     if (!this.posChecker) {

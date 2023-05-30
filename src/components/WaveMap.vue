@@ -46,8 +46,8 @@ export default {
       }
       const line = this.lines[newAl];
       this.playAudio(line.from, line.to);
-      const progress = newAl / this.lines.length;
-      this.waveform.seekProgress(progress);
+      // const progress = newAl / this.lines.length;
+      // this.waveform.seekProgress(progress);
     },
   },
   data() {
