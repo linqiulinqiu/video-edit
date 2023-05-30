@@ -20,6 +20,7 @@ export default {
         text: "加载时间可能很长，请耐心等待。加载中......",
       });
       const res = await this.srtStore.loadSrt();
+      console.log("res in loadSrt:", res);
       if ("error" in res) {
         loading.close();
         this.$message.error(`加载出错了，请刷新后再试。错误原因：${res.error}`);
