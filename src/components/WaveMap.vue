@@ -29,6 +29,7 @@ export default {
       this.updateRegions();
     },
     activeLine(newAl, oldAl) {
+      console.log("activeLine New: ", newAl);
       if (oldAl >= 0 && oldAl < this.regions.length) {
         this.regions[oldAl].update({
           drag: false,
@@ -43,6 +44,10 @@ export default {
           color: "rgba(0,0,0,0.3)",
         });
       }
+      const line = this.lines[newAl];
+      this.playAudio(line.from, line.to);
+      const progress = newAl / this.lines.length;
+      this.waveform.seekProgress(progress);
     },
   },
   data() {
@@ -63,6 +68,7 @@ export default {
       backend: "MediaElement",
       minPxPerSec: this.minPxPerSec,
       scrollParent: true,
+      autoCenter: true,
       plugins: [
         RegionsPlugin.create({}),
 
@@ -163,6 +169,9 @@ export default {
         }
       }
       this.srtStore.activeLine = al;
+    },
+    playAudio(start, end) {
+      this.waveform.play(start, end);
     },
     audioZoom(pxPerSec) {
       this.minPxPerSec = pxPerSec;
