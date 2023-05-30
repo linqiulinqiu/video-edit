@@ -54,8 +54,9 @@ export default {
                 console.log("play error", error);
               });
           }
-          // this.player.play();
-          // this.playing = true;
+          const line = this.lines[newAl];
+          this.player.play(line.from, line.to);
+          this.playing = true;
         }
       }
     },
