@@ -22,7 +22,7 @@ export default {
       const res = await this.srtStore.loadSrt();
       if (res.error) {
         loading.close();
-        this.$message(`加载出错了，请刷新后再试。错误原因：${res.error}`);
+        this.$message.error(`加载出错了，请刷新后再试。错误原因：${res.error}`);
       }
       this.srtStore.loadDone = true;
       loading.close();
