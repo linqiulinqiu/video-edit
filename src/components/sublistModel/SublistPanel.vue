@@ -21,10 +21,15 @@ export default {
       });
       const res = await this.srtStore.loadSrt();
       console.log("res in loadSrt:", res);
-      if ("error" in res) {
-        loading.close();
-        this.$message.error(`加载出错了，请刷新后再试。错误原因：${res.error}`);
+      if (res != undefined) {
+        if ("error" in res) {
+          loading.close();
+          this.$message.error(
+            `加载出错了，请刷新后再试。错误原因：${res.error}`
+          );
+        }
       }
+
       this.srtStore.loadDone = true;
       loading.close();
     },
