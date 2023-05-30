@@ -19,7 +19,11 @@ export default {
         background: "#9dbfc155",
         text: "加载时间可能很长，请耐心等待。加载中......",
       });
-      await this.srtStore.loadSrt();
+      const res = await this.srtStore.loadSrt();
+      if (res.error) {
+        loading.close();
+        this.$message(`加载出错了，请刷新后再试。错误原因：${res.error}`);
+      }
       this.srtStore.loadDone = true;
       loading.close();
     },

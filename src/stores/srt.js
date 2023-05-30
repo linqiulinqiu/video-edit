@@ -61,6 +61,9 @@ export const useSrtStore = defineStore("srt", {
     async loadSrt() {
       const resp = await fetch(`/subedit/subtitle-info/${this.sid}`);
       const body = await resp.json();
+      if (body.error) {
+        return { error: body.error };
+      }
       console.log("load data:", body);
       const chunks = body.subsnap.chunks;
       const lines = [];
