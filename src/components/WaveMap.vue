@@ -44,6 +44,7 @@ export default {
           color: "rgba(0,0,0,0.3)",
         });
       }
+      // this.waveform.seekTo()
       // const line = this.lines[newAl];
       // this.waveform.setMute(true);
       // const now = Date();
@@ -59,8 +60,8 @@ export default {
       // const no = Date();
       // console.log("time no after play audio :", no);
       // }, dur_ms);
-      // const progress = newAl / this.lines.length;
-      // this.waveform.seekProgress(progress);
+      const progress = newAl / this.lines.length;
+      this.waveform.seekTo(progress);
     },
   },
   data() {
