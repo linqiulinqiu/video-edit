@@ -44,24 +44,10 @@ export default {
           color: "rgba(0,0,0,0.3)",
         });
       }
-      // this.waveform.seekTo()
-      // const line = this.lines[newAl];
-      // this.waveform.setMute(true);
-      // const now = Date();
-      // this.playerStore.isPause = false;
-      // console.log("time now before play audio:", now);
-      // console.log("isPause", this.playerStore.isPause);
-
-      // this.playAudio(line.from, line.to);
-      // const obj = this;
-      // const dur_ms = (line.to - line.from) * 1000;
-      // setTimeout(function () {
-      //   obj.playerStore.isPause = true;
-      // const no = Date();
-      // console.log("time no after play audio :", no);
-      // }, dur_ms);
       const progress = newAl / this.lines.length;
-      this.waveform.seekAndCenter(progress);
+      if (progress >= 0 && progress <= 1) {
+        this.waveform.seekAndCenter(progress);
+      }
     },
   },
   data() {
