@@ -61,7 +61,7 @@ export default {
       // console.log("time no after play audio :", no);
       // }, dur_ms);
       const progress = newAl / this.lines.length;
-      this.waveform.seekTo(progress);
+      this.waveform.seekAndCenter(progress);
     },
   },
   data() {
