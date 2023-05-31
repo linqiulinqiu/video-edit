@@ -57,7 +57,7 @@ export default {
           // const line = this.lines[newAl];
           // console.log("this.player", this.player);
           // // this.player.play(line.from, line.to);
-          this.playing = true;
+          // this.playing = true;
         }
       }
     },

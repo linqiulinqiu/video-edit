@@ -20,6 +20,7 @@ export default {
       this.loadWaveform(newV.id);
     },
     pos(newPos, oldPos) {
+      console.log("newPos", newPos);
       if (newPos != null && this.waveform && this.waveSelStore.pos == null) {
         this.waveform.setCurrentTime(newPos);
         this.updateActiveLine();
