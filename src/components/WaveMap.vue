@@ -30,7 +30,6 @@ export default {
       this.updateRegions();
     },
     activeLine(newAl, oldAl) {
-      console.log("activeLine New: ", newAl);
       if (oldAl >= 0 && oldAl < this.regions.length) {
         this.regions[oldAl].update({
           drag: false,
@@ -45,21 +44,21 @@ export default {
           color: "rgba(0,0,0,0.3)",
         });
       }
-      const line = this.lines[newAl];
-      this.waveform.setMute(true);
-      const now = Date();
-      this.playerStore.isPause = false;
-      console.log("time now before play audio:", now);
-      console.log("isPause", this.playerStore.isPause);
-      const obj = this;
-      this.playAudio(line.from, line.to);
-      const dur_ms = (line.to - line.from) * 1000;
-      // console.log("duration", dur);
-      setTimeout(function () {
-        obj.playerStore.isPause = true;
-        const no = Date();
-        console.log("time no after play audio :", no);
-      }, dur_ms);
+      // const line = this.lines[newAl];
+      // this.waveform.setMute(true);
+      // const now = Date();
+      // this.playerStore.isPause = false;
+      // console.log("time now before play audio:", now);
+      // console.log("isPause", this.playerStore.isPause);
+
+      // this.playAudio(line.from, line.to);
+      // const obj = this;
+      // const dur_ms = (line.to - line.from) * 1000;
+      // setTimeout(function () {
+      //   obj.playerStore.isPause = true;
+      // const no = Date();
+      // console.log("time no after play audio :", no);
+      // }, dur_ms);
       // const progress = newAl / this.lines.length;
       // this.waveform.seekProgress(progress);
     },

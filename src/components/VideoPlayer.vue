@@ -63,10 +63,14 @@ export default {
                 console.log("play error", error);
               });
           }
-          // const line = this.lines[newAl];
-          // console.log("this.player", this.player);
-          // // this.player.play(line.from, line.to);
+          const line = this.lines[newAl];
+          const obj = this;
+          // this.player.play(line.from, line.to);
+          const dur_ms = (line.to - line.from) * 1000;
           this.player.play();
+          setTimeout(function () {
+            obj.player.pause();
+          }, dur_ms);
           this.playing = true;
         }
       }
