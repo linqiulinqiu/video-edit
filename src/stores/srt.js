@@ -68,10 +68,8 @@ export const useSrtStore = defineStore("srt", {
       const chunks = body.subsnap.chunks;
       const lines = [];
       this.lang_id = body.lang_id;
-      var texxxt = [];
       for (var i in chunks) {
         const line = chunks[i];
-        texxxt.push(chunks[i].body);
         const item = {
           speaker: line.spk,
           from: line.start_ms / 1000,
@@ -80,7 +78,6 @@ export const useSrtStore = defineStore("srt", {
         item.text = line.body;
         lines.push(item);
       }
-      console.log("chunks:", texxxt);
       if ("refchunks" in body && "en-US" in body.refchunks) {
         this.reflines = body.refchunks["en-US"];
       } else {

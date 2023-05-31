@@ -11,16 +11,15 @@ import cursor from "wavesurfer.js/dist/plugin/wavesurfer.cursor.js";
 
 export default {
   computed: {
-    ...mapState(usePlayerStore, ["pos", "isPause"]),
+    ...mapState(usePlayerStore, ["pos"]),
     ...mapState(useSrtStore, ["activeLine", "lines", "video"]),
-    ...mapStores(useWaveSelStore, useSrtStore, usePlayerStore),
+    ...mapStores(useWaveSelStore, useSrtStore),
   },
   watch: {
     video(newV) {
       this.loadWaveform(newV.id);
     },
     pos(newPos, oldPos) {
-      console.log("newPos", newPos);
       if (newPos != null && this.waveform && this.waveSelStore.pos == null) {
         this.waveform.setCurrentTime(newPos);
         this.updateActiveLine();
