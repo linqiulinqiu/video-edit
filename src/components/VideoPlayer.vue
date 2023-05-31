@@ -9,6 +9,7 @@ import { useSrtStore } from "@/stores/srt";
 export default {
   computed: {
     ...mapState(useSrtStore, ["activeLine", "lines", "video"]),
+    ...mapState(usePlayerStore, ["isPause"]),
     ...mapStores(useWaveSelStore, usePlayerStore),
   },
   data() {
@@ -19,6 +20,14 @@ export default {
     };
   },
   watch: {
+    isPause(newB) {
+      //bool newB ? true(pause):false(play)
+      if (this.player) {
+        if (newB) {
+          this.player.pause();
+        }
+      }
+    },
     video(newV) {
       const newId = newV.id;
       if (newId > 0) {

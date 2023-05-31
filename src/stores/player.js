@@ -1,7 +1,8 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const usePlayerStore = defineStore('player', {
-    state: ()=>({
-        pos: 0
-    })
-})
+export const usePlayerStore = defineStore("player", {
+  state: () => ({
+    pos: 0,
+    isPause: true,
+  }),
+});

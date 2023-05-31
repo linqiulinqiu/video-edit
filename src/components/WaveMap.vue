@@ -11,9 +11,9 @@ import cursor from "wavesurfer.js/dist/plugin/wavesurfer.cursor.js";
 
 export default {
   computed: {
-    ...mapState(usePlayerStore, ["pos"]),
+    ...mapState(usePlayerStore, ["pos", "isPause"]),
     ...mapState(useSrtStore, ["activeLine", "lines", "video"]),
-    ...mapStores(useWaveSelStore, useSrtStore),
+    ...mapStores(useWaveSelStore, useSrtStore, usePlayerStore),
   },
   watch: {
     video(newV) {
@@ -46,7 +46,20 @@ export default {
         });
       }
       const line = this.lines[newAl];
+      this.waveform.setMute(true);
+      const now = Date();
+      this.playerStore.isPause = false;
+      console.log("time now before play audio:", now);
+      console.log("isPause", this.playerStore.isPause);
+      const obj = this;
       this.playAudio(line.from, line.to);
+      const dur_ms = (line.to - line.from) * 1000;
+      // console.log("duration", dur);
+      setTimeout(function () {
+        obj.playerStore.isPause = true;
+        const no = Date();
+        console.log("time no after play audio :", no);
+      }, dur_ms);
       // const progress = newAl / this.lines.length;
       // this.waveform.seekProgress(progress);
     },
