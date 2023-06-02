@@ -61,11 +61,6 @@ export const useSrtStore = defineStore("srt", {
     async loadSrt() {
       const resp = await fetch(`/subedit/subtitle-info/${this.sid}`);
       const body = await resp.json();
-      // console.log(Object.keys(body).length);
-      // const keys = Object.keys(body);
-      // for (let key in keys) {
-      //   console.log("key:", key, keys[key]);
-      // }
 
       if (body.error) {
         return body;
@@ -240,7 +235,7 @@ export const useSrtStore = defineStore("srt", {
           overlap = true;
         }
         this.lines = [...lines];
-
+        console.log("lines,", lines);
         return overlap;
       } else {
         this.lines = [];
