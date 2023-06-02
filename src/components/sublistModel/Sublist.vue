@@ -64,7 +64,6 @@ export default {
     },
     liClick(index) {
       this.srtStore.activeLine = index;
-      console.log("line active:", this.srtStore.activeLine);
     },
     setTalker(val, index) {
       const lines = this.lines.concat();
@@ -167,13 +166,13 @@ export default {
                 type="textarea"
                 @focus="this.showGroup = true"
                 :model-value="line.text"
-                :autosize="{ minRows: 1, maxRows: 5 }"
+                :autosize="{ min: 1 }"
                 autofocus="true"
                 @click="textSelect($event)"
                 @input="modifyText($event, index)"
               />
             </el-col>
-            <el-text size="small">{{ reflines[index] }}</el-text>
+            <el-text size="large">{{ reflines[index] }}</el-text>
           </el-col>
           <el-col class="btn-group" v-if="index == currentIndex">
             <EditBtnGroupVue

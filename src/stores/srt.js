@@ -235,7 +235,6 @@ export const useSrtStore = defineStore("srt", {
           overlap = true;
         }
         this.lines = [...lines];
-        console.log("lines,", lines);
         return overlap;
       } else {
         this.lines = [];
