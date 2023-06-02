@@ -64,6 +64,7 @@ export default {
     },
     liClick(index) {
       this.srtStore.activeLine = index;
+      console.log("line active:", this.srtStore.activeLine);
     },
     setTalker(val, index) {
       const lines = this.lines.concat();

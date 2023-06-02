@@ -62,10 +62,10 @@ export const useSrtStore = defineStore("srt", {
       const resp = await fetch(`/subedit/subtitle-info/${this.sid}`);
       const body = await resp.json();
       // console.log(Object.keys(body).length);
-      const keys = Object.keys(body);
-      for (let key in keys) {
-        console.log("key:", key, keys[key]);
-      }
+      // const keys = Object.keys(body);
+      // for (let key in keys) {
+      //   console.log("key:", key, keys[key]);
+      // }
 
       if (body.error) {
         return body;
