@@ -78,6 +78,7 @@ export default {
       this.showGroup = true;
       const objArea = event.target;
       this.cursorPos = objArea.selectionStart;
+      console.log("textSelect", event,);
     },
     modifyText(text, idx) {
       const line = this.lines[idx];
