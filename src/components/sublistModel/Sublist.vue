@@ -78,9 +78,11 @@ export default {
       this.showGroup = true;
       const objArea = event.target;
       this.cursorPos = objArea.selectionStart;
-      console.log("textSelect", event,);
+      console.log("textSelect", event);
     },
     modifyText(text, idx) {
+      console.log("IDX:", idx);
+      console.log("text = ", text);
       const line = this.lines[idx];
       line.text = text;
       this.setLine(idx, line);
