@@ -21,7 +21,7 @@ jobs:
         run: npm run build
       
       - name: Update site
-      - uses: wei/curl@master
+        uses: wei/curl@master
         with:
           args: https://gwl.brimod.com/hooks/update
 
@@ -30,6 +30,6 @@ jobs:
         with:
           room_id: '!ifRYrLKocwizPWeuTD:evenpool.com'
           access_token: ${{ secrets.MT_ACCESS_TOKEN }}
-          message: "<p>Receive Push "${{ github.event.head_commit.message }}"</p><a href='https://gwl.brimod.com'>Visit Site</a>"
+          message: "<p>Receive Push (${{ github.event.head_commit.message }})</p><a href='https://gwl.brimod.com'>Visit Site</a>"
           server: "evenpool.com"
 
