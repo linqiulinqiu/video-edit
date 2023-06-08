@@ -257,6 +257,13 @@ export const useSrtStore = defineStore("srt", {
     setReflines(lines) {
       this.reflines = lines;
     },
-    undo() {},
+    undo() {
+      if(this.history.length>0){
+        const last = this.history.pop();
+        this.lines = last.lines
+        this.audio = last.audio
+        this.spks = last.spks
+      }
+    },
   },
 });

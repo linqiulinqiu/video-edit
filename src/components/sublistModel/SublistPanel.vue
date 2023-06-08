@@ -47,13 +47,8 @@ export default {
     },
     // undo() {},
     undo() {
-      console.log("history", this.history);
-      const last = this.history.pop();
-      console.log("last history", last);
-      this.srtStore.setLines(last.lines);
-      this.srtStore.audio = last.audio;
-      this.srtStore.setSpks(last.spks);
-    },
+      this.srtStore.undo()
+   },
   },
   data() {
     return {};

@@ -48,7 +48,7 @@ export default {
         lines[index + 1].text = cutTxt[1] + lines[index + 1].text;
         lines[index].to = lines[index].to - cutTime;
         lines[index + 1].from = lines[index + 1].from + cutTime;
-      } else if (direction == "splite") {
+      } else if (direction == "split") {
         const cutTime = (1 - scale) * duration;
         lines[index].text = cutTxt[0];
         lines[index].to = lines[index].to - cutTime;
@@ -58,6 +58,7 @@ export default {
           speaker: lines[index].speaker,
           text: cutTxt[1],
         };
+        console.log('split', lines[index], line)
         lines.splice(index + 1, 0, line);
       }
       return lines;
@@ -82,7 +83,7 @@ export default {
       return isBlank;
     },
     addLine() {
-      const lines = this.editLines("splite");
+      const lines = this.editLines("split");
       this.srtStore.setLines(lines);
     },
     addLineFirst() {

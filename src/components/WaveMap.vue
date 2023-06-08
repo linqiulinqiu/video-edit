@@ -37,15 +37,16 @@ export default {
         });
       }
       if (newAl >= 0 && newAl < this.regions.length) {
-        this.regions[newAl].update({
+        const region = this.regions[newAl]
+        region.update({
           drag: true,
           resize: true,
           color: "rgba(0,0,0,0.3)",
         });
-      }
-      const progress = newAl / this.lines.length;
-      if (progress >= 0 && progress <= 1) {
-        this.waveform.seekAndCenter(progress);
+        const mid = (region.start+region.end)/2
+        const progress = mid/this.waveform.getDuration()
+        console.log('mid=',mid, 'progress=', progress)
+        this.waveform.seekAndCenter(progress)
       }
     },
   },
@@ -98,12 +99,14 @@ export default {
     });
     // TODO: check overlap: cancel update when overlap
     this.waveform.on("region-update-end", (e) => {
+      console.log('region-update-end',e)
       if (
         Object.keys(this.waveform.regions.list).length ==
         this.srtStore.lines.length
       ) {
         let i = 0;
         const lines = [];
+        console.log('region-list', this.waveform.regions.list)
         for (let idx in this.waveform.regions.list) {
           const region = this.waveform.regions.list[idx];
           const line = Object.assign({}, this.srtStore.lines[i]);
@@ -127,24 +130,56 @@ export default {
       this.updateRegions();
     },
     updateRegions() {
-      while (this.regions.length > 0) {
-        const region = this.regions.pop();
-        region.remove();
-      }
-      for (var i in this.lines) {
+      console.log('update regions',this.lines, this.regions)
+      let i = 0
+      let j = 0
+      while(i<this.lines.length && j< this.regions.length){
         const line = this.lines[i];
-        const prop = {
-          id: `line-${i}`,
+        const region = this.regions[j]
+        if(line.from==region.start){
+           if(line.to != region.end){ // region need tweak
+            region.update({
+              end: line.to
+            })
+           }
+           i++
+           j++
+           continue
+        }
+        if(line.from>region.start){  // possible delete, delete region
+          console.log('delete',j)
+          region.remove()
+          this.regions.splice(j,1)
+          continue
+        }
+        if(line.from<region.start){ // possible insert, insert region
+          console.log('insert',i)
+          const ins = this.waveform.addRegion({
+            start: line.from,
+            end: line.to,
+            loop: false,
+            drag: true,
+            resize: true,
+          })
+          this.regions.splice(j, 0, ins)
+          i++
+          j++
+        }
+      }
+      while(i<this.lines.length){
+        const line = this.lines[i]
+        this.regions.push(this.waveform.addRegion({
           start: line.from,
           end: line.to,
           loop: false,
           drag: true,
           resize: true,
-        };
-        if (i == this.activeLine) {
-          prop.color = "rgba(0,0,0,0.3)";
-        }
-        this.regions.push(this.waveform.addRegion(prop));
+        }))
+        i++
+      }
+      while(i<this.regions.length){
+        this.regions[i].remove()
+        this.regions.splice(i,1)
       }
     },
     updateActiveLine() {
