@@ -46,7 +46,7 @@ export default {
       this.$message("保存已完成");
     },
     // undo() {},
-    redo() {
+    undo() {
       console.log("history", this.history);
       const last = this.history.pop();
       console.log("last history", last);
@@ -63,7 +63,7 @@ export default {
 <template>
   <el-col>
     <!-- <el-button @click="undo">Undo</el-button> -->
-    <el-button v-if="this.history.length > 0" @click="redo">Redo</el-button>
+    <el-button v-if="this.history.length > 0" @click="undo">Undo</el-button>
     <el-button @click="loadSrt()">Load</el-button>
     <el-button :disabled="!dirty" @click="saveSrt">Save</el-button>
     <mk-audio v-if="lang_id == 2" />
