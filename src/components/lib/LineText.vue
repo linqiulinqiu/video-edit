@@ -1,22 +1,22 @@
 <script>
-import { defineComponent } from '@vue/composition-api'
+import { defineComponent } from "@vue/composition-api";
 
 export default defineComponent({
-    props() {
-        
+  props() {},
+  data() {
+    return {
+      text: "props",
+      index: "props",
+    };
+  },
+  watch: {
+    text(newText) {
+      setLine();
     },
-    data(){
-        text: 'props',
-        index: 'props'
-    },
-    watch:{
-        text(newText){
-            setLine()
-        }
-    }
-})
+  },
+});
 </script>
 
 <template>
-    <el-input v-model="text">
+  <el-input v-model="text" />
 </template>

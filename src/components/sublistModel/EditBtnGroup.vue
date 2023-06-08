@@ -31,12 +31,12 @@ export default {
       return [first, second];
     },
     editLines(direction) {
+      console.log("StartTime :", Date());
       const index = this.curIndex;
       const lines = this.lineList;
       const cutTxt = this.cutString(this.cursorPos, lines[index].text);
       const duration = lines[index].to - lines[index].from;
       const scale = this.cursorPos / lines[index].text.length;
-
       if (direction == "last") {
         const cutTime = scale * duration;
         lines[index - 1].text = lines[index - 1].text + cutTxt[0];
@@ -61,6 +61,7 @@ export default {
         };
         lines.splice(index + 1, 0, line);
       }
+      console.log("EndTime:", Date());
       return lines;
     },
     delLine(index) {
