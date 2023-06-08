@@ -31,7 +31,6 @@ export default {
       return [first, second];
     },
     editLines(direction) {
-      console.log("StartTime :", Date());
       const index = this.curIndex;
       const lines = this.lineList;
       const cutTxt = this.cutString(this.cursorPos, lines[index].text);
@@ -61,7 +60,6 @@ export default {
         };
         lines.splice(index + 1, 0, line);
       }
-      console.log("EndTime:", Date());
       return lines;
     },
     delLine(index) {

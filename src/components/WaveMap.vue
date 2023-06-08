@@ -26,9 +26,7 @@ export default {
       }
     },
     lines(newLines, oldLines) {
-      console.log("regions update time start,", Date());
       this.updateRegions();
-      console.log("regions update time End,", Date());
     },
     activeLine(newAl, oldAl) {
       if (oldAl >= 0 && oldAl < this.regions.length) {
@@ -100,7 +98,6 @@ export default {
     });
     // TODO: check overlap: cancel update when overlap
     this.waveform.on("region-update-end", (e) => {
-      console.log("regin-click-end time Start", Date());
       if (
         Object.keys(this.waveform.regions.list).length ==
         this.srtStore.lines.length
@@ -118,7 +115,6 @@ export default {
         this.srtStore.setLines(lines);
         this.updateRegions();
       }
-      console.log("regin-click-end time End", Date());
     });
   },
   methods: {

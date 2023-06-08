@@ -23,8 +23,8 @@ export default {
     video(newV) {
       const newId = newV.id;
       if (newId > 0) {
-        const videoAt = `/video-store/video-stream/${newId}`;
-        // const videoAt = "/data/video.mp4";
+        // const videoAt = `/video-store/video-stream/${newId}`;
+        const videoAt = "/data/video.mp4";
         const sources = [
           {
             src: videoAt,
@@ -53,16 +53,35 @@ export default {
                 this.playing = true;
               })
               .catch((error) => {
-                console.log("play error", error);
+                console.log("playPause error", error);
               });
           }
           const line = this.lines[newAl];
           const obj = this;
           // this.player.play(line.from, line.to);
           const dur_ms = (line.to - line.from) * 1000;
-          this.player.play();
+          const ppromise = this.player.play();
+          if (ppromise != undefined) {
+            ppromise
+              .then((_) => {
+                this.playing = false;
+              })
+              .catch((error) => {
+                console.log("play error", error);
+              });
+          }
+
           setTimeout(function () {
-            obj.player.pause();
+            const errPro = obj.player.pause();
+            if (errPro != undefined) {
+              errPro
+                .then((_) => {
+                  this.playing = true;
+                })
+                .catch((error) => {
+                  console.log("playPause error", error);
+                });
+            }
           }, dur_ms);
           // this.playing = true;
         }
