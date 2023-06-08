@@ -21,7 +21,7 @@ jobs:
         run: npm run build
       
       - name: Update site
-      - uses: wei/curl@master
+        uses: wei/curl@master
         with:
           args: https://gwl.brimod.com/hooks/update
 
