@@ -26,9 +26,9 @@ export default {
       }
     },
     lines(newLines, oldLines) {
-      console.log("regions update time start,", date());
+      console.log("regions update time start,", Date());
       this.updateRegions().then(() => {
-        console.log("regions update time End,", date());
+        console.log("regions update time End,", Date());
       });
     },
     activeLine(newAl, oldAl) {
