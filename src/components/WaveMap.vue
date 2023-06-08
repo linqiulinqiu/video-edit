@@ -26,7 +26,10 @@ export default {
       }
     },
     lines(newLines, oldLines) {
-      this.updateRegions();
+      console.log("regions update time start,", date());
+      this.updateRegions().then(() => {
+        console.log("regions update time End,", date());
+      });
     },
     activeLine(newAl, oldAl) {
       if (oldAl >= 0 && oldAl < this.regions.length) {
@@ -98,6 +101,7 @@ export default {
     });
     // TODO: check overlap: cancel update when overlap
     this.waveform.on("region-update-end", (e) => {
+      console.log("regin-click-end time Start", Date());
       if (
         Object.keys(this.waveform.regions.list).length ==
         this.srtStore.lines.length
@@ -115,6 +119,7 @@ export default {
         this.srtStore.setLines(lines);
         this.updateRegions();
       }
+      console.log("regin-click-end time End", Date());
     });
   },
   methods: {
@@ -175,13 +180,6 @@ export default {
     audioZoom(pxPerSec) {
       this.minPxPerSec = pxPerSec;
       this.waveform.zoom(pxPerSec);
-      console.log(
-        "pxPerSec:",
-        pxPerSec,
-        "this.waveform:",
-        this.waveform,
-        this.waveform.params.minPxPerSec
-      );
     },
   },
 };
