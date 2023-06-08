@@ -1,0 +1,35 @@
+name: Web Install
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get dependencies
+        run: npm install
+
+      - name: Build a test release
+        run: npm run build
+      
+      - name: Update site
+      - uses: wei/curl@master
+        with:
+          args: https://gwl.brimod.com/hooks/update
+
+      - name: Send notification
+        uses: s3krit/matrix-message-action@v0.0.3
+        with:
+          room_id: '!ifRYrLKocwizPWeuTD:evenpool.com'
+          access_token: ${{ secrets.MT_ACCESS_TOKEN }}
+          message: "<p>Receive Push "${{ github.event.head_commit.message }}"</p><a href='https://gwl.brimod.com'>Visit Site</a>"
+          server: "evenpool.com"
+
