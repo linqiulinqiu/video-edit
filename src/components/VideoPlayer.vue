@@ -24,6 +24,7 @@ export default {
       const newId = newV.id;
       if (newId > 0) {
         const videoAt = `/video-store/video-stream/${newId}`;
+        // const videoAt = "/data/video.mp4";
         const sources = [
           {
             src: videoAt,
@@ -59,11 +60,11 @@ export default {
           const obj = this;
           // this.player.play(line.from, line.to);
           const dur_ms = (line.to - line.from) * 1000;
-          this.player.play();
-          setTimeout(function () {
-            obj.player.pause();
-          }, dur_ms);
-          this.playing = true;
+          // this.player.play();
+          // setTimeout(function () {
+          //   obj.player.pause();
+          // }, dur_ms);
+          // this.playing = true;
         }
       }
     },
