@@ -23,8 +23,8 @@ export default {
     video(newV) {
       const newId = newV.id;
       if (newId > 0) {
-        // const videoAt = `/video-store/video-stream/${newId}`;
-        const videoAt = "/data/video.mp4";
+        const videoAt = `/video-store/video-stream/${newId}`;
+        // const videoAt = "/data/video.mp4";
         const sources = [
           {
             src: videoAt,
