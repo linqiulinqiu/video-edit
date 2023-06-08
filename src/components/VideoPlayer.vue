@@ -60,10 +60,10 @@ export default {
           const obj = this;
           // this.player.play(line.from, line.to);
           const dur_ms = (line.to - line.from) * 1000;
-          // this.player.play();
-          // setTimeout(function () {
-          //   obj.player.pause();
-          // }, dur_ms);
+          this.player.play();
+          setTimeout(function () {
+            obj.player.pause();
+          }, dur_ms);
           // this.playing = true;
         }
       }

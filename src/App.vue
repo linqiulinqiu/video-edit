@@ -47,7 +47,7 @@ export default {
         <el-button @click="back()">
           <el-icon><Back /></el-icon>
         </el-button>
-        <p>version = <b>0.0.17 test</b></p>
+        <p>version = <b>0.0.17 t</b></p>
         <SublistPanel />
       </el-row>
 
