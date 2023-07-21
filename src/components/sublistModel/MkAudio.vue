@@ -35,13 +35,25 @@ export default {
         lock: true,
       });
       this.making = true;
+      this.null_idx = [];
       var needMake = [];
       for (let idx in this.audio) {
+        console.log("index = ", idx);
+        if (this.lines[idx].text == "") {
+          this.null_idx.push(Number(idx));
+        }
         if (this.audio[idx].len == 0) {
           needMake.push(idx);
           // console.log("needMake i:", idx);
         }
       }
+      if (this.null_idx.length != 0) {
+        this.making = false;
+        loading.close();
+        this.refuse_visible = true;
+        return;
+      }
+
       const obj = this;
       let progress = 0;
       console.log("needMake.length", needMake.length);
@@ -83,6 +95,8 @@ export default {
     return {
       making: false,
       percent_stage: 0,
+      null_idx: [],
+      refuse_visible: false,
     };
   },
 };
@@ -90,6 +104,26 @@ export default {
 <template>
   <el-button v-if="tdirty" @click="makeAudio()"> Make Audio</el-button>
   <el-button v-else-if="canDown" @click="downAudio()"> Down Audio </el-button>
+  <el-dialog v-model="refuse_visible" width="30%" :show-close="false">
+    <template #header>
+      <h2>拒绝生成音频</h2>
+    </template>
+    <el-scrollbar max-height="500px">
+      <ul style="text-align: center">
+        <li>以下行数为空,请修改空行后再生成音频:</li>
+        <li v-for="idx in this.null_idx" :key="idx">
+          <el-text type="danger">第 {{ idx + 1 }} 行</el-text>
+        </li>
+      </ul>
+    </el-scrollbar>
+
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="refuse_visible = false">确定</el-button>
+      </div>
+    </template>
+  </el-dialog>
+
   <!-- <el-progress
     v-else
     color="#1d5d68"
@@ -98,3 +132,8 @@ export default {
     :percentage="percent"
   /> -->
 </template>
+<style scoped>
+ul {
+  padding-left: 0;
+}
+</style>
