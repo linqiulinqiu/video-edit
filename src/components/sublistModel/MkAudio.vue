@@ -38,7 +38,6 @@ export default {
       this.null_idx = [];
       var needMake = [];
       for (let idx in this.audio) {
-        console.log("index = ", idx);
         if (this.lines[idx].text == "") {
           this.null_idx.push(Number(idx));
         }
