@@ -47,6 +47,7 @@ export default {
           // console.log("needMake i:", idx);
         }
       }
+      console.log("null_idx: ", this.null_idx);
       if (this.null_idx.length != 0) {
         this.making = false;
         loading.close();
