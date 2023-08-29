@@ -205,7 +205,7 @@ export default {
 }
 .active {
   border-radius: 10px;
-  background-color: #36727e9c;
+  background-color: #a6dfeb69;
 }
 
 ul.linelist {
@@ -240,6 +240,6 @@ ul li:not(.active):hover {
 }
 .list-title {
   border-radius: 5px;
-  background: #1d5d68;
+  background: #1d5d68fa;
 }
 </style>
